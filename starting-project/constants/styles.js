@@ -1,0 +1,16 @@
+export const Colors = {
+   papayaWhip: '#F7D574',
+   dandelion: '#FAD548',
+   silver50: '#F7F7F7',
+   silver100: '#BDBDBD',
+   silver200: '#969696',
+   silver300: '#757575',
+   silver400: '#4F4F4F',
+   lightCyan: '#D6E5E9',
+   darkBlue: '#497C9A',
+   lavenderBlush: '#EAB5C2',
+   turquoise: '#B2EBC7',
+   dimgray: '#262626',
+   snow: '#FFFAFA',
+   white: '#FFFFFF',
+};
