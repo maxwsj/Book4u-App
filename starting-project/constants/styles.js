@@ -1,5 +1,5 @@
 export const Colors = {
-   papayaWhip: '#F7D574',
+   papayaWhip: '#ffeebf',
    dandelion: '#FAD548',
    silver50: '#F7F7F7',
    silver100: '#BDBDBD',

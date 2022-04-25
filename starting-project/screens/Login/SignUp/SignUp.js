@@ -1,27 +1,32 @@
 import { StyleSheet, Text, View } from 'react-native';
-import React from 'react';
+import { useState } from 'react';
 
 import Logo from '../../../componnets/UI/Logo';
 
 import { Colors } from '../../../constants/styles';
 import SignUpForm from '../../../componnets/SignUp/SignUpForm';
 
-import Button from '../../../componnets/UI/Button';
 import HorizontalButton from '../../../componnets/UI/HorizontalButton';
 import GoogleBtn from '../../../componnets/UI/GoogleBtn';
 
 const SignUp = () => {
+   const [userData, setUserData] = useState({});
+
+   function submitHandler(credentials) {
+      setUserData((curUserData) => {
+         return {
+            ...curUserData,
+            ...credentials,
+         };
+      });
+   }
+
    return (
       <View style={styles.container}>
          <Logo />
          <View style={styles.formWrapper}>
             <Text style={styles.title}>Sua Conta</Text>
-            <SignUpForm />
-         </View>
-         <View style={styles.buttonWrapper}>
-            <View style={styles.button}>
-               <Button>Próximo</Button>
-            </View>
+            <SignUpForm onSubmit={submitHandler} />
          </View>
          <HorizontalButton
             hrContainer={styles.hrContainer}
@@ -46,12 +51,7 @@ const styles = StyleSheet.create({
       marginTop: 40,
       marginHorizontal: 30,
    },
-   buttonWrapper: {
-      marginHorizontal: 30,
-   },
-   button: {
-      marginTop: 50,
-   },
+
    hrColor: {
       borderBottomColor: Colors.lavenderBlush,
    },

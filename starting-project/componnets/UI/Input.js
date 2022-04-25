@@ -1,15 +1,15 @@
 import { StyleSheet, View, TextInput } from 'react-native';
 import React from 'react';
-import Ionicons from '@expo/vector-icons/Ionicons';
 
 import { Colors } from '../../constants/styles';
 
-const Input = ({ inputConfig, inputContainer, isInvalid }) => {
+const Input = ({ inputConfig, inputContainer, isInvalid, onUpdateValue }) => {
    return (
       <View style={[styles.searchSection, inputContainer]}>
          <TextInput
             style={[styles.input, isInvalid && styles.inputInvalid]}
             {...inputConfig}
+            onChangeText={onUpdateValue}
          />
       </View>
    );

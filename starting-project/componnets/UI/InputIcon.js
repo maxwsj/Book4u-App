@@ -4,11 +4,16 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 
 import { Colors } from '../../constants/styles';
 
-const Input = ({ inputConfig, iconConfig }) => {
+const Input = ({ inputConfig, iconConfig, isInvalid, onUpdateValue }) => {
+   console.log(`${isInvalid} InputIcon`);
    return (
-      <View style={styles.searchSection}>
+      <View style={[styles.searchSection, isInvalid && styles.inputInvalid]}>
          <Ionicons style={styles.searchIcon} {...iconConfig} />
-         <TextInput style={styles.input} {...inputConfig} />
+         <TextInput
+            style={[styles.input, isInvalid && styles.inputInvalid]}
+            {...inputConfig}
+            onChangeText={onUpdateValue}
+         />
       </View>
    );
 };
@@ -36,5 +41,10 @@ const styles = StyleSheet.create({
       backgroundColor: Colors.white,
       fontSize: 16,
       color: Colors.silver400,
+   },
+   inputInvalid: {
+      backgroundColor: Colors.papayaWhip,
+      borderRadius: 5,
+      overflow: 'hidden',
    },
 });
