@@ -4,14 +4,20 @@ import React from 'react';
 import FlatButton from './FlatButton';
 import { Colors } from '../../constants/styles';
 
-const HorizontalButton = ({ hrColor, btnTitle, btnText, hrContainer }) => {
+const HorizontalButton = ({
+   hrColor,
+   btnTitle,
+   btnText,
+   hrContainer,
+   onPress,
+}) => {
    return (
       <View style={[styles.signInContainer, hrContainer]}>
          <View style={[styles.signInTextWrapper, hrColor]}>
             <Text style={styles.signInText}>{btnTitle}</Text>
          </View>
          <View style={styles.signInButtonWrapper}>
-            <FlatButton>{btnText}</FlatButton>
+            <FlatButton onPress={onPress}>{btnText}</FlatButton>
          </View>
       </View>
    );

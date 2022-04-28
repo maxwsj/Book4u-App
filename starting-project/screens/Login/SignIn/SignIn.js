@@ -10,10 +10,17 @@ import GoogleBtn from '../../../componnets/UI/GoogleBtn';
 import SignInForm from '../../../componnets/SignIn/SignInForm';
 import SignInBgImage from '../../../componnets/SignIn/SignInBgImage';
 
-const SignIn = () => {
+const SignIn = ({ navigation }) => {
+   function signUpHandler() {
+      navigation.replace('SignUp');
+   }
+
    const [credentialsInvalid, setCredentialsInvalid] = useState({
+      name: false,
+      nickname: false,
       email: false,
       password: false,
+      confirmPassword: false,
    });
 
    function submitHandler(credentials) {
@@ -22,7 +29,6 @@ const SignIn = () => {
       email = email.trim();
       password = password.trim();
 
-      // Validação do Login
       const emailIsValid = email.includes('@');
       const passwordIsValid = password.length > 6;
 
@@ -52,6 +58,7 @@ const SignIn = () => {
             hrColor={styles.hrColor}
             btnTitle='ENTRAR'
             btnText='Inscrever-se'
+            onPress={signUpHandler}
          />
          <GoogleBtn />
       </View>

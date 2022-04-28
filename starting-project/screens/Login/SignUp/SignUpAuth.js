@@ -10,7 +10,11 @@ import Button from '../../../componnets/UI/Button';
 import HorizontalButton from '../../../componnets/UI/HorizontalButton';
 import GoogleBtn from '../../../componnets/UI/GoogleBtn';
 
-const SignUpAuth = () => {
+const SignUpAuth = ({ route, navigation }) => {
+   const { email } = route.params;
+   function signInHandler() {
+      navigation.replace('SignIn');
+   }
    return (
       <>
          <View style={styles.container}>
@@ -19,8 +23,8 @@ const SignUpAuth = () => {
                <Text style={styles.title}>Verifique seu endereço de email</Text>
                <View style={styles.textWrapper}>
                   <Text style={styles.text}>
-                     Enviamos um código para o seu email, fulano@hotmail.com
-                     para verificá-lo.
+                     Enviamos um código para o seu email, {email} para
+                     verificá-lo.
                   </Text>
                </View>
             </View>
@@ -29,6 +33,7 @@ const SignUpAuth = () => {
                   <Input
                      inputConfig={{
                         placeholder: 'Insira o código de verificação',
+                        textAlign: 'center',
                      }}
                   />
                </View>
@@ -44,6 +49,7 @@ const SignUpAuth = () => {
                hrColor={styles.hrColor}
                btnTitle='Possui uma conta ?'
                btnText='Clique aqui !'
+               onPress={signInHandler}
             />
             <GoogleBtn />
          </View>
@@ -65,7 +71,7 @@ const styles = StyleSheet.create({
    textWrapper: {
       marginTop: 50,
       marginBottom: 30,
-      marginHorizontal: 10,
+      marginHorizontal: 30,
    },
    buttonsWrapper: {
       marginTop: 30,
@@ -73,7 +79,7 @@ const styles = StyleSheet.create({
       marginHorizontal: 30,
    },
    inputWrapper: {
-      marginHorizontal: 50,
+      marginHorizontal: 20,
    },
    title: {
       fontSize: 24,

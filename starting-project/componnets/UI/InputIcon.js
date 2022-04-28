@@ -5,7 +5,6 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { Colors } from '../../constants/styles';
 
 const Input = ({ inputConfig, iconConfig, isInvalid, onUpdateValue }) => {
-   console.log(`${isInvalid} InputIcon`);
    return (
       <View style={[styles.searchSection, isInvalid && styles.inputInvalid]}>
          <Ionicons style={styles.searchIcon} {...iconConfig} />

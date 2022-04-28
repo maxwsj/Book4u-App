@@ -12,8 +12,6 @@ const SignInForm = ({ onSubmit, credentialsInvalid }) => {
    const { email: emailIsInvalid, password: passwordIsInvalid } =
       credentialsInvalid;
 
-   console.log(emailIsInvalid);
-
    function updateInputValueHandler(inputType, enteredValue) {
       switch (inputType) {
          case 'email':

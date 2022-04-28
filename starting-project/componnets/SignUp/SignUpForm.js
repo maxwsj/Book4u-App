@@ -1,67 +1,85 @@
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import { useState } from 'react';
 import Input from '../UI/Input';
 import Button from '../UI/Button';
-import SignUpAuth from '../../screens/Login/SignUp/SignUpAuth';
 
-const SignUpForm = ({ onSubmit }) => {
-   const [isFilled, setIsFilled] = useState(!true);
+const SignUpForm = ({ onSubmit, isValidated, credentialsInvalid }) => {
+   const [formData, setFormData] = useState({
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+      rg: '',
+      cpf: '',
+      cellphone: '',
+      telephone: '',
+   });
 
-   function nextFormHandler() {
-      setIsFilled(true);
+   const {
+      firstName: firstNameIsInvalid,
+      lastName: lastNameIsInvalid,
+      email: emailIsInvalid,
+      password: passwordIsInvalid,
+      confirmPassword: passwordsDontMatch,
+      rg: rgIsInvalid,
+      cpf: cpfIsInvalid,
+      cellphone: cellphoneIsInvalid,
+      telephone: telephoneIsInvalid,
+   } = credentialsInvalid;
+
+   function handleFormChange(inputIdentifier, enteredValue) {
+      setFormData((curInputs) => {
+         return {
+            ...curInputs,
+            [inputIdentifier]: enteredValue,
+         };
+      });
    }
 
-   function SignUpFormPT1({ onSubmit }) {
-      const [formPT1, setFormPT1] = useState({
-         name: '',
-         nickname: '',
-         email: '',
-         password: '',
-         confirmPassword: '',
+   function submitHandler() {
+      onSubmit({
+         firstName: formData.firstName,
+         lastName: formData.lastName,
+         email: formData.email,
+         password: formData.password,
+         confirmPassword: formData.confirmPassword,
+         rg: formData.rg,
+         cpf: formData.cpf,
+         cellphone: formData.cellphone,
+         telephone: formData.telephone,
       });
+   }
 
-      function handleFormChange(inputIdentifier, enteredValue) {
-         setFormPT1((curInputs) => {
-            return {
-               ...curInputs,
-               [inputIdentifier]: enteredValue,
-            };
-         });
-      }
-      function submitHandler() {
-         nextFormHandler();
-         onSubmit({
-            name: formPT1.name,
-            nickname: formPT1.nickname,
-            email: formPT1.email,
-            password: formPT1.password,
-            confirmPassword: formPT1.confirmPassword,
-         });
-      }
-      return (
-         <>
+   return (
+      <>
+         <View>
             <Input
-               onUpdateValue={handleFormChange.bind(this, 'name')}
-               value={formPT1.name}
-               // isInvalid={nameIsInvalid}
+               onUpdateValue={handleFormChange.bind(this, 'firstName')}
+               value={formData.firstName}
+               isInvalid={firstNameIsInvalid}
                inputConfig={{
                   placeholder: 'Nome',
                }}
                inputContainer={styles.inputContainer}
             />
+         </View>
+         <View>
             <Input
-               onUpdateValue={handleFormChange.bind(this, 'nickname')}
-               value={formPT1.nickname}
-               //isInvalid={nicknameIsInvalid}
+               onUpdateValue={handleFormChange.bind(this, 'lastName')}
+               value={formData.lastName}
+               isInvalid={lastNameIsInvalid}
                inputConfig={{
                   placeholder: 'Sobrenome',
                }}
                inputContainer={styles.inputContainer}
             />
+         </View>
+         <View>
             <Input
                onUpdateValue={handleFormChange.bind(this, 'email')}
-               value={formPT1.email}
-               //isInvalid={emailIsInvalid}
+               value={formData.email}
+               isInvalid={emailIsInvalid}
                inputConfig={{
                   placeholder: 'Email',
                   keyboardType: 'email-address',
@@ -69,108 +87,83 @@ const SignUpForm = ({ onSubmit }) => {
                }}
                inputContainer={styles.inputContainer}
             />
+         </View>
+         <View>
             <Input
                onUpdateValue={handleFormChange.bind(this, 'password')}
-               value={formPT1.password}
-               //isInvalid={passwordIsInvalid}
+               value={formData.password}
+               isInvalid={passwordIsInvalid}
                inputConfig={{
                   placeholder: 'Insira uma senha',
                }}
                inputContainer={styles.inputContainer}
             />
+         </View>
+         <View>
             <Input
                onUpdateValue={handleFormChange.bind(this, 'confirmPassword')}
-               value={formPT1.confirmPassword}
-               //isInvalid={confirmPasswordIsInvalid}
+               value={formData.confirmPassword}
+               isInvalid={passwordsDontMatch}
                inputConfig={{
                   placeholder: 'Insira a senha novamente',
                }}
                inputContainer={styles.inputContainer}
             />
-            <View style={styles.button}>
-               <Button onPress={submitHandler}>Próximo</Button>
-            </View>
-         </>
-      );
-   }
-   function SignUpFormPT2({ onSubmit }) {
-      const [formPT2, setFormPT2] = useState({
-         rg: '',
-         cpf: '',
-         cellphone: '',
-         telephone: '',
-      });
-
-      function handleFormChange(inputIdentifier, enteredValue) {
-         setFormPT2((curInputs) => {
-            return {
-               ...curInputs,
-               [inputIdentifier]: enteredValue,
-            };
-         });
-      }
-
-      function submitHandler() {
-         onSubmit({
-            rg: formPT2.rg,
-            cpf: formPT2.cpf,
-            cellphone: formPT2.cellphone,
-            telephone: formPT2.telephone,
-         });
-      }
-      return (
-         <>
+         </View>
+         <View>
             <Input
                onUpdateValue={handleFormChange.bind(this, 'cpf')}
-               value={formPT2.cpf}
-               //isInvalid={cpfIsInvalid}
+               value={formData.cpf}
+               isInvalid={cpfIsInvalid}
                inputConfig={{
-                  placeholder: 'CPF',
+                  placeholder: 'CPF: (Sem ponto)',
                   keyboardType: 'numeric',
+                  maxLength: 11,
                }}
                inputContainer={styles.inputContainer}
             />
+         </View>
+         <View>
             <Input
                onUpdateValue={handleFormChange.bind(this, 'rg')}
-               value={formPT2.rg}
-               //isInvalid={rgIsInvalid}
+               value={formData.rg}
+               isInvalid={rgIsInvalid}
                inputConfig={{
-                  placeholder: 'RG',
+                  placeholder: 'RG: (Sem ponto)',
                   keyboardType: 'numeric',
+                  maxLength: 9,
                }}
                inputContainer={styles.inputContainer}
             />
+         </View>
+         <View>
             <Input
                onUpdateValue={handleFormChange.bind(this, 'cellphone')}
-               value={formPT2.cellphone}
-               //isInvalid={cellphoneIsInvalid}
+               value={formData.cellphone}
+               isInvalid={cellphoneIsInvalid}
                inputConfig={{
                   placeholder: 'Celular',
                   keyboardType: 'numeric',
+                  maxLength: 11,
                }}
                inputContainer={styles.inputContainer}
             />
+         </View>
+         <View>
             <Input
                onUpdateValue={handleFormChange.bind(this, 'telephone')}
-               value={formPT2.telephone}
-               //isInvalid={telephoneIsInvalid}
+               value={formData.telephone}
                inputConfig={{
                   placeholder: 'Telefone Fixo',
                   keyboardType: 'numeric',
+                  maxLength: 10,
                }}
                inputContainer={styles.inputContainer}
             />
-            <View style={styles.button}>
-               <Button onPress={submitHandler}>Próximo</Button>
-            </View>
-         </>
-      );
-   }
-
-   return (
-      <>
-         {!isFilled && <SignUpFormPT1 onSubmit={onSubmit} />}
-         {isFilled && <SignUpFormPT2 onSubmit={onSubmit} />}
+         </View>
+         <View style={styles.button}>
+            <Button onPress={submitHandler}>Próximo</Button>
+         </View>
       </>
    );
 };
@@ -179,9 +172,10 @@ export default SignUpForm;
 
 const styles = StyleSheet.create({
    inputContainer: {
-      marginTop: 18,
+      marginTop: 14,
    },
    button: {
-      marginTop: 50,
+      marginTop: 40,
+      marginHorizontal: 30,
    },
 });
