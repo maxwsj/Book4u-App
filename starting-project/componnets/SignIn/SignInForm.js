@@ -46,6 +46,8 @@ const SignInForm = ({ onSubmit, credentialsInvalid }) => {
                   size: 20,
                   color: Colors.silver200,
                }}
+               children='* Dados incorretos'
+               InvalidInputTxtStyle={styles.InvalidInputMargin}
             />
          </View>
          <View style={styles.inputItem}>
@@ -62,6 +64,8 @@ const SignInForm = ({ onSubmit, credentialsInvalid }) => {
                   size: 20,
                   color: Colors.silver200,
                }}
+               children='* Dados incorretos'
+               InvalidInputTxtStyle={styles.InvalidInputMargin}
             />
          </View>
          <View style={styles.button}>
@@ -83,5 +87,8 @@ const styles = StyleSheet.create({
    button: {
       marginTop: 40,
       marginHorizontal: 40,
+   },
+   InvalidInputMargin: {
+      marginLeft: -30,
    },
 });

@@ -8,6 +8,7 @@ import Input from '../../../componnets/UI/Input';
 import Button from '../../../componnets/UI/Button';
 import HorizontalButton from '../../../componnets/UI/HorizontalButton';
 import GoogleBtn from '../../../componnets/UI/GoogleBtn';
+import usuarioService from '../../../util/auth';
 
 const PasswordRecoverAuth = ({ navigation }) => {
    const [isInvalid, setIsInvalid] = useState(false);
@@ -17,8 +18,25 @@ const PasswordRecoverAuth = ({ navigation }) => {
       navigation.replace('SignIn');
    }
 
-   function emailHandler() {
-      navigation.replace('PasswordRecoverAuth', { email: userEmailInput });
+   async function emailHandler() {
+      if (userEmailInput === '') {
+         setIsInvalid(true);
+      } else {
+         try {
+            const response = await usuarioService.userRecoverEmail(
+               userEmailInput
+            );
+            if (response === 'Usuário não encontrado') {
+               setIsInvalid(true);
+            } else {
+               navigation.replace('PasswordRecoverAuth', {
+                  email: userEmailInput,
+               });
+            }
+         } catch (error) {
+            console.log(error);
+         }
+      }
    }
 
    function handleFormChange(enteredValue) {
@@ -45,9 +63,9 @@ const PasswordRecoverAuth = ({ navigation }) => {
                      onUpdateValue={handleFormChange}
                      value={userEmailInput}
                      isInvalid={isInvalid}
+                     children='* Email incorreto ou não está cadastrado'
                   />
                </View>
-
                <View style={styles.button}>
                   <Button onPress={emailHandler}>Próximo</Button>
                </View>

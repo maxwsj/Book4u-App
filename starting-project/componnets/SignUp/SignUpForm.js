@@ -63,6 +63,7 @@ const SignUpForm = ({ onSubmit, credentialsInvalid }) => {
                   placeholder: 'Nome',
                }}
                inputContainer={styles.inputContainer}
+               children='* Dados incorretos'
             />
          </View>
          <View>
@@ -74,6 +75,7 @@ const SignUpForm = ({ onSubmit, credentialsInvalid }) => {
                   placeholder: 'Sobrenome',
                }}
                inputContainer={styles.inputContainer}
+               children='* Dados incorretos'
             />
          </View>
          <View>
@@ -87,6 +89,7 @@ const SignUpForm = ({ onSubmit, credentialsInvalid }) => {
                   autoCapitalize: 'none',
                }}
                inputContainer={styles.inputContainer}
+               children='* Dados incorretos'
             />
          </View>
          <View>
@@ -98,6 +101,7 @@ const SignUpForm = ({ onSubmit, credentialsInvalid }) => {
                   placeholder: 'Insira uma senha',
                }}
                inputContainer={styles.inputContainer}
+               children='* Dados incorretos'
             />
          </View>
          <View>
@@ -112,6 +116,7 @@ const SignUpForm = ({ onSubmit, credentialsInvalid }) => {
                   placeholder: 'Insira a senha novamente',
                }}
                inputContainer={styles.inputContainer}
+               children='* Dados incorretos'
             />
          </View>
          <View>
@@ -125,6 +130,7 @@ const SignUpForm = ({ onSubmit, credentialsInvalid }) => {
                   maxLength: 11,
                }}
                inputContainer={styles.inputContainer}
+               children='* Dados incorretos'
             />
          </View>
          <View>
@@ -138,6 +144,7 @@ const SignUpForm = ({ onSubmit, credentialsInvalid }) => {
                   maxLength: 9,
                }}
                inputContainer={styles.inputContainer}
+               children='* Dados incorretos'
             />
          </View>
          <View>
@@ -151,6 +158,7 @@ const SignUpForm = ({ onSubmit, credentialsInvalid }) => {
                   maxLength: 11,
                }}
                inputContainer={styles.inputContainer}
+               children='* Dados incorretos'
             />
          </View>
          <View>
@@ -163,6 +171,7 @@ const SignUpForm = ({ onSubmit, credentialsInvalid }) => {
                   maxLength: 10,
                }}
                inputContainer={styles.inputContainer}
+               children='* Dados incorretos'
             />
          </View>
          <View style={styles.button}>

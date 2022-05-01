@@ -1,19 +1,32 @@
 import { StyleSheet, View, TextInput } from 'react-native';
 import React from 'react';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import InvalidInputTxt from './InvalidInputTxt';
 
 import { Colors } from '../../constants/styles';
 
-const Input = ({ inputConfig, iconConfig, isInvalid, onUpdateValue }) => {
+const Input = ({
+   inputConfig,
+   iconConfig,
+   isInvalid,
+   onUpdateValue,
+   children,
+   InvalidInputTxtStyle,
+}) => {
    return (
-      <View style={[styles.searchSection, isInvalid && styles.inputInvalid]}>
-         <Ionicons style={styles.searchIcon} {...iconConfig} />
-         <TextInput
-            style={[styles.input, isInvalid && styles.inputInvalid]}
-            {...inputConfig}
-            onChangeText={onUpdateValue}
-         />
-      </View>
+      <>
+         <View style={[styles.searchSection, isInvalid && styles.inputInvalid]}>
+            <Ionicons style={styles.searchIcon} {...iconConfig} />
+            <TextInput
+               style={[styles.input, isInvalid && styles.inputInvalid]}
+               {...inputConfig}
+               onChangeText={onUpdateValue}
+            />
+         </View>
+         <View style={InvalidInputTxtStyle}>
+            {isInvalid && <InvalidInputTxt>{children}</InvalidInputTxt>}
+         </View>
+      </>
    );
 };
 

@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import { Colors } from '../../../constants/styles';
 import Logo from '../../../componnets/UI/Logo';
 
+import usuarioService from '../../../util/auth';
+
 import Input from '../../../componnets/UI/Input';
 import FlatButton from '../../../componnets/UI/FlatButton';
 import Button from '../../../componnets/UI/Button';
@@ -13,15 +15,21 @@ import GoogleBtn from '../../../componnets/UI/GoogleBtn';
 const SignUpAuth = ({ route, navigation }) => {
    const [isInvalid, setIsInvalid] = useState(false);
    const [userAuthInput, setUserAuthInput] = useState('');
+   const [registeredNumber, setRegisteredNumber] = useState('');
 
    const { email, registerNumber } = route.params;
+
+   useEffect(() => {
+      setRegisteredNumber(registerNumber);
+   }, [registeredNumber]);
 
    function signInHandler() {
       navigation.replace('SignIn');
    }
 
    function confirmRegisterHandler() {
-      if (userAuthInput === registerNumber) {
+      if (userAuthInput === registeredNumber) {
+         usuarioService.confirmRegistration(userAuthInput);
          navigation.replace('SignIn');
       } else {
          setIsInvalid(true);

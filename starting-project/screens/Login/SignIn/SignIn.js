@@ -11,6 +11,8 @@ import SignInForm from '../../../componnets/SignIn/SignInForm';
 import SignInBgImage from '../../../componnets/SignIn/SignInBgImage';
 
 const SignIn = ({ navigation }) => {
+   const [isInvalid, setIsInvalid] = useState(false);
+
    function signUpHandler() {
       navigation.replace('SignUp');
    }
@@ -40,6 +42,7 @@ const SignIn = ({ navigation }) => {
             email: !emailIsValid,
             password: !passwordIsValid,
          });
+         setIsInvalid(true);
          return;
       }
    }
@@ -52,11 +55,12 @@ const SignIn = ({ navigation }) => {
          <SignInForm
             onSubmit={submitHandler}
             credentialsInvalid={credentialsInvalid}
+            isInvalid={isInvalid}
          />
 
          <View style={styles.flatButton}>
             <FlatButton onPress={passwordRecoverHandler}>
-               Esqueceu sua senha ?
+               Recuperar sua conta ?
             </FlatButton>
          </View>
          <HorizontalButton

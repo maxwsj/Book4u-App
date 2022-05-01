@@ -9,7 +9,7 @@ const Input = ({
    inputContainer,
    isInvalid,
    onUpdateValue,
-   ref,
+   children,
 }) => {
    return (
       <>
@@ -20,7 +20,7 @@ const Input = ({
                onChangeText={onUpdateValue}
             />
          </View>
-         {isInvalid && <InvalidInputTxt />}
+         {isInvalid && <InvalidInputTxt>{children}</InvalidInputTxt>}
       </>
    );
 };
