@@ -14,6 +14,9 @@ const SignIn = ({ navigation }) => {
    function signUpHandler() {
       navigation.replace('SignUp');
    }
+   function passwordRecoverHandler() {
+      navigation.replace('PasswordRecover');
+   }
 
    const [credentialsInvalid, setCredentialsInvalid] = useState({
       name: false,
@@ -52,7 +55,9 @@ const SignIn = ({ navigation }) => {
          />
 
          <View style={styles.flatButton}>
-            <FlatButton>Esqueceu sua senha ?</FlatButton>
+            <FlatButton onPress={passwordRecoverHandler}>
+               Esqueceu sua senha ?
+            </FlatButton>
          </View>
          <HorizontalButton
             hrColor={styles.hrColor}
@@ -71,6 +76,7 @@ const styles = StyleSheet.create({
    bgImgContainer: {
       width: '100%',
       height: 420,
+      zIndex: 10,
    },
    flatButton: {
       marginTop: 12,

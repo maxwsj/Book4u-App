@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native';
-import React from 'react';
+import { useState, useEffect } from 'react';
 
 import { Colors } from '../../../constants/styles';
 import Logo from '../../../componnets/UI/Logo';
@@ -11,10 +11,27 @@ import HorizontalButton from '../../../componnets/UI/HorizontalButton';
 import GoogleBtn from '../../../componnets/UI/GoogleBtn';
 
 const SignUpAuth = ({ route, navigation }) => {
-   const { email } = route.params;
+   const [isInvalid, setIsInvalid] = useState(false);
+   const [userAuthInput, setUserAuthInput] = useState('');
+
+   const { email, registerNumber } = route.params;
+
    function signInHandler() {
       navigation.replace('SignIn');
    }
+
+   function confirmRegisterHandler() {
+      if (userAuthInput === registerNumber) {
+         navigation.replace('SignIn');
+      } else {
+         setIsInvalid(true);
+      }
+   }
+
+   function handleFormChange(enteredValue) {
+      setUserAuthInput(enteredValue);
+   }
+
    return (
       <>
          <View style={styles.container}>
@@ -32,16 +49,23 @@ const SignUpAuth = ({ route, navigation }) => {
                <View style={styles.inputWrapper}>
                   <Input
                      inputConfig={{
+                        keyboardType: 'numeric',
                         placeholder: 'Insira o código de verificação',
                         textAlign: 'center',
+                        maxLength: 5,
                      }}
+                     onUpdateValue={handleFormChange}
+                     value={userAuthInput}
+                     isInvalid={isInvalid}
                   />
                </View>
                <View style={styles.flatButton}>
                   <FlatButton>Reenviar código</FlatButton>
                </View>
                <View style={styles.button}>
-                  <Button>Criar sua conta</Button>
+                  <Button onPress={confirmRegisterHandler}>
+                     Criar sua conta
+                  </Button>
                </View>
             </View>
             <HorizontalButton

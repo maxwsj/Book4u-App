@@ -1,10 +1,13 @@
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 import Logo from '../../../componnets/UI/Logo';
 
 import { Colors } from '../../../constants/styles';
-import SignUpForm from '../../../componnets/SignUp/SignUpForm';
+
+import usuarioService from '../../../util/auth';
+
+import SignUpContent from '../../../componnets/SignUp/SignUpContent';
 
 import HorizontalButton from '../../../componnets/UI/HorizontalButton';
 import GoogleBtn from '../../../componnets/UI/GoogleBtn';
@@ -14,100 +17,22 @@ const SignUp = ({ navigation }) => {
       navigation.replace('SignIn');
    }
 
-   const [isValidated, setIsValidated] = useState(false);
-   const [userDataValidation, setUserDataValidation] = useState({});
-   const [userData, setUserData] = useState({});
-   const [credentialsInvalid, setCredentialsInvalid] = useState({
-      firstName: false,
-      lastName: false,
-      email: false,
-      password: false,
-      confirmPassword: false,
-      rg: false,
-      cpf: false,
-      cellphone: false,
-      telephone: false,
-   });
+   async function signupHandler(userData) {
+      // setIsAuthenticating(true);
+      try {
+         const registerNumber = await usuarioService.createUser(userData);
 
-   function submitHandler(userDataValidation) {
-      setUserDataValidation((curUserData) => {
-         return {
-            ...curUserData,
-            ...userDataValidation,
-         };
-      });
-      userDataValidationHandler(userDataValidation);
-   }
-
-   function userDataValidationHandler(userDataValidation) {
-      let {
-         firstName,
-         lastName,
-         email,
-         password,
-         confirmPassword,
-         rg,
-         cpf,
-         cellphone,
-      } = userDataValidation;
-
-      firstName = firstName.trim();
-      lastName = lastName.trim();
-      email = email.trim();
-      rg = rg.trim();
-      cpf = cpf.trim();
-      cellphone = cellphone.trim();
-
-      const firstNameIsValid = firstName.length > 0;
-      const lastNameIsValid = lastName.length > 0;
-      const emailIsValid = email.includes('@');
-      const passwordIsValid = password.length > 0;
-      const passwordsAreEqual = password === confirmPassword;
-      const rgIsValid = rg.length > 0;
-      // const rgIsValid = rg.length > 8;
-      const cpfIsValid = cpf.length > 0;
-      // const cpfIsValid = cpf.length > 10;
-      const cellphoneIsValid = cellphone.length > 0;
-
-      if (
-         !firstNameIsValid ||
-         !lastNameIsValid ||
-         !emailIsValid ||
-         !passwordIsValid ||
-         !passwordsAreEqual ||
-         !rgIsValid ||
-         !cpfIsValid ||
-         !cellphoneIsValid
-      ) {
-         setCredentialsInvalid({
-            firstName: !firstNameIsValid,
-            lastName: !lastNameIsValid,
-            email: !emailIsValid,
-            password: !passwordIsValid,
-            confirmPassword: !passwordIsValid || passwordsAreEqual,
-            rg: !rgIsValid,
-            cpf: !cpfIsValid,
-            cellphone: !cellphoneIsValid,
+         navigation.navigate('SignUpAuth', {
+            email: userData.personalData.email,
+            registerNumber: registerNumber,
          });
-      } else {
-         setUserData({
-            firstName: firstName,
-            lastName: lastName,
-            email: email,
-            password: password,
-            rg: rg,
-            cpf: cpf,
-            cellphone: cellphone,
-         });
-         setIsValidated(true);
+
+         // authCtx.authenticate(token);
+      } catch (error) {
+         console.log(error);
+         // setIsAuthenticating(false);
       }
    }
-
-   useEffect(() => {
-      if (isValidated) {
-         navigation.navigate('SignUpAuth', { email: userData.email });
-      }
-   }, [isValidated]);
 
    return (
       <>
@@ -118,10 +43,9 @@ const SignUp = ({ navigation }) => {
             <View style={styles.formWrapper}>
                <Text style={styles.title}>Sua Conta</Text>
             </View>
-            <SignUpForm
-               onSubmit={submitHandler}
-               credentialsInvalid={credentialsInvalid}
-               isValidated={isValidated}
+            <SignUpContent
+               onSubmitUser={signupHandler}
+               // onValidating={userValidationHandler}
             />
             <HorizontalButton
                hrContainer={styles.hrContainer}

@@ -1,9 +1,10 @@
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useState } from 'react';
+
 import Input from '../UI/Input';
 import Button from '../UI/Button';
 
-const SignUpForm = ({ onSubmit, isValidated, credentialsInvalid }) => {
+const SignUpForm = ({ onSubmit, credentialsInvalid }) => {
    const [formData, setFormData] = useState({
       firstName: '',
       lastName: '',
@@ -28,7 +29,7 @@ const SignUpForm = ({ onSubmit, isValidated, credentialsInvalid }) => {
       telephone: telephoneIsInvalid,
    } = credentialsInvalid;
 
-   function handleFormChange(inputIdentifier, enteredValue) {
+   function updateInputValueHandler(inputIdentifier, enteredValue) {
       setFormData((curInputs) => {
          return {
             ...curInputs,
@@ -55,7 +56,7 @@ const SignUpForm = ({ onSubmit, isValidated, credentialsInvalid }) => {
       <>
          <View>
             <Input
-               onUpdateValue={handleFormChange.bind(this, 'firstName')}
+               onUpdateValue={updateInputValueHandler.bind(this, 'firstName')}
                value={formData.firstName}
                isInvalid={firstNameIsInvalid}
                inputConfig={{
@@ -66,7 +67,7 @@ const SignUpForm = ({ onSubmit, isValidated, credentialsInvalid }) => {
          </View>
          <View>
             <Input
-               onUpdateValue={handleFormChange.bind(this, 'lastName')}
+               onUpdateValue={updateInputValueHandler.bind(this, 'lastName')}
                value={formData.lastName}
                isInvalid={lastNameIsInvalid}
                inputConfig={{
@@ -77,7 +78,7 @@ const SignUpForm = ({ onSubmit, isValidated, credentialsInvalid }) => {
          </View>
          <View>
             <Input
-               onUpdateValue={handleFormChange.bind(this, 'email')}
+               onUpdateValue={updateInputValueHandler.bind(this, 'email')}
                value={formData.email}
                isInvalid={emailIsInvalid}
                inputConfig={{
@@ -90,7 +91,7 @@ const SignUpForm = ({ onSubmit, isValidated, credentialsInvalid }) => {
          </View>
          <View>
             <Input
-               onUpdateValue={handleFormChange.bind(this, 'password')}
+               onUpdateValue={updateInputValueHandler.bind(this, 'password')}
                value={formData.password}
                isInvalid={passwordIsInvalid}
                inputConfig={{
@@ -101,7 +102,10 @@ const SignUpForm = ({ onSubmit, isValidated, credentialsInvalid }) => {
          </View>
          <View>
             <Input
-               onUpdateValue={handleFormChange.bind(this, 'confirmPassword')}
+               onUpdateValue={updateInputValueHandler.bind(
+                  this,
+                  'confirmPassword'
+               )}
                value={formData.confirmPassword}
                isInvalid={passwordsDontMatch}
                inputConfig={{
@@ -112,7 +116,7 @@ const SignUpForm = ({ onSubmit, isValidated, credentialsInvalid }) => {
          </View>
          <View>
             <Input
-               onUpdateValue={handleFormChange.bind(this, 'cpf')}
+               onUpdateValue={updateInputValueHandler.bind(this, 'cpf')}
                value={formData.cpf}
                isInvalid={cpfIsInvalid}
                inputConfig={{
@@ -125,7 +129,7 @@ const SignUpForm = ({ onSubmit, isValidated, credentialsInvalid }) => {
          </View>
          <View>
             <Input
-               onUpdateValue={handleFormChange.bind(this, 'rg')}
+               onUpdateValue={updateInputValueHandler.bind(this, 'rg')}
                value={formData.rg}
                isInvalid={rgIsInvalid}
                inputConfig={{
@@ -138,7 +142,7 @@ const SignUpForm = ({ onSubmit, isValidated, credentialsInvalid }) => {
          </View>
          <View>
             <Input
-               onUpdateValue={handleFormChange.bind(this, 'cellphone')}
+               onUpdateValue={updateInputValueHandler.bind(this, 'cellphone')}
                value={formData.cellphone}
                isInvalid={cellphoneIsInvalid}
                inputConfig={{
@@ -151,7 +155,7 @@ const SignUpForm = ({ onSubmit, isValidated, credentialsInvalid }) => {
          </View>
          <View>
             <Input
-               onUpdateValue={handleFormChange.bind(this, 'telephone')}
+               onUpdateValue={updateInputValueHandler.bind(this, 'telephone')}
                value={formData.telephone}
                inputConfig={{
                   placeholder: 'Telefone Fixo',

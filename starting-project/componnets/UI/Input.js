@@ -4,7 +4,13 @@ import React from 'react';
 import { Colors } from '../../constants/styles';
 import InvalidInputTxt from './InvalidInputTxt';
 
-const Input = ({ inputConfig, inputContainer, isInvalid, onUpdateValue }) => {
+const Input = ({
+   inputConfig,
+   inputContainer,
+   isInvalid,
+   onUpdateValue,
+   ref,
+}) => {
    return (
       <>
          <View style={[styles.searchSection, inputContainer]}>
