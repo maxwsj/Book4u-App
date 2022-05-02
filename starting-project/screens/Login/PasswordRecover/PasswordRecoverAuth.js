@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { Colors } from '../../../constants/styles';
 import Logo from '../../../componnets/UI/Logo';
@@ -9,28 +9,48 @@ import FlatButton from '../../../componnets/UI/FlatButton';
 import Button from '../../../componnets/UI/Button';
 import HorizontalButton from '../../../componnets/UI/HorizontalButton';
 import GoogleBtn from '../../../componnets/UI/GoogleBtn';
+import usuarioService from '../../../util/auth';
 
 const PasswordRecoverAuth = ({ route, navigation }) => {
    const [isInvalid, setIsInvalid] = useState(false);
-   const [httpAuthToken, setHttpAuthToken] = useState('1234');
-   const [userAuthInput, setUserAuthInput] = useState('');
+   const [recoveredNumber, setRecoveredNumber] = useState('');
+   const [userAuthInput, setUserAuthInput] = useState(null);
+   const [resendToken, setResendToken] = useState(null);
 
-   const { email } = route.params;
+   const { email, recoverToken } = route.params;
+
+   useEffect(() => {
+      setRecoveredNumber(recoverToken);
+   }, [recoveredNumber]);
 
    function signInHandler() {
       navigation.replace('SignIn');
    }
 
-   function confirmTokenHandler() {
-      if (userAuthInput === httpAuthToken) {
-         navigation.replace('NewPassword');
-      } else {
-         setIsInvalid(true);
+   async function confirmTokenHandler() {
+      try {
+         if (
+            userAuthInput === recoveredNumber ||
+            userAuthInput === resendToken
+         ) {
+            navigation.replace('NewPassword', { email: email });
+         } else {
+            setIsInvalid(true);
+         }
+      } catch (error) {
+         console.log(error);
       }
    }
 
    function handleFormChange(enteredValue) {
-      setUserAuthInput(enteredValue);
+      const userInput = parseInt(enteredValue);
+      setUserAuthInput(userInput);
+   }
+
+   async function resendTokenHandler() {
+      const newToken = await usuarioService.userRecoverToken(email);
+      console.log(newToken);
+      setResendToken(newToken);
    }
 
    return (
@@ -60,7 +80,9 @@ const PasswordRecoverAuth = ({ route, navigation }) => {
                />
             </View>
             <View style={styles.flatButton}>
-               <FlatButton>Reenviar código</FlatButton>
+               <FlatButton onPress={resendTokenHandler}>
+                  Reenviar código
+               </FlatButton>
             </View>
             <View style={styles.button}>
                <Button onPress={confirmTokenHandler}>Próximo</Button>

@@ -26,11 +26,14 @@ const PasswordRecoverAuth = ({ navigation }) => {
             const response = await usuarioService.userRecoverEmail(
                userEmailInput
             );
+
             if (response === 'Usuário não encontrado') {
                setIsInvalid(true);
             } else {
+               const userValidationToken = parseInt(response);
                navigation.replace('PasswordRecoverAuth', {
                   email: userEmailInput,
+                  recoverToken: userValidationToken,
                });
             }
          } catch (error) {
@@ -57,6 +60,7 @@ const PasswordRecoverAuth = ({ navigation }) => {
                   <Input
                      inputConfig={{
                         keyboardType: 'email-address',
+                        autoCapitalize: 'none',
                         placeholder: 'Insira o email cadastrado',
                         textAlign: 'center',
                      }}

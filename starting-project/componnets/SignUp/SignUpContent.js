@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 import { useState } from 'react';
 import SignUpForm from './SignUpForm';
 
-const SignUpContent = ({ onSubmitUser, onValidating }) => {
+const SignUpContent = ({ onSubmitUser }) => {
    const [isValid, setIsValid] = useState(false);
 
    const [credentialsInvalid, setCredentialsInvalid] = useState({
@@ -16,16 +16,6 @@ const SignUpContent = ({ onSubmitUser, onValidating }) => {
       cellphone: false,
       telephone: false,
    });
-
-   // function submitHandler(userDataValidation) {
-   //    setUserDataValidation((curUserData) => {
-   //       return {
-   //          ...curUserData,
-   //          ...userDataValidation,
-   //       };
-   //    });
-   //    userDataValidationHandler(userDataValidation);
-   // }
 
    function submitHandler(userDataValidation) {
       let {

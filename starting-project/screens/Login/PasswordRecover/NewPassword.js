@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native';
-import React from 'react';
+import { useState, useEffect } from 'react';
 
 import { Colors } from '../../../constants/styles';
 
@@ -9,9 +9,44 @@ import GoogleBtn from '../../../componnets/UI/GoogleBtn';
 import Input from '../../../componnets/UI/Input';
 import Button from '../../../componnets/UI/Button';
 
-const NewPassword = ({ navigation }) => {
+import usuarioService from '../../../util/auth';
+
+const NewPassword = ({ route, navigation }) => {
+   const { email } = route.params;
+   const [isInvalid, setIsInvalid] = useState(false);
+   const [passwordForm, setPasswordForm] = useState({
+      newPassword: '',
+      confirmPassword: '',
+   });
+
    function signInHandler() {
       navigation.replace('SignIn');
+   }
+
+   function updateInputValueHandler(inputIdentifier, enteredValue) {
+      setPasswordForm((curInputs) => {
+         return {
+            ...curInputs,
+            [inputIdentifier]: enteredValue,
+         };
+      });
+   }
+
+   async function updatePasswordHandler() {
+      const isEmptyNewPass = passwordForm.newPassword.length > 0;
+      const isEmptyConfirmPass = passwordForm.confirmPassword.length > 0;
+      const areEqual =
+         passwordForm.newPassword === passwordForm.confirmPassword;
+
+      if (!isEmptyNewPass || !isEmptyConfirmPass || !areEqual) {
+         setIsInvalid(true);
+      } else {
+         await usuarioService.userRecoverPassword(
+            email,
+            passwordForm.newPassword
+         );
+         navigation.replace('SignIn');
+      }
    }
 
    return (
@@ -24,19 +59,30 @@ const NewPassword = ({ navigation }) => {
          </View>
          <View style={styles.inputWrapper}>
             <Input
+               onUpdateValue={updateInputValueHandler.bind(this, 'newPassword')}
                inputConfig={{
                   placeholder: 'Insira a senha',
                }}
+               value={passwordForm.newPassword}
+               isInvalid={isInvalid}
+               children='* Dados incorretos'
             />
             <Input
+               onUpdateValue={updateInputValueHandler.bind(
+                  this,
+                  'confirmPassword'
+               )}
                inputConfig={{
                   placeholder: 'Repita a senha',
                }}
+               value={passwordForm.confirmPassword}
+               isInvalid={isInvalid}
+               children='* Dados incorretos'
             />
          </View>
 
          <View style={styles.button}>
-            <Button>Confirmar</Button>
+            <Button onPress={updatePasswordHandler}>Confirmar</Button>
          </View>
 
          <HorizontalButton

@@ -34,23 +34,26 @@ class UsuarioService {
       });
 
       const responseData = response.data;
-
       return responseData;
    }
 
    async userRecoverToken(token) {
-      await axios({
+      const response = await axios({
          url: Config.API_URL + `api/user/resendRNumber/${token}`,
          method: 'PUT',
          timeout: Config.TIMEOUT_REQUEST,
          headers: Config.HEADER_REQUEST,
       });
+
+      const RecoverToken = response.data;
+      return RecoverToken;
    }
 
-   async userRecoverPassword(newPassword) {
+   async userRecoverPassword(email, newPassword) {
       await axios({
-         url: Config.API_URL + `api/user/exchangePassword/${newPassword}`,
+         url: Config.API_URL + `api/user/exchangePassword/${email}`,
          method: 'PUT',
+         data: newPassword,
          timeout: Config.TIMEOUT_REQUEST,
          headers: Config.HEADER_REQUEST,
       });
