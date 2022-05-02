@@ -2,6 +2,7 @@ import { StyleSheet, View, TextInput } from 'react-native';
 import React from 'react';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import InvalidInputTxt from './InvalidInputTxt';
+import IconBtn from './IconBtn';
 
 import { Colors } from '../../constants/styles';
 
@@ -12,6 +13,9 @@ const Input = ({
    onUpdateValue,
    children,
    InvalidInputTxtStyle,
+   setIcon,
+   iconBtnConfig,
+   onIconBtnPress,
 }) => {
    return (
       <>
@@ -22,6 +26,12 @@ const Input = ({
                {...inputConfig}
                onChangeText={onUpdateValue}
             />
+            {setIcon && (
+               <IconBtn
+                  onPress={onIconBtnPress}
+                  iconBtnConfig={iconBtnConfig}
+               />
+            )}
          </View>
          <View style={InvalidInputTxtStyle}>
             {isInvalid && <InvalidInputTxt>{children}</InvalidInputTxt>}

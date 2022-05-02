@@ -58,6 +58,17 @@ class UsuarioService {
          headers: Config.HEADER_REQUEST,
       });
    }
+   async userDataValidation(userData) {
+      const response = await axios({
+         url: Config.API_URL + `api/user/auth/login`,
+         method: 'POST',
+         data: userData,
+         timeout: Config.TIMEOUT_REQUEST,
+         headers: Config.HEADER_REQUEST,
+      });
+
+      return response;
+   }
 }
 
 let usuarioService = new UsuarioService();

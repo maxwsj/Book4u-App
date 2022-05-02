@@ -10,6 +10,8 @@ import GoogleBtn from '../../../componnets/UI/GoogleBtn';
 import SignInForm from '../../../componnets/SignIn/SignInForm';
 import SignInBgImage from '../../../componnets/SignIn/SignInBgImage';
 
+import usuarioService from '../../../util/auth';
+
 const SignIn = ({ navigation }) => {
    const [isInvalid, setIsInvalid] = useState(false);
 
@@ -21,29 +23,29 @@ const SignIn = ({ navigation }) => {
    }
 
    const [credentialsInvalid, setCredentialsInvalid] = useState({
-      name: false,
-      nickname: false,
-      email: false,
+      username: false,
       password: false,
-      confirmPassword: false,
    });
 
-   function submitHandler(credentials) {
-      let { email, password } = credentials;
+   async function submitHandler(credentials) {
+      let { username, password } = credentials;
 
-      email = email.trim();
+      username = username.trim();
       password = password.trim();
 
-      const emailIsValid = email.includes('@');
+      const usernameIsValid = username.includes('@');
       const passwordIsValid = password.length > 6;
 
-      if (!emailIsValid || !passwordIsValid) {
+      if (!usernameIsValid || !passwordIsValid) {
          setCredentialsInvalid({
-            email: !emailIsValid,
+            username: !usernameIsValid,
             password: !passwordIsValid,
          });
          setIsInvalid(true);
          return;
+      } else {
+         const response = await usuarioService.userDataValidation(credentials);
+         console.log(response.data.user.userSituation.name);
       }
    }
 

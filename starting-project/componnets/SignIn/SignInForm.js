@@ -6,16 +6,20 @@ import InputIcon from '../UI/InputIcon';
 import Button from '../UI/Button';
 
 const SignInForm = ({ onSubmit, credentialsInvalid }) => {
-   const [enteredEmail, setEnteredEmail] = useState('');
+   const [enteredUsername, setEnteredUsername] = useState('');
    const [enteredPassword, setEnteredPassword] = useState('');
+   const [visible, setVisibility] = useState(false);
+   const [secureTextEntry, setSecureTextEntry] = useState(true);
 
-   const { email: emailIsInvalid, password: passwordIsInvalid } =
+   const icon = !visible ? 'eye-off-outline' : 'eye-outline';
+
+   const { username: usernameIsInvalid, password: passwordIsInvalid } =
       credentialsInvalid;
 
    function updateInputValueHandler(inputType, enteredValue) {
       switch (inputType) {
-         case 'email':
-            setEnteredEmail(enteredValue);
+         case 'username':
+            setEnteredUsername(enteredValue);
             break;
          case 'password':
             setEnteredPassword(enteredValue);
@@ -25,21 +29,27 @@ const SignInForm = ({ onSubmit, credentialsInvalid }) => {
 
    function submitHandler() {
       onSubmit({
-         email: enteredEmail,
+         username: enteredUsername,
          password: enteredPassword,
       });
+   }
+
+   function iconBtnHandler() {
+      setVisibility(!visible);
+      setSecureTextEntry(!secureTextEntry);
    }
 
    return (
       <View style={styles.loginFormContainer}>
          <View>
             <InputIcon
-               onUpdateValue={updateInputValueHandler.bind(this, 'email')}
-               value={enteredEmail}
-               isInvalid={emailIsInvalid}
+               onUpdateValue={updateInputValueHandler.bind(this, 'username')}
+               value={enteredUsername}
+               isInvalid={usernameIsInvalid}
                inputConfig={{
                   placeholder: 'Usuário',
                   keyboardType: 'email-address',
+                  autoCapitalize: 'none',
                }}
                iconConfig={{
                   name: 'person-outline',
@@ -57,7 +67,7 @@ const SignInForm = ({ onSubmit, credentialsInvalid }) => {
                isInvalid={passwordIsInvalid}
                inputConfig={{
                   placeholder: 'Senha',
-                  secureTextEntry: true,
+                  secureTextEntry: secureTextEntry,
                }}
                iconConfig={{
                   name: 'md-lock-closed-outline',
@@ -66,6 +76,13 @@ const SignInForm = ({ onSubmit, credentialsInvalid }) => {
                }}
                children='* Dados incorretos'
                InvalidInputTxtStyle={styles.InvalidInputMargin}
+               setIcon={true}
+               iconBtnConfig={{
+                  name: icon,
+                  size: 20,
+                  color: Colors.silver200,
+               }}
+               onIconBtnPress={iconBtnHandler}
             />
          </View>
          <View style={styles.button}>
