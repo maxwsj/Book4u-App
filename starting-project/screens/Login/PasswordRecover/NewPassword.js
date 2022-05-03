@@ -33,6 +33,7 @@ const NewPassword = ({ route, navigation }) => {
    }
 
    async function updatePasswordHandler() {
+      const password = { password: passwordForm.newPassword };
       const isEmptyNewPass = passwordForm.newPassword.length > 0;
       const isEmptyConfirmPass = passwordForm.confirmPassword.length > 0;
       const areEqual =
@@ -41,10 +42,7 @@ const NewPassword = ({ route, navigation }) => {
       if (!isEmptyNewPass || !isEmptyConfirmPass || !areEqual) {
          setIsInvalid(true);
       } else {
-         await usuarioService.userRecoverPassword(
-            email,
-            passwordForm.newPassword
-         );
+         await usuarioService.userRecoverPassword(email, password);
          navigation.replace('SignIn');
       }
    }
@@ -122,18 +120,15 @@ const styles = StyleSheet.create({
    },
    title: {
       color: Colors.silver400,
-      fontSize: 20,
+      fontSize: 24,
+      fontFamily: 'montserrat-regular',
+      textAlign: 'center',
    },
    titleWrapper: {
       marginTop: 60,
       justifyContent: 'center',
       alignItems: 'center',
       marginHorizontal: 30,
-   },
-   title: {
-      fontSize: 24,
-      color: Colors.silver400,
-      textAlign: 'center',
    },
    button: {
       marginTop: 60,

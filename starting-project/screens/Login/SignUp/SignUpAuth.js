@@ -16,6 +16,7 @@ const SignUpAuth = ({ route, navigation }) => {
    const [isInvalid, setIsInvalid] = useState(false);
    const [userAuthInput, setUserAuthInput] = useState('');
    const [registeredNumber, setRegisteredNumber] = useState('');
+   const [resendToken, setResendToken] = useState(null);
 
    const { email, registerNumber } = route.params;
 
@@ -27,9 +28,12 @@ const SignUpAuth = ({ route, navigation }) => {
       navigation.replace('SignIn');
    }
 
-   function confirmRegisterHandler() {
-      if (userAuthInput === registeredNumber) {
-         usuarioService.confirmRegistration(userAuthInput);
+   async function confirmRegisterHandler() {
+      if (
+         userAuthInput === registeredNumber ||
+         +userAuthInput === resendToken
+      ) {
+         await usuarioService.confirmRegistration(userAuthInput);
          navigation.replace('SignIn');
       } else {
          setIsInvalid(true);
@@ -38,6 +42,11 @@ const SignUpAuth = ({ route, navigation }) => {
 
    function handleFormChange(enteredValue) {
       setUserAuthInput(enteredValue);
+   }
+
+   async function resendTokenHandler() {
+      const newToken = await usuarioService.userRecoverToken(email);
+      setResendToken(newToken);
    }
 
    return (
@@ -68,12 +77,12 @@ const SignUpAuth = ({ route, navigation }) => {
                   />
                </View>
                <View style={styles.flatButton}>
-                  <FlatButton>Reenviar código</FlatButton>
+                  <FlatButton onPress={resendTokenHandler}>
+                     Reenviar código
+                  </FlatButton>
                </View>
                <View style={styles.button}>
-                  <Button onPress={confirmRegisterHandler}>
-                     Criar sua conta
-                  </Button>
+                  <Button onPress={confirmRegisterHandler}>Confirmar</Button>
                </View>
             </View>
             <HorizontalButton

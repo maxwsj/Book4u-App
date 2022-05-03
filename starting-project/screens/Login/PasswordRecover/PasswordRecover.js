@@ -35,6 +35,7 @@ const PasswordRecoverAuth = ({ navigation }) => {
                   email: userEmailInput,
                   recoverToken: userValidationToken,
                });
+               console.log(response);
             }
          } catch (error) {
             console.log(error);
@@ -112,6 +113,7 @@ const styles = StyleSheet.create({
       fontSize: 24,
       color: Colors.silver400,
       textAlign: 'center',
+      fontFamily: 'montserrat-regular',
    },
    button: {
       marginTop: 100,

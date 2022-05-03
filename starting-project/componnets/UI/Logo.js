@@ -30,5 +30,6 @@ const styles = StyleSheet.create({
       fontSize: 32,
       letterSpacing: 5,
       color: Colors.silver300,
+      fontFamily: 'lato-light',
    },
 });

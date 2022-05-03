@@ -13,6 +13,8 @@ import HorizontalButton from '../../../componnets/UI/HorizontalButton';
 import GoogleBtn from '../../../componnets/UI/GoogleBtn';
 
 const SignUp = ({ navigation }) => {
+   const [isInvalid, setIsInvalid] = useState(false);
+
    function signInHandler() {
       navigation.replace('SignIn');
    }
@@ -29,7 +31,7 @@ const SignUp = ({ navigation }) => {
 
          // authCtx.authenticate(token);
       } catch (error) {
-         console.log(error);
+         setIsInvalid(true);
          // setIsAuthenticating(false);
       }
    }
@@ -43,10 +45,7 @@ const SignUp = ({ navigation }) => {
             <View style={styles.formWrapper}>
                <Text style={styles.title}>Sua Conta</Text>
             </View>
-            <SignUpContent
-               onSubmitUser={signupHandler}
-               // onValidating={userValidationHandler}
-            />
+            <SignUpContent onSubmitUser={signupHandler} isInvalid={isInvalid} />
             <HorizontalButton
                hrContainer={styles.hrContainer}
                hrColor={styles.hrColor}
@@ -85,5 +84,6 @@ const styles = StyleSheet.create({
    title: {
       color: Colors.silver400,
       fontSize: 20,
+      fontFamily: 'montserrat-regular',
    },
 });

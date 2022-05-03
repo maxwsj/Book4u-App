@@ -28,5 +28,7 @@ const styles = StyleSheet.create({
    buttonText: {
       textAlign: 'center',
       color: Colors.silver300,
+      fontFamily: 'poppins-regular',
+      fontSize: 14,
    },
 });

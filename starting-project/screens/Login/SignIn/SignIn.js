@@ -29,6 +29,7 @@ const SignIn = ({ navigation }) => {
 
    async function submitHandler(credentials) {
       let { username, password } = credentials;
+      console.log(credentials);
 
       username = username.trim();
       password = password.trim();
@@ -44,8 +45,7 @@ const SignIn = ({ navigation }) => {
          setIsInvalid(true);
          return;
       } else {
-         const response = await usuarioService.userDataValidation(credentials);
-         console.log(response.data.user.userSituation.name);
+         await usuarioService.userDataValidation(credentials);
       }
    }
 
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
       zIndex: 10,
    },
    flatButton: {
-      marginTop: 12,
+      marginTop: 30,
       marginHorizontal: 40,
    },
    hrColor: {

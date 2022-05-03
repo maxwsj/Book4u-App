@@ -47,7 +47,7 @@ const SignInForm = ({ onSubmit, credentialsInvalid }) => {
                value={enteredUsername}
                isInvalid={usernameIsInvalid}
                inputConfig={{
-                  placeholder: 'Usuário',
+                  placeholder: 'Email',
                   keyboardType: 'email-address',
                   autoCapitalize: 'none',
                }}

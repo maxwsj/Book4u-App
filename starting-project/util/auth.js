@@ -49,11 +49,11 @@ class UsuarioService {
       return RecoverToken;
    }
 
-   async userRecoverPassword(email, newPassword) {
+   async userRecoverPassword(email, password) {
       await axios({
          url: Config.API_URL + `api/user/exchangePassword/${email}`,
          method: 'PUT',
-         data: newPassword,
+         data: password,
          timeout: Config.TIMEOUT_REQUEST,
          headers: Config.HEADER_REQUEST,
       });
@@ -66,7 +66,6 @@ class UsuarioService {
          timeout: Config.TIMEOUT_REQUEST,
          headers: Config.HEADER_REQUEST,
       });
-
       return response;
    }
 }

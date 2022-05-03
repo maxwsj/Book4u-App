@@ -36,5 +36,6 @@ const styles = StyleSheet.create({
       color: Colors.snow,
       letterSpacing: 5,
       fontSize: 24,
+      fontFamily: 'lato-regular',
    },
 });

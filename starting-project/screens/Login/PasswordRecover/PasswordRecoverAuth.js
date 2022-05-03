@@ -33,6 +33,7 @@ const PasswordRecoverAuth = ({ route, navigation }) => {
             userAuthInput === recoveredNumber ||
             userAuthInput === resendToken
          ) {
+            await usuarioService.confirmRegistration(userAuthInput);
             navigation.replace('NewPassword', { email: email });
          } else {
             setIsInvalid(true);
@@ -43,13 +44,12 @@ const PasswordRecoverAuth = ({ route, navigation }) => {
    }
 
    function handleFormChange(enteredValue) {
-      const userInput = parseInt(enteredValue);
+      const userInput = +enteredValue;
       setUserAuthInput(userInput);
    }
 
    async function resendTokenHandler() {
       const newToken = await usuarioService.userRecoverToken(email);
-      console.log(newToken);
       setResendToken(newToken);
    }
 
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
       marginHorizontal: 30,
    },
    buttonsWrapper: {
-      marginTop: 30,
+      marginTop: 20,
       marginBottom: 30,
       marginHorizontal: 30,
    },
@@ -127,10 +127,15 @@ const styles = StyleSheet.create({
    title: {
       fontSize: 24,
       color: Colors.silver400,
+      fontFamily: 'montserrat-regular',
+      marginHorizontal: 30,
+      textAlign: 'center',
    },
    text: {
+      fontSize: 14,
       textAlign: 'center',
       color: Colors.silver400,
+      fontFamily: 'poppins-regular',
    },
    button: {
       marginTop: 50,

@@ -20,7 +20,7 @@ export default Button;
 const styles = StyleSheet.create({
    button: {
       borderRadius: 6,
-      paddingVertical: 12,
+      paddingVertical: 10,
       paddingHorizontal: 12,
       backgroundColor: Colors.dandelion,
       elevation: 2,
@@ -36,6 +36,6 @@ const styles = StyleSheet.create({
       textAlign: 'center',
       color: Colors.snow,
       fontSize: 16,
-      fontWeight: 'bold',
+      fontFamily: 'poppins-bold',
    },
 });

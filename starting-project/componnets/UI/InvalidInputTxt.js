@@ -13,5 +13,6 @@ const styles = StyleSheet.create({
       fontSize: 10,
       color: Colors.lavenderBlush,
       marginLeft: 30,
+      fontFamily: 'poppins-regular',
    },
 });

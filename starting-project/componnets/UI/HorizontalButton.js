@@ -38,6 +38,8 @@ const styles = StyleSheet.create({
    signInText: {
       textAlign: 'center',
       color: Colors.silver300,
+      fontFamily: 'poppins-regular',
+      fontSize: 14,
    },
    signInButtonWrapper: {
       borderBottomColor: Colors.silver100,

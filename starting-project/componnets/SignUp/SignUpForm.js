@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Input from '../UI/Input';
 import Button from '../UI/Button';
 
-const SignUpForm = ({ onSubmit, credentialsInvalid }) => {
+const SignUpForm = ({ onSubmit, credentialsInvalid, isInvalid }) => {
    const [formData, setFormData] = useState({
       firstName: '',
       lastName: '',
@@ -58,7 +58,7 @@ const SignUpForm = ({ onSubmit, credentialsInvalid }) => {
             <Input
                onUpdateValue={updateInputValueHandler.bind(this, 'firstName')}
                value={formData.firstName}
-               isInvalid={firstNameIsInvalid}
+               isInvalid={firstNameIsInvalid || isInvalid}
                inputConfig={{
                   placeholder: 'Nome',
                }}
@@ -70,7 +70,7 @@ const SignUpForm = ({ onSubmit, credentialsInvalid }) => {
             <Input
                onUpdateValue={updateInputValueHandler.bind(this, 'lastName')}
                value={formData.lastName}
-               isInvalid={lastNameIsInvalid}
+               isInvalid={lastNameIsInvalid || isInvalid}
                inputConfig={{
                   placeholder: 'Sobrenome',
                }}
@@ -82,7 +82,7 @@ const SignUpForm = ({ onSubmit, credentialsInvalid }) => {
             <Input
                onUpdateValue={updateInputValueHandler.bind(this, 'email')}
                value={formData.email}
-               isInvalid={emailIsInvalid}
+               isInvalid={emailIsInvalid || isInvalid}
                inputConfig={{
                   placeholder: 'Email',
                   keyboardType: 'email-address',
@@ -96,9 +96,9 @@ const SignUpForm = ({ onSubmit, credentialsInvalid }) => {
             <Input
                onUpdateValue={updateInputValueHandler.bind(this, 'password')}
                value={formData.password}
-               isInvalid={passwordIsInvalid}
+               isInvalid={passwordIsInvalid || isInvalid}
                inputConfig={{
-                  placeholder: 'Insira uma senha',
+                  placeholder: 'Insira uma senha (mínimo 9 caracteres)',
                }}
                inputContainer={styles.inputContainer}
                children='* Dados incorretos'
@@ -111,7 +111,7 @@ const SignUpForm = ({ onSubmit, credentialsInvalid }) => {
                   'confirmPassword'
                )}
                value={formData.confirmPassword}
-               isInvalid={passwordsDontMatch}
+               isInvalid={passwordsDontMatch || isInvalid}
                inputConfig={{
                   placeholder: 'Insira a senha novamente',
                }}
@@ -123,9 +123,9 @@ const SignUpForm = ({ onSubmit, credentialsInvalid }) => {
             <Input
                onUpdateValue={updateInputValueHandler.bind(this, 'cpf')}
                value={formData.cpf}
-               isInvalid={cpfIsInvalid}
+               isInvalid={cpfIsInvalid || isInvalid}
                inputConfig={{
-                  placeholder: 'CPF: (Sem ponto)',
+                  placeholder: 'CPF: (Somento números)',
                   keyboardType: 'numeric',
                   maxLength: 11,
                }}
@@ -137,9 +137,9 @@ const SignUpForm = ({ onSubmit, credentialsInvalid }) => {
             <Input
                onUpdateValue={updateInputValueHandler.bind(this, 'rg')}
                value={formData.rg}
-               isInvalid={rgIsInvalid}
+               isInvalid={rgIsInvalid || isInvalid}
                inputConfig={{
-                  placeholder: 'RG: (Sem ponto)',
+                  placeholder: 'RG: (Somento números)',
                   keyboardType: 'numeric',
                   maxLength: 9,
                }}
@@ -151,7 +151,7 @@ const SignUpForm = ({ onSubmit, credentialsInvalid }) => {
             <Input
                onUpdateValue={updateInputValueHandler.bind(this, 'cellphone')}
                value={formData.cellphone}
-               isInvalid={cellphoneIsInvalid}
+               isInvalid={cellphoneIsInvalid || isInvalid}
                inputConfig={{
                   placeholder: 'Celular',
                   keyboardType: 'numeric',
