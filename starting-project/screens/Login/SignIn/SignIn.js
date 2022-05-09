@@ -7,13 +7,12 @@ import FlatButton from '../../../componnets/UI/FlatButton';
 import HorizontalButton from '../../../componnets/UI/HorizontalButton';
 import GoogleBtn from '../../../componnets/UI/GoogleBtn';
 
-import SignInForm from '../../../componnets/SignIn/SignInForm';
 import SignInBgImage from '../../../componnets/SignIn/SignInBgImage';
+import SignInContent from '../../../componnets/SignIn/SignInContent';
+import LoadingOverlay from '../../../componnets/UI/LoadingOverlay';
 
-import usuarioService from '../../../util/auth';
-
-const SignIn = ({ navigation }) => {
-   const [isInvalid, setIsInvalid] = useState(false);
+const SignIn = ({ navigation, onTeste }) => {
+   const [isAuthenticating, setIsAuthenticating] = useState(false);
 
    function signUpHandler() {
       navigation.replace('SignUp');
@@ -22,31 +21,12 @@ const SignIn = ({ navigation }) => {
       navigation.replace('PasswordRecover');
    }
 
-   const [credentialsInvalid, setCredentialsInvalid] = useState({
-      username: false,
-      password: false,
-   });
+   function authenticatingHandler(boolean) {
+      setIsAuthenticating(boolean);
+   }
 
-   async function submitHandler(credentials) {
-      let { username, password } = credentials;
-      console.log(credentials);
-
-      username = username.trim();
-      password = password.trim();
-
-      const usernameIsValid = username.includes('@');
-      const passwordIsValid = password.length > 6;
-
-      if (!usernameIsValid || !passwordIsValid) {
-         setCredentialsInvalid({
-            username: !usernameIsValid,
-            password: !passwordIsValid,
-         });
-         setIsInvalid(true);
-         return;
-      } else {
-         await usuarioService.userDataValidation(credentials);
-      }
+   if (isAuthenticating) {
+      return <LoadingOverlay message='Entrando...' />;
    }
 
    return (
@@ -54,11 +34,7 @@ const SignIn = ({ navigation }) => {
          <View style={styles.bgImgContainer}>
             <SignInBgImage />
          </View>
-         <SignInForm
-            onSubmit={submitHandler}
-            credentialsInvalid={credentialsInvalid}
-            isInvalid={isInvalid}
-         />
+         <SignInContent onAuth={authenticatingHandler} />
 
          <View style={styles.flatButton}>
             <FlatButton onPress={passwordRecoverHandler}>

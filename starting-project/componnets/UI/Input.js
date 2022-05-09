@@ -3,6 +3,7 @@ import React from 'react';
 
 import { Colors } from '../../constants/styles';
 import InvalidInputTxt from './InvalidInputTxt';
+import IconBtn from '../UI/IconBtn';
 
 const Input = ({
    inputConfig,
@@ -10,6 +11,9 @@ const Input = ({
    isInvalid,
    onUpdateValue,
    children,
+   setIcon,
+   onIconBtnPress,
+   iconBtnConfig,
 }) => {
    return (
       <>
@@ -19,6 +23,12 @@ const Input = ({
                {...inputConfig}
                onChangeText={onUpdateValue}
             />
+            {setIcon && (
+               <IconBtn
+                  onPress={onIconBtnPress}
+                  iconBtnConfig={iconBtnConfig}
+               />
+            )}
          </View>
          {isInvalid && <InvalidInputTxt>{children}</InvalidInputTxt>}
       </>

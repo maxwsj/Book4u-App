@@ -40,12 +40,10 @@ const SignUpContent = ({ onSubmitUser, isInvalid }) => {
       const firstNameIsValid = firstName.length > 0;
       const lastNameIsValid = lastName.length > 0;
       const emailIsValid = email.includes('@');
-      const passwordIsValid = password.length > 0;
+      const passwordIsValid = password.length > 8;
       const passwordsAreEqual = password === confirmPassword;
-      const rgIsValid = rg.length > 0;
-      // const rgIsValid = rg.length > 8;
-      const cpfIsValid = cpf.length > 0;
-      // const cpfIsValid = cpf.length > 10;
+      const rgIsValid = rg.length > 8;
+      const cpfIsValid = cpf.length > 10;
       const cellphoneIsValid = cellphone.length > 0;
 
       if (
@@ -63,31 +61,32 @@ const SignUpContent = ({ onSubmitUser, isInvalid }) => {
             lastName: !lastNameIsValid,
             email: !emailIsValid,
             password: !passwordIsValid,
-            confirmPassword: !passwordIsValid || passwordsAreEqual,
+            confirmPassword: !passwordIsValid || !passwordsAreEqual,
             rg: !rgIsValid,
             cpf: !cpfIsValid,
             cellphone: !cellphoneIsValid,
          });
+      } else {
+         onSubmitUser({
+            userSituation: {
+               name: 'Pendente',
+            },
+            personalData: {
+               email: email,
+               password: password,
+               rg: rg,
+               cpf: cpf,
+               cellphone: cellphone,
+               telephone: telephone,
+            },
+            firstName: firstName,
+            lastName: lastName,
+            profileImage: '',
+            registerNumber: '',
+         });
+         setIsValid(true);
+         // onValidating(isValid);
       }
-      onSubmitUser({
-         userSituation: {
-            name: 'Pendente',
-         },
-         personalData: {
-            email: email,
-            password: password,
-            rg: rg,
-            cpf: cpf,
-            cellphone: cellphone,
-            telephone: telephone,
-         },
-         firstName: firstName,
-         lastName: lastName,
-         profileImage: '',
-         registerNumber: '',
-      });
-      setIsValid(true);
-      // onValidating(isValid);
    }
 
    return (

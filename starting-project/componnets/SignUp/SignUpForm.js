@@ -1,10 +1,22 @@
 import { StyleSheet, View } from 'react-native';
 import { useState } from 'react';
 
+import { Colors } from '../../constants/styles';
+
 import Input from '../UI/Input';
 import Button from '../UI/Button';
 
 const SignUpForm = ({ onSubmit, credentialsInvalid, isInvalid }) => {
+   const [visible, setVisibility] = useState(false);
+   const [secureTextEntry, setSecureTextEntry] = useState(true);
+
+   const icon = !visible ? 'eye-off-outline' : 'eye-outline';
+
+   function iconBtnHandler() {
+      setVisibility(!visible);
+      setSecureTextEntry(!secureTextEntry);
+   }
+
    const [formData, setFormData] = useState({
       firstName: '',
       lastName: '',
@@ -98,10 +110,18 @@ const SignUpForm = ({ onSubmit, credentialsInvalid, isInvalid }) => {
                value={formData.password}
                isInvalid={passwordIsInvalid || isInvalid}
                inputConfig={{
-                  placeholder: 'Insira uma senha (mínimo 9 caracteres)',
+                  placeholder: 'Insira uma senha (mín. 9 caracteres)',
+                  secureTextEntry: secureTextEntry,
                }}
                inputContainer={styles.inputContainer}
                children='* Dados incorretos'
+               setIcon={true}
+               iconBtnConfig={{
+                  name: icon,
+                  size: 20,
+                  color: Colors.silver200,
+               }}
+               onIconBtnPress={iconBtnHandler}
             />
          </View>
          <View>
@@ -114,6 +134,7 @@ const SignUpForm = ({ onSubmit, credentialsInvalid, isInvalid }) => {
                isInvalid={passwordsDontMatch || isInvalid}
                inputConfig={{
                   placeholder: 'Insira a senha novamente',
+                  secureTextEntry: true,
                }}
                inputContainer={styles.inputContainer}
                children='* Dados incorretos'
@@ -131,6 +152,7 @@ const SignUpForm = ({ onSubmit, credentialsInvalid, isInvalid }) => {
                }}
                inputContainer={styles.inputContainer}
                children='* Dados incorretos'
+               iconBtnConfig={styles.iconBtnConfig}
             />
          </View>
          <View>

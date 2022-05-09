@@ -1,10 +1,12 @@
 import { StyleSheet, Text, View } from 'react-native';
-import { useState, useEffect } from 'react';
+import { useContext, useState, useEffect } from 'react';
 
 import { Colors } from '../../../constants/styles';
 import Logo from '../../../componnets/UI/Logo';
 
 import usuarioService from '../../../util/auth';
+
+import LoadingOverlay from '../../../componnets/UI/LoadingOverlay';
 
 import Input from '../../../componnets/UI/Input';
 import FlatButton from '../../../componnets/UI/FlatButton';
@@ -12,11 +14,17 @@ import Button from '../../../componnets/UI/Button';
 import HorizontalButton from '../../../componnets/UI/HorizontalButton';
 import GoogleBtn from '../../../componnets/UI/GoogleBtn';
 
+import { AuthContext } from '../../../store/auth-context';
+
 const SignUpAuth = ({ route, navigation }) => {
    const [isInvalid, setIsInvalid] = useState(false);
    const [userAuthInput, setUserAuthInput] = useState('');
    const [registeredNumber, setRegisteredNumber] = useState('');
    const [resendToken, setResendToken] = useState(null);
+   const authCtx = useContext(AuthContext);
+   const [isAuthenticating, setIsAuthenticating] = useState(false);
+
+   let token = Math.random().toString();
 
    const { email, registerNumber } = route.params;
 
@@ -33,11 +41,23 @@ const SignUpAuth = ({ route, navigation }) => {
          userAuthInput === registeredNumber ||
          +userAuthInput === resendToken
       ) {
-         await usuarioService.confirmRegistration(userAuthInput);
+         setIsAuthenticating(true);
+         try {
+            await usuarioService.confirmRegistration(userAuthInput);
+            authCtx.authenticate(token);
+         } catch (error) {
+            console.log(error);
+            setIsInvalid(true);
+         }
+         setIsAuthenticating(false);
          navigation.replace('SignIn');
       } else {
          setIsInvalid(true);
       }
+   }
+
+   if (isAuthenticating) {
+      return <LoadingOverlay message='Criando um usuário...' />;
    }
 
    function handleFormChange(enteredValue) {

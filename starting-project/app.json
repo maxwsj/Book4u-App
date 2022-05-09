@@ -1,8 +1,11 @@
 {
   "expo": {
-    "name": "starting-project",
-    "slug": "starting-project",
+    "name": "book4u-project",
+    "slug": "book4u-project",
     "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "orientation": "portrait",
     "icon": "./assets/icon1.png",
     "splash": {
@@ -13,9 +16,6 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
     "ios": {
       "supportsTablet": true
     },
@@ -28,5 +28,6 @@
     "web": {
       "favicon": "./assets/favicon.png"
     }
-  }
+  },
+  "name": "book4u-project"
 }

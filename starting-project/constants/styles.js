@@ -7,6 +7,8 @@ export const Colors = {
    silver300: '#757575',
    silver400: '#4F4F4F',
    lightCyan: '#D6E5E9',
+   mediumCyan: '#a3c8d1',
+   darkCyan: '#67adbf',
    darkBlue: '#497C9A',
    lavenderBlush: '#EAB5C2',
    turquoise: '#B2EBC7',
