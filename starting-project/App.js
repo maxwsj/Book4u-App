@@ -7,7 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import AppLoading from 'expo-app-loading';
 
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
@@ -19,11 +19,18 @@ import SignUpAuth from './screens/Login/SignUp/SignUpAuth';
 import PasswordRecover from './screens/Login/PasswordRecover/PasswordRecover';
 import PasswordRecoverAuth from './screens/Login/PasswordRecover/PasswordRecoverAuth';
 import NewPassword from './screens/Login/PasswordRecover/NewPassword';
+
+// Authenticated Stack
 import Home from './screens/Home/Home';
-import IconBtn from './componnets/UI/IconBtn';
+import BookOverviewSection from './screens/Home/BooksOverviewSection/BookOverviewSection';
+import ProfileData from './screens/UserProfile/ProfileData/ProfileData';
+import ShoppingCartScreen from './screens/Payment/ShoppingCartScreen';
+import UserLibrarie from './screens/UserProfile/UserLibrarie/UserLibrarie';
+import UserNotification from './screens/UserProfile/UserNotification/UserNotification';
 
 import { useFonts } from 'expo-font';
 
+import IconBtn from './componnets/UI/IconBtn';
 import LogoButton from './componnets/UI/LogoButton';
 import DrawerContent from './componnets/UI/DrawerContent';
 
@@ -34,13 +41,6 @@ LogBox.ignoreLogs(['']);
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
-
-function logoBtn() {
-   function buttonLogoHandler() {
-      console.log('LogoBTN');
-   }
-   return <LogoButton onPress={buttonLogoHandler} />;
-}
 
 function AuthStack() {
    function testeHandler(isInvalid) {
@@ -70,7 +70,19 @@ function AuthStack() {
    );
 }
 
-function AuthenticatedStack(props) {
+function AuthenticatedStack() {
+   const navigation = useNavigation();
+   function logoBtn() {
+      function buttonLogoHandler() {
+         navigation.navigate('Home');
+      }
+      return <LogoButton onPress={buttonLogoHandler} />;
+   }
+
+   function prevScreenHandler() {
+      navigation.navigate('Home');
+   }
+
    return (
       <Drawer.Navigator
          drawerContent={(props) => <DrawerContent {...props} />}
@@ -88,15 +100,17 @@ function AuthenticatedStack(props) {
                backgroundColor: Colors.mediumCyan,
                width: '60%',
             },
+            sceneContainerStyle: { backgroundColor: Colors.white },
             //    // Estiliza a parte lateral do Drawer individualmente
-            //    //  drawerContentContainerStyle: { backgroundColor: 'white' },
-            //    //  drawerContentStyle: { backgroundColor: '#f31' },
+            // drawerContentContainerStyle: { backgroundColor: 'white' },
+            // drawerContentStyle: { backgroundColor: '#f31' },
             headerRight: ({ tintColor }) => (
                <IconBtn
                   icon='menu'
                   color={tintColor}
                   size={24}
                   onPress={() => navigation.toggleDrawer()}
+                  iconBtnStyle={styles.iconRightBtn}
                />
             ),
             //    headerRightContainerStyle: { paddingRight: 16 },
@@ -112,11 +126,87 @@ function AuthenticatedStack(props) {
                      icon='ellipsis-horizontal'
                      color={tintColor}
                      size={24}
-                     style={styles.iconBtnContainer}
+                     iconBtnStyle={styles.iconLeftBtn}
                      onPress={() => {
                         console.log(`Left BTN`);
                      }}
-                     //          // onPress={authCtx.logout}
+                  />
+               ),
+            }}
+         />
+         <Drawer.Screen
+            name='BookOverviewSection'
+            component={BookOverviewSection}
+            options={{
+               headerLeft: ({ tintColor }) => (
+                  <IconBtn
+                     icon='ellipsis-horizontal'
+                     color={tintColor}
+                     size={24}
+                     iconBtnStyle={styles.iconRightBtn}
+                     onPress={() => {
+                        console.log(`Left BTN`);
+                     }}
+                  />
+               ),
+            }}
+         />
+         <Drawer.Screen
+            name='ShoppingCartScreen'
+            component={ShoppingCartScreen}
+            options={{
+               headerLeft: ({ tintColor }) => (
+                  <IconBtn
+                     icon='arrow-back-outline'
+                     color={tintColor}
+                     size={24}
+                     iconBtnStyle={styles.iconLeftBtn}
+                     onPress={prevScreenHandler}
+                  />
+               ),
+            }}
+         />
+         <Drawer.Screen
+            name='UserLibrarie'
+            component={UserLibrarie}
+            options={{
+               headerLeft: ({ tintColor }) => (
+                  <IconBtn
+                     icon='arrow-back-outline'
+                     color={tintColor}
+                     size={24}
+                     iconBtnStyle={styles.iconLeftBtn}
+                     onPress={prevScreenHandler}
+                  />
+               ),
+            }}
+         />
+         <Drawer.Screen
+            name='UserNotification'
+            component={UserNotification}
+            options={{
+               headerLeft: ({ tintColor }) => (
+                  <IconBtn
+                     icon='arrow-back-outline'
+                     color={tintColor}
+                     size={24}
+                     iconBtnStyle={styles.iconLeftBtn}
+                     onPress={prevScreenHandler}
+                  />
+               ),
+            }}
+         />
+         <Drawer.Screen
+            name='ProfileData'
+            component={ProfileData}
+            options={{
+               headerLeft: ({ tintColor }) => (
+                  <IconBtn
+                     icon='arrow-back-outline'
+                     color={tintColor}
+                     size={24}
+                     iconBtnStyle={styles.iconLeftBtn}
+                     onPress={prevScreenHandler}
                   />
                ),
             }}
@@ -177,24 +267,6 @@ function Root() {
 }
 
 export default function App() {
-   // const [fontsLoaded] = useFonts({
-   //    'poppins-regular': require('./assets/fonts/poppins/Poppins_400Regular.ttf'),
-   //    'poppins-medium': require('./assets/fonts/poppins/Poppins_500Medium.ttf'),
-   //    'poppins-bold': require('./assets/fonts/poppins/Poppins_700Bold.ttf'),
-
-   //    'lato-light': require('./assets/fonts/lato/Lato_300Light.ttf'),
-   //    'lato-regular': require('./assets/fonts/lato/Lato_400Regular.ttf'),
-   //    'lato-bold': require('./assets/fonts/lato/Lato_700Bold.ttf'),
-
-   //    'montserrat-light': require('./assets/fonts/montserrat/Montserrat_300Light.ttf'),
-   //    'montserrat-regular': require('./assets/fonts/montserrat/Montserrat_400Regular.ttf'),
-   //    'montserrat-medium': require('./assets/fonts/montserrat/Montserrat_500Medium.ttf'),
-   // });
-
-   // if (!fontsLoaded) {
-   //    return <AppLoading />;
-   // }
-
    return (
       <>
          <StatusBar style='auto' />
@@ -206,7 +278,10 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
-   iconBtnContainer: {
-      marginLeft: 10,
+   iconLeftBtn: {
+      marginLeft: 25,
+   },
+   iconRightBtn: {
+      marginRight: 12,
    },
 });

@@ -16,6 +16,7 @@ const Input = ({
    setIcon,
    iconBtnConfig,
    onIconBtnPress,
+   iconBtnStyle,
 }) => {
    return (
       <>
@@ -30,6 +31,7 @@ const Input = ({
                <IconBtn
                   onPress={onIconBtnPress}
                   iconBtnConfig={iconBtnConfig}
+                  iconBtnStyle={iconBtnStyle}
                />
             )}
          </View>

@@ -7,8 +7,21 @@ import { Colors } from '../../constants/styles';
 
 import { AuthContext } from '../../store/auth-context';
 
-const DrawerContent = (props) => {
+const DrawerContent = ({ props, navigation }) => {
    const authCtx = useContext(AuthContext);
+
+   function profileHandler() {
+      navigation.navigate('ProfileData');
+   }
+   function shoppingCartHandler() {
+      navigation.navigate('ShoppingCartScreen');
+   }
+   function librarieHandler() {
+      navigation.navigate('UserLibrarie');
+   }
+   function notificationHandler() {
+      navigation.navigate('UserNotification');
+   }
 
    return (
       <View style={{ flex: 1 }}>
@@ -22,9 +35,7 @@ const DrawerContent = (props) => {
                               styles.button,
                               pressed && styles.pressed,
                            ]}
-                           onPress={() => {
-                              console.log('Profile Pressed');
-                           }}
+                           onPress={profileHandler}
                         >
                            <Avatar.Image
                               source={require('../../assets/userImg/userProfileDefault.png')}
@@ -59,7 +70,7 @@ const DrawerContent = (props) => {
                      icon={(color, size) => (
                         <Ionicons name='home-outline' color={color} size={24} />
                      )}
-                     onPress={() => {}}
+                     onPress={() => navigation.navigate('Home')}
                   />
                   <DrawerItem
                      label='Perfil'
@@ -70,21 +81,21 @@ const DrawerContent = (props) => {
                            size={24}
                         />
                      )}
-                     onPress={() => {}}
+                     onPress={profileHandler}
                   />
                   <DrawerItem
                      label='Carrinho'
                      icon={(color, size) => (
                         <Ionicons name='cart-outline' color={color} size={24} />
                      )}
-                     onPress={() => {}}
+                     onPress={shoppingCartHandler}
                   />
                   <DrawerItem
                      label='Biblioteca'
                      icon={(color, size) => (
                         <Ionicons name='book-outline' color={color} size={24} />
                      )}
-                     onPress={() => {}}
+                     onPress={librarieHandler}
                   />
                </Drawer.Section>
                <Drawer.Section
@@ -99,7 +110,7 @@ const DrawerContent = (props) => {
                            size={24}
                         />
                      )}
-                     onPress={() => {}}
+                     onPress={notificationHandler}
                   />
                   <DrawerItem
                      label='Configurações'

@@ -2,7 +2,14 @@ import { StyleSheet, Pressable, View } from 'react-native';
 import React from 'react';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-const IconBtn = ({ iconBtnConfig, onPress, icon, color, size, style }) => {
+const IconBtn = ({
+   iconBtnConfig,
+   onPress,
+   icon,
+   color,
+   size,
+   iconBtnStyle,
+}) => {
    return (
       <Pressable
          onPress={onPress}
@@ -10,7 +17,7 @@ const IconBtn = ({ iconBtnConfig, onPress, icon, color, size, style }) => {
       >
          <View style={[styles.iconContainer]}>
             <Ionicons
-               style={[styles.searchIcon, style]}
+               style={[styles.searchIcon, iconBtnStyle]}
                name={icon}
                color={color}
                size={size}
