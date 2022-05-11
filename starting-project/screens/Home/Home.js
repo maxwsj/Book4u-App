@@ -1,11 +1,14 @@
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import React from 'react';
 
+import BooksSection from '../../componnets/BooksSection/BooksSection';
+
 import InputIcon from '../../componnets/UI/InputIcon';
 import { Colors } from '../../constants/styles';
 
 import { Divider } from 'react-native-paper';
-import BookOverviewSection from './BooksOverviewSection/BookOverviewSection';
+
+import { BOOK_DATA } from '../../data/dummy-data';
 
 const Home = () => {
    return (
@@ -35,13 +38,13 @@ const Home = () => {
                   // onIconBtnPress={iconBtnHandler}
                />
                <Text style={styles.sectionTitle}>Livros mais trocados</Text>
-               <BookOverviewSection />
+               <BooksSection items={BOOK_DATA} />
                <Divider style={styles.dividerStyles} />
                <Text style={styles.sectionTitle}>Anuncios recentes</Text>
-               <BookOverviewSection />
+               <BooksSection items={BOOK_DATA} />
                <Divider style={styles.dividerStyles} />
                <Text style={styles.sectionTitle}>Populares</Text>
-               <BookOverviewSection />
+               <BooksSection items={BOOK_DATA} />
                <Divider style={styles.dividerStyles} />
             </View>
          </View>

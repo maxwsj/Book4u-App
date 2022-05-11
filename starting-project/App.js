@@ -22,11 +22,11 @@ import NewPassword from './screens/Login/PasswordRecover/NewPassword';
 
 // Authenticated Stack
 import Home from './screens/Home/Home';
-import BookOverviewSection from './screens/Home/BooksOverviewSection/BookOverviewSection';
 import ProfileData from './screens/UserProfile/ProfileData/ProfileData';
 import ShoppingCartScreen from './screens/Payment/ShoppingCartScreen';
 import UserLibrarie from './screens/UserProfile/UserLibrarie/UserLibrarie';
 import UserNotification from './screens/UserProfile/UserNotification/UserNotification';
+import BookDetail from './screens/Home/BookDetail/BookDetail';
 
 import { useFonts } from 'expo-font';
 
@@ -135,18 +135,16 @@ function AuthenticatedStack() {
             }}
          />
          <Drawer.Screen
-            name='BookOverviewSection'
-            component={BookOverviewSection}
+            name='BookDetail'
+            component={BookDetail}
             options={{
                headerLeft: ({ tintColor }) => (
                   <IconBtn
-                     icon='ellipsis-horizontal'
+                     icon='arrow-back-outline'
                      color={tintColor}
                      size={24}
-                     iconBtnStyle={styles.iconRightBtn}
-                     onPress={() => {
-                        console.log(`Left BTN`);
-                     }}
+                     iconBtnStyle={styles.iconLeftBtn}
+                     onPress={prevScreenHandler}
                   />
                ),
             }}

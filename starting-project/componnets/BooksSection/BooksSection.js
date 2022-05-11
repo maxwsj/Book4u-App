@@ -1,20 +1,22 @@
 import { StyleSheet, View, FlatList, Dimensions } from 'react-native';
 import BookItems from './BookItems';
+import { useNavigation } from '@react-navigation/native';
 
 import { Colors } from '../../constants/styles';
 
 const { width } = Dimensions.get('window');
 
 const BooksSection = ({ items }) => {
-   function renderBookItem(bookData) {
+   const navigation = useNavigation();
+
+   function renderBookItem(itemData) {
       function pressHandler() {
-         console.log(bookData.item.id);
-         // navigation.navigate('MealsOverview', {
-         //    categoryId: itemData.item.id,
-         // });
+         navigation.navigate('BookDetail', {
+            bookId: itemData.item.id,
+         });
       }
 
-      const book = bookData.item;
+      const book = itemData.item;
 
       const bookItemProps = {
          id: book.id,
