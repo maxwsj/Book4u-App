@@ -3,9 +3,10 @@ export const BOOK_DATA = [
       id: 'b1',
       owner: { name: 'André Damázio' },
       createdAt: '10/05/2022',
+      price: '18.00',
       quantityExchanged: 20,
       name: 'How to stop Worrying and Start Living',
-      pagesQuantity: 256,
+      pagesQuantity: 500,
       synopsis:
          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean lobortis diam mollis tellus vehicula hendrerit. Proin maximus, elit eu consectetur.',
       status: 'Dísponível',
@@ -27,17 +28,21 @@ export const BOOK_DATA = [
       bookImages: {
          frontSideImage:
             'https://images.unsplash.com/photo-1535398089889-dd807df1dfaa?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=464&q=80',
-         rightSideImage: 'b',
-         leftSideImage: 'c',
-         backSideImage: 'd',
+         rightSideImage:
+            'https://images.unsplash.com/photo-1589829085413-56de8ae18c73?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1512&q=80',
+         leftSideImage:
+            'https://images.unsplash.com/photo-1592496431122-2349e0fbc666?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1512&q=80',
+         backSideImage:
+            'https://images.unsplash.com/photo-1641154748135-8032a61a3f80?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=715&q=80',
       },
    },
    {
       id: 'b2',
       owner: { name: 'Gustavo Fontana' },
+      price: '35.00',
       createdAt: '10/02/2022',
       name: 'Cronicas de Narnia',
-      pagesQuantity: 256,
+      pagesQuantity: 100,
       synopsis:
          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean lobortis diam mollis tellus vehicula hendrerit. Proin maximus, elit eu consectetur.',
       status: 'Dísponível',
@@ -67,9 +72,10 @@ export const BOOK_DATA = [
    {
       id: 'b3',
       owner: { name: 'Max William' },
+      price: '25.00',
       createdAt: '10/04/2022',
       name: 'The Picture of Dorian Gray',
-      pagesQuantity: 256,
+      pagesQuantity: 56,
       synopsis:
          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean lobortis diam mollis tellus vehicula hendrerit. Proin maximus, elit eu consectetur.',
       status: 'Dísponível',
@@ -99,9 +105,10 @@ export const BOOK_DATA = [
    {
       id: 'b4',
       createdAt: '10/01/2022',
+      price: '40.00',
       owner: { name: 'Andressa Gomes' },
       name: 'As duas Torres',
-      pagesQuantity: 256,
+      pagesQuantity: 99,
       synopsis:
          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean lobortis diam mollis tellus vehicula hendrerit. Proin maximus, elit eu consectetur.',
       status: 'Dísponível',

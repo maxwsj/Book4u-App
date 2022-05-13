@@ -15,4 +15,5 @@ export const Colors = {
    dimgray: '#262626',
    snow: '#FFFAFA',
    white: '#FFFFFF',
+   white50: '#FDFDFD',
 };

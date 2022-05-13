@@ -100,7 +100,7 @@ function AuthenticatedStack() {
                backgroundColor: Colors.mediumCyan,
                width: '60%',
             },
-            sceneContainerStyle: { backgroundColor: Colors.white },
+            sceneContainerStyle: { backgroundColor: Colors.snow },
             //    // Estiliza a parte lateral do Drawer individualmente
             // drawerContentContainerStyle: { backgroundColor: 'white' },
             // drawerContentStyle: { backgroundColor: '#f31' },
@@ -147,6 +147,15 @@ function AuthenticatedStack() {
                      onPress={prevScreenHandler}
                   />
                ),
+               headerTitle: 'Detalhes do Livro',
+               headerStyle: { backgroundColor: Colors.white50 },
+               headerTintColor: Colors.darkBlue,
+               headerTitleStyle: {
+                  color: Colors.silver400,
+                  fontFamily: 'poppins-regular',
+                  fontSize: 18,
+                  marginTop: 4,
+               },
             }}
          />
          <Drawer.Screen

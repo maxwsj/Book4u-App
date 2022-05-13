@@ -1,30 +1,49 @@
-import { useLayoutEffect, useEffect, View, Text } from 'react-native';
-import BooksSection from '../../../componnets/BooksSection/BooksSection';
+import {
+   View,
+   StyleSheet,
+   FlatList,
+   Dimensions,
+   ScrollView,
+   Text,
+} from 'react-native';
+import BookDetailItems from '../../../componnets/BookDetails/BookDetailItems';
+import BookDetailsImage from '../../../componnets/BookDetails/BookDetailsImage';
 import { BOOK_DATA } from '../../../data/dummy-data';
 
-// RESPONSÁVEL POR EXIBIR OS DADOS DE LIVROS REFERENTES A UMA SEÇÃO
 function BookDetail({ route, navigation }) {
    const { bookId } = route.params;
 
-   // const displayedBook = Book.filter((mealItem) => {
-   //    return mealItem.categoryIds.indexOf(catId) >= 0;
-   // });
+   const bookDetails = BOOK_DATA.filter((bookItem) => {
+      return bookItem.id === bookId;
+   });
 
-   // useLayoutEffect(() => {
-   //    const categoryTitle = CATEGORIES.find(
-   //       (category) => category.id === catId
-   //    ).title;
+   const images = Object.values({ ...bookDetails[0].bookImages });
 
-   //    navigation.setOptions({
-   //       title: categoryTitle,
-   //    });
-   // }, [catId, navigation]);
+   function renderBookItem({ item, index }) {
+      return <BookDetailsImage imageUrl={item} />;
+   }
 
    return (
-      <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-         <Text>{bookId}</Text>
-      </View>
+      <>
+         <FlatList
+            data={images}
+            keyExtractor={(item) => item}
+            horizontal
+            pagingEnabled
+            snapToAlignment='start'
+            showsHorizontalScrollIndicator={false}
+            decelerationRate={'fast'}
+            renderItem={renderBookItem}
+            nestedScrollEnabled={true}
+            extraData={bookId}
+         />
+         <ScrollView contentContainerStyle={{ paddingBottom: 20 }}>
+            <BookDetailItems bookData={bookDetails} />
+         </ScrollView>
+      </>
    );
 }
 
 export default BookDetail;
+
+const styles = StyleSheet.create({});
