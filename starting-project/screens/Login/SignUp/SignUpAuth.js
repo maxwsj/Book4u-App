@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
       marginHorizontal: 40,
    },
    hrColor: {
-      borderBottomColor: Colors.dandelion,
+      borderBottomColor: Colors.primary,
    },
    hrContainer: {
       marginTop: 50,

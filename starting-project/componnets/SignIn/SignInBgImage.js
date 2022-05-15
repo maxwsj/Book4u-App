@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, ImageBackground, Image } from 'react-native';
 
 import { Colors } from '../../constants/styles';
-import bgAppImg from '../../assets/img/bg-login-img.png';
+import bgAppImg from '../../assets/img/book_app_bg_img.png';
 import BookLogo from '../UI/BookLogo';
 // import BookLogo from '../../assets/img/book2-logo.svg';
 
@@ -9,7 +9,6 @@ const SignInBgImage = () => {
    return (
       <ImageBackground source={bgAppImg} style={styles.image}>
          <View style={styles.imageContainer}>
-            {/* <BookLogo width={60} height={40} /> */}
             <BookLogo />
             <Text style={styles.title}>BOOK4U</Text>
          </View>
@@ -39,9 +38,12 @@ const styles = StyleSheet.create({
       letterSpacing: 5,
       fontSize: 24,
       fontFamily: 'lato-regular',
+      textShadowOffset: { width: 1, height: 2 },
+      textShadowRadius: 14,
+      textShadowColor: 'rgba(0, 0, 0, 0.75)',
    },
    bookImgContainer: {
-      width: 36,
-      height: 36,
+      width: 43,
+      height: 43,
    },
 });

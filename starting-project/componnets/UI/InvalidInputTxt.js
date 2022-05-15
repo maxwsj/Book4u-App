@@ -11,7 +11,7 @@ export default InvalidInputTxt;
 const styles = StyleSheet.create({
    invalidText: {
       fontSize: 10,
-      color: Colors.lavenderBlush,
+      color: Colors.tertiary,
       marginLeft: 30,
       fontFamily: 'poppins-regular',
    },

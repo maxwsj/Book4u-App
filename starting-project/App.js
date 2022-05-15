@@ -91,7 +91,7 @@ function AuthenticatedStack() {
             headerStyle: { backgroundColor: Colors.darkCyan },
             headerTintColor: 'white',
             headerTitleAlign: 'center',
-            drawerActiveBackgroundColor: Colors.darkBlue,
+            drawerActiveBackgroundColor: Colors.secondary,
             drawerActiveTintColor: Colors.snow,
             headerTitle: logoBtn,
             headerStatusBarHeight: 50,
@@ -149,7 +149,7 @@ function AuthenticatedStack() {
                ),
                headerTitle: 'Detalhes do Livro',
                headerStyle: { backgroundColor: Colors.white50 },
-               headerTintColor: Colors.darkBlue,
+               headerTintColor: Colors.secondary,
                headerTitleStyle: {
                   color: Colors.silver400,
                   fontFamily: 'poppins-regular',

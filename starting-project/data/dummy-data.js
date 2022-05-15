@@ -8,7 +8,7 @@ export const BOOK_DATA = [
       name: 'How to stop Worrying and Start Living',
       pagesQuantity: 500,
       synopsis:
-         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean lobortis diam mollis tellus vehicula hendrerit. Proin maximus, elit eu consectetur.',
+         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean lobortis diam mollis tellus vehicula hendrerit. Proin maximus, elit eu consectetur Aenean lobortis diam mollis tellus vehicula hendrerit. Proin maximus, elit eu consecteturAenean lobortis diam mollis tellus vehicula hendrerit. Proin maximus, elit eu consectetur.',
       status: 'Dísponível',
       condition: 'Semi-novo',
       author: {

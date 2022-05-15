@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
       borderRadius: 6,
       paddingVertical: 10,
       paddingHorizontal: 12,
-      backgroundColor: Colors.dandelion,
+      backgroundColor: Colors.primary,
       elevation: 2,
       shadowColor: 'black',
       shadowOffset: { width: 1, height: 1 },

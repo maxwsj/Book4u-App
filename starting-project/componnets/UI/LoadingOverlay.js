@@ -5,7 +5,7 @@ function LoadingOverlay({ message }) {
    return (
       <View style={styles.rootContainer}>
          <Text style={styles.message}>{message}</Text>
-         <ActivityIndicator size='large' color={Colors.darkBlue} />
+         <ActivityIndicator size='large' color={Colors.secondary} />
       </View>
    );
 }

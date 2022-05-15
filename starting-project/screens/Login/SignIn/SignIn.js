@@ -1,4 +1,4 @@
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Dimensions } from 'react-native';
 import { useState } from 'react';
 
 import { Colors } from '../../../constants/styles';
@@ -10,6 +10,8 @@ import GoogleBtn from '../../../componnets/UI/GoogleBtn';
 import SignInBgImage from '../../../componnets/SignIn/SignInBgImage';
 import SignInContent from '../../../componnets/SignIn/SignInContent';
 import LoadingOverlay from '../../../componnets/UI/LoadingOverlay';
+
+const { width } = Dimensions.get('window');
 
 const SignIn = ({ navigation, onTeste }) => {
    const [isAuthenticating, setIsAuthenticating] = useState(false);
@@ -56,15 +58,16 @@ export default SignIn;
 
 const styles = StyleSheet.create({
    bgImgContainer: {
-      width: '100%',
-      height: 420,
+      width: width,
+      height: width,
       zIndex: 10,
+      marginBottom: 30,
    },
    flatButton: {
       marginTop: 30,
       marginHorizontal: 40,
    },
    hrColor: {
-      borderBottomColor: Colors.darkBlue,
+      borderBottomColor: Colors.secondary,
    },
 });

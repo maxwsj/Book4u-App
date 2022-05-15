@@ -17,7 +17,7 @@ const BookTradeContainer = ({ dividerStyle }) => {
                   icon={'remove-outline'}
                   size={24}
                   color='black'
-                  iconBtnStyle={styles.iconBtnStyle}
+                  iconBtnStyle={[styles.iconBtnStyle, styles.removeBtn]}
                   onPress={() => console.log('remove')}
                />
             </View>
@@ -29,7 +29,7 @@ const BookTradeContainer = ({ dividerStyle }) => {
                   icon={'add-outline'}
                   size={24}
                   color='black'
-                  iconBtnStyle={styles.iconBtnStyle}
+                  iconBtnStyle={[styles.iconBtnStyle, styles.addBtn]}
                   onPress={() => console.log('add')}
                />
             </View>
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
    },
    tradeQuantity: {
-      marginHorizontal: 15,
+      marginHorizontal: 5,
    },
    tradeTextWrapper: {
       marginLeft: 10,
@@ -71,6 +71,12 @@ const styles = StyleSheet.create({
    },
    iconBtnStyle: {
       padding: 0,
-      marginHorizontal: 10,
+      marginHorizontal: 25,
+   },
+   removeBtn: {
+      marginRight: 2,
+   },
+   addBtn: {
+      marginLeft: 10,
    },
 });

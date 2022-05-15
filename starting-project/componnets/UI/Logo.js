@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       alignItems: 'center',
       flexDirection: 'row',
-      borderBottomColor: Colors.lavenderBlush,
+      borderBottomColor: Colors.tertiary,
       borderBottomWidth: 1,
       marginHorizontal: 30,
       paddingVertical: 8,

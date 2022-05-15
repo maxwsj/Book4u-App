@@ -6,6 +6,7 @@ import Button from '../UI/Button';
 import BookDetailTable from './BookDetailTable';
 import BookInfoContainer from './BookInfoContainer';
 import BookTradeContainer from './BookTradeContainer';
+import BookSynopsisContainer from './BookSynopsisContainer';
 
 const { width } = Dimensions.get('window');
 
@@ -36,15 +37,7 @@ const BookDetailItems = ({ bookData }) => {
             dividerStyle={styles.divider}
             bookData={bookDetailData}
          />
-         <View style={styles.bookSynopsis}>
-            <Text style={styles.titleSynopsis}>Sinopse</Text>
-            <Text style={styles.textSynopsis}>
-               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean
-               lobortis diam mollis tellus vehicula hendrerit tellus vehicula
-               hendrerit. Proin maximus, elit eu consectetur elit eu consectetur
-               elit eu consectetur elit eu consectetur.
-            </Text>
-         </View>
+         <BookSynopsisContainer synopsisText={bookDetailData[0].synopsis} />
          <View style={styles.tradeWrapper}>
             <View style={styles.tradeItems}>
                <BookTradeContainer dividerStyle={styles.divider} />
@@ -133,23 +126,12 @@ const styles = StyleSheet.create({
    },
    price: {
       fontFamily: 'lato-regular',
-      color: Colors.darkBlue,
+      color: Colors.secondary,
    },
    title: {
       fontFamily: 'lato-regular',
       color: Colors.silver400,
       width: width * 0.6,
-   },
-   titleSynopsis: {
-      fontFamily: 'lato-regular',
-      color: Colors.silver400,
-      fontSize: 16,
-   },
-   textSynopsis: {
-      fontFamily: 'lato-regular',
-      color: Colors.silver300,
-      marginTop: 15,
-      textAlign: 'justify',
    },
    author: {
       fontFamily: 'lato-regular',
@@ -165,10 +147,6 @@ const styles = StyleSheet.create({
       marginHorizontal: 15,
       marginVertical: 24,
       backgroundColor: Colors.silver200,
-   },
-   bookSynopsis: {
-      marginTop: 30,
-      marginHorizontal: 30,
    },
    detailsContainer: {
       marginTop: 30,
@@ -202,6 +180,6 @@ const styles = StyleSheet.create({
    btnStyle: {
       justifyContent: 'center',
       height: 60,
-      backgroundColor: Colors.darkBlue,
+      backgroundColor: Colors.secondary,
    },
 });

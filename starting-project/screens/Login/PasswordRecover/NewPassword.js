@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
    },
 
    hrColor: {
-      borderBottomColor: Colors.lavenderBlush,
+      borderBottomColor: Colors.tertiary,
    },
    hrContainer: {
       marginTop: 50,
