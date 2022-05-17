@@ -3,6 +3,7 @@ import BookItems from './BookItems';
 import { useNavigation } from '@react-navigation/native';
 
 import { Colors } from '../../constants/styles';
+import { useEffect } from 'react';
 
 const { width } = Dimensions.get('window');
 

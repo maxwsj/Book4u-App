@@ -1,12 +1,21 @@
-import { StyleSheet, Text, View, Pressable } from 'react-native';
-import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { useState } from 'react';
 import { Colors } from '../../constants/styles';
 import IconBtn from '../UI/IconBtn';
 
-const BookTradeContainer = ({ dividerStyle }) => {
+const BookTradeContainer = () => {
+   const [bookQuantity, setBookQuantity] = useState(0);
+
+   function addHandler() {
+      setBookQuantity((prevBook) => prevBook + 1);
+   }
+   function removeHandler() {
+      setBookQuantity((prevBook) => (prevBook > 0 ? prevBook - 1 : prevBook));
+   }
+
    return (
       <View style={styles.tradeBtnContainer}>
-         <View style={[styles.bookInfoItems, dividerStyle]}>
+         <View style={[styles.bookInfoItems, styles.divider]}>
             <View style={styles.tradeTextWrapper}>
                <Text style={styles.tradeText}>Quantidade</Text>
             </View>
@@ -18,11 +27,11 @@ const BookTradeContainer = ({ dividerStyle }) => {
                   size={24}
                   color='black'
                   iconBtnStyle={[styles.iconBtnStyle, styles.removeBtn]}
-                  onPress={() => console.log('remove')}
+                  onPress={removeHandler}
                />
             </View>
             <View style={styles.tradeQuantity}>
-               <Text>1</Text>
+               <Text>{bookQuantity}</Text>
             </View>
             <View>
                <IconBtn
@@ -30,7 +39,7 @@ const BookTradeContainer = ({ dividerStyle }) => {
                   size={24}
                   color='black'
                   iconBtnStyle={[styles.iconBtnStyle, styles.addBtn]}
-                  onPress={() => console.log('add')}
+                  onPress={addHandler}
                />
             </View>
          </View>
@@ -78,5 +87,10 @@ const styles = StyleSheet.create({
    },
    addBtn: {
       marginLeft: 10,
+   },
+   divider: {
+      borderRightWidth: 1,
+      paddingRight: 24,
+      borderRightColor: Colors.silver300,
    },
 });

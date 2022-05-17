@@ -10,13 +10,14 @@ const HorizontalButton = ({
    btnText,
    hrContainer,
    onPress,
+   btnHrColor,
 }) => {
    return (
       <View style={[styles.signInContainer, hrContainer]}>
          <View style={[styles.signInTextWrapper, hrColor]}>
             <Text style={styles.signInText}>{btnTitle}</Text>
          </View>
-         <View style={styles.signInButtonWrapper}>
+         <View style={[styles.signInButtonWrapper, btnHrColor]}>
             <FlatButton onPress={onPress}>{btnText}</FlatButton>
          </View>
       </View>

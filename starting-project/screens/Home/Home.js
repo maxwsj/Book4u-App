@@ -1,16 +1,28 @@
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
-import React from 'react';
+import { useState, useEffect } from 'react';
 
 import BooksSection from '../../componnets/BooksSection/BooksSection';
 
 import InputIcon from '../../componnets/UI/InputIcon';
 import { Colors } from '../../constants/styles';
 
-import { Divider } from 'react-native-paper';
+// import { Divider } from 'react-native-paper';
+import { Divider, Modal, Portal, Provider } from 'react-native-paper';
 
 import { BOOK_DATA } from '../../data/dummy-data';
 
 const Home = () => {
+   const [bookData, setBookData] = useState({});
+   useEffect(() => {
+      setBookData(BOOK_DATA);
+   }, [bookData]);
+
+   const [visible, setVisible] = useState(false);
+
+   const filterHandler = () => setVisible(true);
+   const hideModal = () => setVisible(false);
+   const containerStyle = { backgroundColor: 'white', padding: 20 };
+
    return (
       <ScrollView>
          <View style={styles.homeContainer}>
@@ -19,6 +31,7 @@ const Home = () => {
                   // onUpdateValue={updateInputValueHandler.bind(this, 'password')}
                   // value={enteredPassword}
                   // isInvalid={passwordIsInvalid}
+                  bgStyle={styles.inputBgStyle}
                   inputConfig={{
                      placeholder: 'Livros, autores, gêneros',
                   }}
@@ -35,19 +48,32 @@ const Home = () => {
                      color: Colors.silver200,
                   }}
                   iconBtnStyle={styles.iconBtnStyle}
-                  // onIconBtnPress={iconBtnHandler}
+                  onIconBtnPress={filterHandler}
                />
                <Text style={styles.sectionTitle}>Livros mais trocados</Text>
-               <BooksSection items={BOOK_DATA} />
+               <BooksSection items={bookData} />
                <Divider style={styles.dividerStyles} />
                <Text style={styles.sectionTitle}>Anuncios recentes</Text>
-               <BooksSection items={BOOK_DATA} />
+               <BooksSection items={bookData} />
                <Divider style={styles.dividerStyles} />
                <Text style={styles.sectionTitle}>Populares</Text>
-               <BooksSection items={BOOK_DATA} />
+               <BooksSection items={bookData} />
                <Divider style={styles.dividerStyles} />
             </View>
          </View>
+         <Provider>
+            <Portal>
+               <Modal
+                  visible={visible}
+                  onDismiss={hideModal}
+                  contentContainerStyle={containerStyle}
+               >
+                  <Text>
+                     Example Modal. Click outside this area to dismiss.
+                  </Text>
+               </Modal>
+            </Portal>
+         </Provider>
       </ScrollView>
    );
 };
@@ -72,5 +98,8 @@ const styles = StyleSheet.create({
    },
    iconBtnStyle: {
       marginRight: -15,
+   },
+   inputBgStyle: {
+      backgroundColor: Colors.snow,
    },
 });

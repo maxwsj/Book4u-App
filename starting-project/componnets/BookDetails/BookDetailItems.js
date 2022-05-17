@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, Pressable, Dimensions } from 'react-native';
 import { useEffect, useState } from 'react';
-import { Title, Avatar, Divider } from 'react-native-paper';
+import { Title, Avatar } from 'react-native-paper';
 import { Colors } from '../../constants/styles';
 import Button from '../UI/Button';
 import BookDetailTable from './BookDetailTable';
@@ -40,7 +40,7 @@ const BookDetailItems = ({ bookData }) => {
          <BookSynopsisContainer synopsisText={bookDetailData[0].synopsis} />
          <View style={styles.tradeWrapper}>
             <View style={styles.tradeItems}>
-               <BookTradeContainer dividerStyle={styles.divider} />
+               <BookTradeContainer />
             </View>
             <View style={styles.tradeItems}>
                <Button
@@ -137,11 +137,7 @@ const styles = StyleSheet.create({
       fontFamily: 'lato-regular',
       color: Colors.silver300,
    },
-   divider: {
-      borderRightWidth: 1,
-      paddingRight: 24,
-      borderRightColor: Colors.silver300,
-   },
+
    dividerPaper: {
       height: 1,
       marginHorizontal: 15,

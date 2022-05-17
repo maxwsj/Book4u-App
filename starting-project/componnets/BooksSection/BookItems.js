@@ -7,21 +7,12 @@ import {
    Dimensions,
 } from 'react-native';
 import React from 'react';
-import { useNavigation } from '@react-navigation/native';
 
 import { Colors } from '../../constants/styles';
 
 const { width } = Dimensions.get('window');
 
-const BookItems = ({ id, title, imageUrl, onPress }) => {
-   const navigation = useNavigation();
-
-   function selectMealItemHandler() {
-      navigation.navigate('MealDetail', {
-         mealId: id,
-      });
-   }
-
+const BookItems = ({ title, imageUrl, onPress }) => {
    return (
       <Pressable
          onPress={onPress}

@@ -7,7 +7,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import AppLoading from 'expo-app-loading';
 
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import {
+   NavigationContainer,
+   useNavigation,
+   CommonActions,
+} from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
@@ -80,7 +84,7 @@ function AuthenticatedStack() {
    }
 
    function prevScreenHandler() {
-      navigation.navigate('Home');
+      navigation.dispatch(CommonActions.goBack());
    }
 
    return (
