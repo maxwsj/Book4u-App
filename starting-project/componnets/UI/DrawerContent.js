@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
    },
    bottomDrawerSection: {
       marginBottom: 15,
-      borderTopColor: Colors.darkCyan,
+      borderTopColor: Colors.primary,
       borderTopWidth: 1,
    },
    preference: {
@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
       paddingHorizontal: 16,
    },
    profileBackgroundColor: {
-      backgroundColor: Colors.silver100,
+      backgroundColor: Colors.snow,
       borderColor: Colors.silver300,
    },
    //    drawerSpacing: {

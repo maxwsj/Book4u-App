@@ -80,11 +80,16 @@ function AuthenticatedStack() {
       function buttonLogoHandler() {
          navigation.navigate('Home');
       }
-      return <LogoButton onPress={buttonLogoHandler} />;
+      return (
+         <LogoButton
+            textColor={styles.logoTxtColor}
+            onPress={buttonLogoHandler}
+         />
+      );
    }
 
    function prevScreenHandler() {
-      navigation.dispatch(CommonActions.goBack());
+      navigation.goBack();
    }
 
    return (
@@ -92,7 +97,7 @@ function AuthenticatedStack() {
          drawerContent={(props) => <DrawerContent {...props} />}
          screenOptions={({ navigation }) => ({
             drawerPosition: 'right',
-            headerStyle: { backgroundColor: Colors.darkCyan },
+            headerStyle: { backgroundColor: Colors.primary },
             headerTintColor: 'white',
             headerTitleAlign: 'center',
             drawerActiveBackgroundColor: Colors.secondary,
@@ -101,7 +106,7 @@ function AuthenticatedStack() {
             headerStatusBarHeight: 50,
             //    // Estiliza a parte lateral do drawer globalmente
             drawerStyle: {
-               backgroundColor: Colors.mediumCyan,
+               backgroundColor: Colors.quartiary,
                width: '60%',
             },
             sceneContainerStyle: { backgroundColor: Colors.snow },
@@ -190,6 +195,15 @@ function AuthenticatedStack() {
                      onPress={prevScreenHandler}
                   />
                ),
+               headerTitle: 'Cadastro de Livros',
+               headerStyle: { backgroundColor: Colors.white50 },
+               headerTintColor: Colors.secondary,
+               headerTitleStyle: {
+                  color: Colors.silver400,
+                  fontFamily: 'poppins-regular',
+                  fontSize: 18,
+                  marginTop: 4,
+               },
             }}
          />
          <Drawer.Screen

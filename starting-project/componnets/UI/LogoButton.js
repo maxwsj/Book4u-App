@@ -1,10 +1,8 @@
-import { StyleSheet, Text, View, Pressable } from 'react-native';
+import { StyleSheet, Text, View, Pressable, Image } from 'react-native';
 import React from 'react';
-
-import BookLogo from './BookLogo';
 import { Colors } from '../../constants/styles';
 
-const LogoButton = ({ onPress }) => {
+const LogoButton = ({ onPress, textColor }) => {
    return (
       <Pressable
          onPress={onPress}
@@ -12,8 +10,13 @@ const LogoButton = ({ onPress }) => {
       >
          <View style={styles.container}>
             {/* <BookLogo width={30} height={40} /> */}
-            <BookLogo logoSize={styles.logoSize} />
-            <Text style={styles.text}>BOOK4U</Text>
+            <View style={styles.imageContainer}>
+               <Image
+                  style={styles.image}
+                  source={require('../../assets/img/books-white.png')}
+               />
+            </View>
+            <Text style={[styles.text, textColor]}>BOOK4U</Text>
          </View>
       </Pressable>
    );
@@ -41,5 +44,13 @@ const styles = StyleSheet.create({
    logoSize: {
       width: 32,
       height: 32,
+   },
+   imageContainer: {
+      width: 36,
+      height: 36,
+   },
+   image: {
+      width: '100%',
+      height: '100%',
    },
 });

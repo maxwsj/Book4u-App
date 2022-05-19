@@ -2,10 +2,12 @@ import { StyleSheet, Text, View, Dimensions } from 'react-native';
 import { useEffect, useState } from 'react';
 import { Divider, Avatar } from 'react-native-paper';
 import Modal from 'react-native-modal';
+import { useNavigation } from '@react-navigation/native';
 
 import { Colors } from '../../../constants/styles';
 import { BOOK_DATA } from '../../../data/dummy-data';
 
+import IconBtn from '../../../componnets/UI/IconBtn';
 import FlatButton from '../../../componnets/UI/FlatButton';
 import BooksSection from '../../../componnets/BooksSection/BooksSection';
 import TextIcon from '../../../componnets/UI/TextIcon';
@@ -14,6 +16,8 @@ import UserAddressForm from '../../../componnets/ProfileData/UserAddressForm';
 const { width, height } = Dimensions.get('window');
 
 const ProfileData = () => {
+   const navigation = useNavigation();
+
    const [bookOption, setBookOption] = useState(true);
    const [whishOption, setWhishOption] = useState(false);
    const [contactOption, setContactOption] = useState(false);
@@ -51,6 +55,15 @@ const ProfileData = () => {
    useEffect(() => {
       setBookData(BOOK_DATA);
    }, [bookData]);
+
+   function addNewBookHandler() {
+      navigation.navigate('UserLibrarie');
+   }
+
+   function submitHandler(userAddressValidation) {
+      let { CEP, bairro, numero, complemento } = userAddressValidation;
+      console.log(CEP, bairro, numero, complemento);
+   }
 
    return (
       <>
@@ -91,7 +104,17 @@ const ProfileData = () => {
             </View>
             {bookOption && (
                <View style={styles.userLibrary}>
-                  <Text style={styles.userLibraryTitle}>Minha biblioteca</Text>
+                  <View style={styles.userWishlist}>
+                     <Text style={styles.userLibraryTitle}>
+                        Minha biblioteca
+                     </Text>
+                     <IconBtn
+                        icon='add-circle-outline'
+                        size={24}
+                        iconBtnStyle={styles.addWishlistIcon}
+                        onPress={addNewBookHandler}
+                     />
+                  </View>
                   <BooksSection items={bookData} />
                </View>
             )}
@@ -100,6 +123,7 @@ const ProfileData = () => {
                   <Text style={styles.userLibraryTitle}>
                      Minha lista de desejo
                   </Text>
+
                   <BooksSection items={bookData} />
                </View>
             )}
@@ -166,7 +190,10 @@ const ProfileData = () => {
             // contentContainerStyle={styles.containerStyle}
          >
             <View style={styles.addressContainer}>
-               <UserAddressForm onClose={formCloseHandler} />
+               <UserAddressForm
+                  onSubmit={submitHandler}
+                  onClose={formCloseHandler}
+               />
             </View>
          </Modal>
       </>
@@ -187,7 +214,7 @@ const styles = StyleSheet.create({
       top: width / 4,
    },
    profileBackgroundImg: {
-      backgroundColor: Colors.darkCyan,
+      backgroundColor: Colors.quartiary,
       width: '100%',
       height: width * 0.4,
    },
@@ -249,5 +276,13 @@ const styles = StyleSheet.create({
    },
    addressContainer: {
       marginHorizontal: 30,
+      flex: 1,
+   },
+   userWishlist: {
+      flexDirection: 'row',
+      alignItems: 'center',
+   },
+   addWishlistIcon: {
+      color: Colors.secondary,
    },
 });

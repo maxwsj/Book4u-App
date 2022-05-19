@@ -14,12 +14,17 @@ const Input = ({
    setIcon,
    onIconBtnPress,
    iconBtnConfig,
+   inputStyle,
 }) => {
    return (
       <>
          <View style={[styles.searchSection, inputContainer]}>
             <TextInput
-               style={[styles.input, isInvalid && styles.inputInvalid]}
+               style={[
+                  styles.input,
+                  inputStyle,
+                  isInvalid && styles.inputInvalid,
+               ]}
                {...inputConfig}
                onChangeText={onUpdateValue}
             />

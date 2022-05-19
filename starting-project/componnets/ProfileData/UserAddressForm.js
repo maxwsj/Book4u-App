@@ -1,14 +1,37 @@
 import { StyleSheet, View } from 'react-native';
-import React from 'react';
+import { useState } from 'react';
 import { Colors } from '../../constants/styles';
 import InputIcon from '../UI/InputIcon';
 import Button from '../UI/Button';
 import IconBtn from '../UI/IconBtn';
 
-const UserAddressForm = ({ onClose }) => {
-   function confirmHandler() {
+const UserAddressForm = ({ onClose, onSubmit }) => {
+   const [formData, setFormData] = useState({
+      CEP: '',
+      bairro: '',
+      numero: '',
+      complemento: '',
+   });
+
+   function updateInputValueHandler(inputIdentifier, enteredValue) {
+      setFormData((curInputs) => {
+         return {
+            ...curInputs,
+            [inputIdentifier]: enteredValue,
+         };
+      });
+   }
+
+   function submitHandler() {
+      onSubmit({
+         CEP: formData.CEP,
+         bairro: formData.bairro,
+         numero: formData.numero,
+         complemento: formData.complemento,
+      });
       onClose();
    }
+
    return (
       <View style={styles.addressContainer}>
          <View style={{ alignItems: 'flex-end' }}>
@@ -23,13 +46,15 @@ const UserAddressForm = ({ onClose }) => {
             />
          </View>
          <InputIcon
-            // onUpdateValue={updateInputValueHandler.bind(this, 'username')}
-            // value={enteredUsername}
+            onUpdateValue={updateInputValueHandler.bind(this, 'CEP')}
+            value={formData.CEP}
             // isInvalid={usernameIsInvalid}
             bgStyle={styles.inputBgColor}
             inputConfig={{
                placeholder: 'CEP',
                autoCapitalize: 'none',
+               keyboardType: 'numeric',
+               maxLength: 9,
             }}
             iconConfig={{
                name: 'location-outline',
@@ -40,8 +65,8 @@ const UserAddressForm = ({ onClose }) => {
             // InvalidInputTxtStyle={styles.InvalidInputMargin}
          />
          <InputIcon
-            // onUpdateValue={updateInputValueHandler.bind(this, 'username')}
-            // value={enteredUsername}
+            onUpdateValue={updateInputValueHandler.bind(this, 'bairro')}
+            value={formData.bairro}
             // isInvalid={usernameIsInvalid}
             inputContainer={styles.inputContainer}
             bgStyle={styles.inputBgColor}
@@ -58,8 +83,8 @@ const UserAddressForm = ({ onClose }) => {
             // InvalidInputTxtStyle={styles.InvalidInputMargin}
          />
          <InputIcon
-            // onUpdateValue={updateInputValueHandler.bind(this, 'username')}
-            // value={enteredUsername}
+            onUpdateValue={updateInputValueHandler.bind(this, 'numero')}
+            value={formData.numero}
             // isInvalid={usernameIsInvalid}
             inputContainer={styles.inputContainer}
             bgStyle={styles.inputBgColor}
@@ -76,8 +101,8 @@ const UserAddressForm = ({ onClose }) => {
             // InvalidInputTxtStyle={styles.InvalidInputMargin}
          />
          <InputIcon
-            // onUpdateValue={updateInputValueHandler.bind(this, 'username')}
-            // value={enteredUsername}
+            onUpdateValue={updateInputValueHandler.bind(this, 'complemento')}
+            value={formData.complemento}
             // isInvalid={usernameIsInvalid}
             inputContainer={styles.inputContainer}
             bgStyle={styles.inputBgColor}
@@ -94,7 +119,7 @@ const UserAddressForm = ({ onClose }) => {
             // InvalidInputTxtStyle={styles.InvalidInputMargin}
          />
          <View style={styles.buttonWrapper}>
-            <Button onPress={confirmHandler}>Confirmar</Button>
+            <Button onPress={submitHandler}>Confirmar</Button>
          </View>
       </View>
    );
