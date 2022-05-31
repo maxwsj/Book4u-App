@@ -8,6 +8,7 @@ import IconBtn from '../UI/IconBtn';
 const UserAddressForm = ({ onClose, onSubmit }) => {
    const [formData, setFormData] = useState({
       CEP: '',
+      endereco: '',
       bairro: '',
       numero: '',
       complemento: '',
@@ -26,6 +27,7 @@ const UserAddressForm = ({ onClose, onSubmit }) => {
       onSubmit({
          CEP: formData.CEP,
          bairro: formData.bairro,
+         endereco: formData.endereco,
          numero: formData.numero,
          complemento: formData.complemento,
       });
@@ -52,7 +54,6 @@ const UserAddressForm = ({ onClose, onSubmit }) => {
             bgStyle={styles.inputBgColor}
             inputConfig={{
                placeholder: 'CEP',
-               autoCapitalize: 'none',
                keyboardType: 'numeric',
                maxLength: 9,
             }}
@@ -72,7 +73,23 @@ const UserAddressForm = ({ onClose, onSubmit }) => {
             bgStyle={styles.inputBgColor}
             inputConfig={{
                placeholder: 'Bairro',
-               autoCapitalize: 'none',
+            }}
+            iconConfig={{
+               name: 'map-outline',
+               size: 20,
+               color: Colors.silver200,
+            }}
+            // children='* Dados incorretos'
+            // InvalidInputTxtStyle={styles.InvalidInputMargin}
+         />
+         <InputIcon
+            onUpdateValue={updateInputValueHandler.bind(this, 'endereco')}
+            value={formData.endereco}
+            // isInvalid={usernameIsInvalid}
+            inputContainer={styles.inputContainer}
+            bgStyle={styles.inputBgColor}
+            inputConfig={{
+               placeholder: 'Endereço',
             }}
             iconConfig={{
                name: 'map-outline',
@@ -90,7 +107,6 @@ const UserAddressForm = ({ onClose, onSubmit }) => {
             bgStyle={styles.inputBgColor}
             inputConfig={{
                placeholder: 'Número',
-               autoCapitalize: 'none',
             }}
             iconConfig={{
                name: 'navigate-outline',

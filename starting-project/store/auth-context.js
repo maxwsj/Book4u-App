@@ -6,23 +6,24 @@ export const AuthContext = createContext({
    token: '',
    isAuthenticated: false,
    authenticate: (token) => {},
+   userIdHandler: (id) => {},
    logout: () => {},
 });
 
 function AuthContextProvider({ children }) {
    const [authToken, setAuthToken] = useState();
+   const [userId, setUserId] = useState();
 
-   // Should be triggered whenever a user did login or sign up successfully
    function authenticate(token) {
       setAuthToken(token);
-      // The first argument is the key
-      // Second the value that we wanna store (must be a string)
       AsyncStorage.setItem('token', token);
    }
+
    function logout() {
       console.log('Logout');
       setAuthToken(null);
       AsyncStorage.removeItem('token');
+      AsyncStorage.removeItem('userId');
    }
 
    const value = {

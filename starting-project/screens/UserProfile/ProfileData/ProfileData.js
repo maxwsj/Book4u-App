@@ -1,7 +1,6 @@
 import { StyleSheet, Text, View, Dimensions } from 'react-native';
 import { useEffect, useState } from 'react';
 import { Divider, Avatar } from 'react-native-paper';
-import Modal from 'react-native-modal';
 import { useNavigation } from '@react-navigation/native';
 
 import { Colors } from '../../../constants/styles';
@@ -12,6 +11,11 @@ import FlatButton from '../../../componnets/UI/FlatButton';
 import BooksSection from '../../../componnets/BooksSection/BooksSection';
 import TextIcon from '../../../componnets/UI/TextIcon';
 import UserAddressForm from '../../../componnets/ProfileData/UserAddressForm';
+import CellphoneForm from '../../../componnets/ProfileData/CellphoneForm';
+import TelephoneForm from '../../../componnets/ProfileData/TelephoneForm';
+
+import userService from '../../../util/http-user';
+import UserModal from '../../../componnets/ProfileData/UserModal';
 
 const { width, height } = Dimensions.get('window');
 
@@ -22,15 +26,40 @@ const ProfileData = () => {
    const [whishOption, setWhishOption] = useState(false);
    const [contactOption, setContactOption] = useState(false);
 
-   const [isVisible, setisVisible] = useState(false);
-   const hideModal = () => setisVisible(false);
+   const [cellphoneIsVisible, setCellphoneIsVisible] = useState(false);
+   const [telephoneIsVisible, setTelephoneIsVisible] = useState(false);
+   const [addressIsVisible, setAddressIsVisible] = useState(false);
+
+   const hideCellphoneModal = () => setCellphoneIsVisible(false);
+   const hideTelephoneModal = () => setTelephoneIsVisible(false);
+   const hideAddressModal = () => setAddressIsVisible(false);
+
+   const [bookData, setBookData] = useState({});
+
+   useEffect(() => {
+      setBookData(BOOK_DATA);
+   }, [bookData]);
 
    function addressHandler() {
-      setisVisible(true);
+      setAddressIsVisible(true);
    }
 
-   function formCloseHandler() {
-      hideModal();
+   function cellphoneHandler() {
+      setCellphoneIsVisible(true);
+   }
+
+   function telephoneHandler() {
+      setTelephoneIsVisible(true);
+   }
+
+   function cellPhoneFormCloseHandler() {
+      hideCellphoneModal();
+   }
+   function telephoneFormCloseHandler() {
+      hideTelephoneModal();
+   }
+   function addressFormCloseHandler() {
+      hideAddressModal();
    }
 
    function bookOptionHandler() {
@@ -49,20 +78,49 @@ const ProfileData = () => {
       setContactOption(true);
    }
 
-   useEffect(() => {}, [bookOption]);
-
-   const [bookData, setBookData] = useState({});
-   useEffect(() => {
-      setBookData(BOOK_DATA);
-   }, [bookData]);
-
    function addNewBookHandler() {
-      navigation.navigate('UserLibrarie');
+      navigation.navigate('RegisterBook');
+   }
+   function editBookHandler() {
+      navigation.navigate('EditBook');
+   }
+   function deleteBookHandler() {
+      navigation.navigate('DeleteBook');
    }
 
-   function submitHandler(userAddressValidation) {
-      let { CEP, bairro, numero, complemento } = userAddressValidation;
-      console.log(CEP, bairro, numero, complemento);
+   async function submitAddressHandler(userAddress) {
+      // await userService.sendUserAddress(userAddress);
+
+      fetch(
+         'https://react-lessons-8cbae-default-rtdb.firebaseio.com/userAddress.json',
+         {
+            method: 'PUT',
+            body: JSON.stringify(userAddress),
+         }
+      );
+   }
+
+   async function submitCellphoneHandler(userCellphone) {
+      // await userService.sendUserAddress(userCellphone);
+
+      fetch(
+         'https://react-lessons-8cbae-default-rtdb.firebaseio.com/userCellphone.json',
+         {
+            method: 'PUT',
+            body: JSON.stringify(userCellphone),
+         }
+      );
+   }
+
+   async function submitTelephoneHandler(userTelephone) {
+      // await userService.sendUserAddress(userTelephone);
+      fetch(
+         'https://react-lessons-8cbae-default-rtdb.firebaseio.com/telephone.json',
+         {
+            method: 'PUT',
+            body: JSON.stringify(userTelephone),
+         }
+      );
    }
 
    return (
@@ -75,9 +133,7 @@ const ProfileData = () => {
                         size={120}
                         style={styles.profileBackgroundColor}
                      />
-                     <Text style={[styles.text, styles.userText]}>
-                        Aragon Swifte
-                     </Text>
+                     <Text style={[styles.text, styles.userText]}>Teste</Text>
                      <Text style={[styles.text, styles.userAddressText]}>
                         Salvador, Bahia
                      </Text>
@@ -114,6 +170,18 @@ const ProfileData = () => {
                         iconBtnStyle={styles.addWishlistIcon}
                         onPress={addNewBookHandler}
                      />
+                     <IconBtn
+                        icon='pencil-outline'
+                        size={24}
+                        iconBtnStyle={styles.addWishlistIcon}
+                        onPress={editBookHandler}
+                     />
+                     <IconBtn
+                        icon='trash-outline'
+                        size={24}
+                        iconBtnStyle={styles.addWishlistIcon}
+                        onPress={deleteBookHandler}
+                     />
                   </View>
                   <BooksSection items={bookData} />
                </View>
@@ -143,7 +211,7 @@ const ProfileData = () => {
                         color: Colors.silver200,
                      }}
                      // iconBtnStyle={}
-                     onIconBtnPress={addressHandler}
+                     onIconBtnPress={telephoneHandler}
                   />
                   <TextIcon
                      text={'(11) 91033-2333'}
@@ -159,7 +227,7 @@ const ProfileData = () => {
                         color: Colors.silver200,
                      }}
                      // iconBtnStyle={}
-                     onIconBtnPress={addressHandler}
+                     onIconBtnPress={cellphoneHandler}
                   />
                   <TextIcon
                      text={'Rua são vicente de almeida, Bahia'}
@@ -180,22 +248,37 @@ const ProfileData = () => {
                </View>
             )}
          </View>
-         <Modal
-            isVisible={isVisible}
-            backdropTransitionOutTiming={0}
-            onBackdropPress={hideModal}
-            deviceWidth={width}
-            deviceHeight={height}
-            style={styles.containerStyle}
-            // contentContainerStyle={styles.containerStyle}
-         >
-            <View style={styles.addressContainer}>
+
+         <UserModal
+            onShow={addressIsVisible}
+            onHideModal={hideAddressModal}
+            formData={
                <UserAddressForm
-                  onSubmit={submitHandler}
-                  onClose={formCloseHandler}
+                  onSubmit={submitAddressHandler}
+                  onClose={addressFormCloseHandler}
                />
-            </View>
-         </Modal>
+            }
+         />
+         <UserModal
+            onShow={cellphoneIsVisible}
+            onHideModal={hideCellphoneModal}
+            formData={
+               <CellphoneForm
+                  onSubmit={submitCellphoneHandler}
+                  onClose={cellPhoneFormCloseHandler}
+               />
+            }
+         />
+         <UserModal
+            onShow={telephoneIsVisible}
+            onHideModal={hideTelephoneModal}
+            formData={
+               <TelephoneForm
+                  onSubmit={submitTelephoneHandler}
+                  onClose={telephoneFormCloseHandler}
+               />
+            }
+         />
       </>
    );
 };
@@ -264,19 +347,6 @@ const styles = StyleSheet.create({
    },
    textIconTextConfig: {
       fontFamily: 'lato-regular',
-   },
-   containerStyle: {
-      width: width,
-      backgroundColor: Colors.snow,
-      borderTopRightRadius: width * 0.15,
-      borderTopLeftRadius: width * 0.15,
-      marginHorizontal: 0,
-      marginBottom: 0,
-      marginTop: width,
-   },
-   addressContainer: {
-      marginHorizontal: 30,
-      flex: 1,
    },
    userWishlist: {
       flexDirection: 'row',

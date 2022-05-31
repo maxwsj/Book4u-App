@@ -28,7 +28,10 @@ import NewPassword from './screens/Login/PasswordRecover/NewPassword';
 import Home from './screens/Home/Home';
 import ProfileData from './screens/UserProfile/ProfileData/ProfileData';
 import ShoppingCartScreen from './screens/Payment/ShoppingCartScreen';
-import UserLibrarie from './screens/UserProfile/UserLibrarie/UserLibrarie';
+import RegisterBook from './screens/UserProfile/RegisterBookScreen/RegisterBook';
+import DeleteBook from './screens/UserProfile/DeleteBookScreen/DeleteBook';
+import EditBook from './screens/UserProfile/EditBookScreen/EditBook';
+import EditBookForm from './screens/UserProfile/EditBookScreen/EditBookForm';
 import UserNotification from './screens/UserProfile/UserNotification/UserNotification';
 import BookDetail from './screens/Home/BookDetail/BookDetail';
 
@@ -89,7 +92,31 @@ function AuthenticatedStack() {
    }
 
    function prevScreenHandler() {
-      navigation.goBack();
+      // navigation.goBack();
+      navigation.dispatch(
+         CommonActions.reset({
+            index: 1,
+            routes: [
+               {
+                  name: 'Home',
+               },
+            ],
+         })
+      );
+   }
+
+   function profileScreenHandler() {
+      navigation.dispatch(
+         CommonActions.reset({
+            index: 1,
+            routes: [
+               { name: 'RegisterBook' },
+               {
+                  name: 'ProfileData',
+               },
+            ],
+         })
+      );
    }
 
    return (
@@ -183,8 +210,8 @@ function AuthenticatedStack() {
             }}
          />
          <Drawer.Screen
-            name='UserLibrarie'
-            component={UserLibrarie}
+            name='RegisterBook'
+            component={RegisterBook}
             options={{
                headerLeft: ({ tintColor }) => (
                   <IconBtn
@@ -192,10 +219,82 @@ function AuthenticatedStack() {
                      color={tintColor}
                      size={24}
                      iconBtnStyle={styles.iconLeftBtn}
-                     onPress={prevScreenHandler}
+                     onPress={profileScreenHandler}
                   />
                ),
                headerTitle: 'Cadastro de Livros',
+               headerStyle: { backgroundColor: Colors.white50 },
+               headerTintColor: Colors.secondary,
+               headerTitleStyle: {
+                  color: Colors.silver400,
+                  fontFamily: 'poppins-regular',
+                  fontSize: 18,
+                  marginTop: 4,
+               },
+            }}
+         />
+         <Drawer.Screen
+            name='EditBook'
+            component={EditBook}
+            options={{
+               headerLeft: ({ tintColor }) => (
+                  <IconBtn
+                     icon='arrow-back-outline'
+                     color={tintColor}
+                     size={24}
+                     iconBtnStyle={styles.iconLeftBtn}
+                     onPress={profileScreenHandler}
+                  />
+               ),
+               headerTitle: 'Edite seus livros',
+               headerStyle: { backgroundColor: Colors.white50 },
+               headerTintColor: Colors.secondary,
+               headerTitleStyle: {
+                  color: Colors.silver400,
+                  fontFamily: 'poppins-regular',
+                  fontSize: 18,
+                  marginTop: 4,
+               },
+            }}
+         />
+         <Drawer.Screen
+            name='EditBookForm'
+            component={EditBookForm}
+            options={{
+               headerLeft: ({ tintColor }) => (
+                  <IconBtn
+                     icon='arrow-back-outline'
+                     color={tintColor}
+                     size={24}
+                     iconBtnStyle={styles.iconLeftBtn}
+                     onPress={profileScreenHandler}
+                  />
+               ),
+               headerTitle: 'Edite seu livro',
+               headerStyle: { backgroundColor: Colors.white50 },
+               headerTintColor: Colors.secondary,
+               headerTitleStyle: {
+                  color: Colors.silver400,
+                  fontFamily: 'poppins-regular',
+                  fontSize: 18,
+                  marginTop: 4,
+               },
+            }}
+         />
+         <Drawer.Screen
+            name='DeleteBook'
+            component={DeleteBook}
+            options={{
+               headerLeft: ({ tintColor }) => (
+                  <IconBtn
+                     icon='arrow-back-outline'
+                     color={tintColor}
+                     size={24}
+                     iconBtnStyle={styles.iconLeftBtn}
+                     onPress={profileScreenHandler}
+                  />
+               ),
+               headerTitle: 'Delete seus livros',
                headerStyle: { backgroundColor: Colors.white50 },
                headerTintColor: Colors.secondary,
                headerTitleStyle: {
@@ -295,6 +394,7 @@ export default function App() {
    return (
       <>
          <StatusBar style='auto' />
+
          <AuthContextProvider>
             <Root />
          </AuthContextProvider>

@@ -78,10 +78,13 @@ const SignUpContent = ({ onSubmitUser, isInvalid }) => {
                cpf: cpf,
                cellphone: cellphone,
                telephone: telephone,
+               address: '',
+               complement: '',
+               token: '',
             },
             firstName: firstName,
             lastName: lastName,
-            profileImage: '',
+            picture: '',
             registerNumber: '',
          });
          setIsValid(true);

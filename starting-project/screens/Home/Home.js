@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 
 import BooksSection from '../../componnets/BooksSection/BooksSection';
 
@@ -10,10 +10,14 @@ import { Colors } from '../../constants/styles';
 import { Divider, Modal, Portal, Provider } from 'react-native-paper';
 
 import { BOOK_DATA } from '../../data/dummy-data';
+import { AuthContext } from '../../store/auth-context';
 
 const Home = () => {
+   const authCtx = useContext(AuthContext);
+
    const [bookData, setBookData] = useState({});
    useEffect(() => {
+      console.log(`TOKEN: ${authCtx.token}`);
       setBookData(BOOK_DATA);
    }, [bookData]);
 

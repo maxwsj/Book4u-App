@@ -17,7 +17,7 @@ const DrawerContent = ({ props, navigation }) => {
       navigation.navigate('ShoppingCartScreen');
    }
    function librarieHandler() {
-      navigation.navigate('UserLibrarie');
+      navigation.navigate('RegisterBook');
    }
    function notificationHandler() {
       navigation.navigate('UserNotification');

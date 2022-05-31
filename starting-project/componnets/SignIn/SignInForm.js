@@ -6,20 +6,20 @@ import InputIcon from '../UI/InputIcon';
 import Button from '../UI/Button';
 
 const SignInForm = ({ onSubmit, credentialsInvalid }) => {
-   const [enteredUsername, setEnteredUsername] = useState('');
+   const [enteredEmail, setEnteredEmail] = useState('');
    const [enteredPassword, setEnteredPassword] = useState('');
    const [visible, setVisibility] = useState(false);
    const [secureTextEntry, setSecureTextEntry] = useState(true);
 
    const icon = !visible ? 'eye-off-outline' : 'eye-outline';
 
-   const { username: usernameIsInvalid, password: passwordIsInvalid } =
+   const { email: emailIsInvalid, password: passwordIsInvalid } =
       credentialsInvalid;
 
    function updateInputValueHandler(inputType, enteredValue) {
       switch (inputType) {
-         case 'username':
-            setEnteredUsername(enteredValue);
+         case 'email':
+            setEnteredEmail(enteredValue);
             break;
          case 'password':
             setEnteredPassword(enteredValue);
@@ -29,7 +29,7 @@ const SignInForm = ({ onSubmit, credentialsInvalid }) => {
 
    function submitHandler() {
       onSubmit({
-         username: enteredUsername,
+         email: enteredEmail,
          password: enteredPassword,
       });
    }
@@ -43,9 +43,9 @@ const SignInForm = ({ onSubmit, credentialsInvalid }) => {
       <View style={styles.loginFormContainer}>
          <View>
             <InputIcon
-               onUpdateValue={updateInputValueHandler.bind(this, 'username')}
-               value={enteredUsername}
-               isInvalid={usernameIsInvalid}
+               onUpdateValue={updateInputValueHandler.bind(this, 'email')}
+               value={enteredEmail}
+               isInvalid={emailIsInvalid}
                inputConfig={{
                   placeholder: 'Email',
                   keyboardType: 'email-address',

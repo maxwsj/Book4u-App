@@ -10,13 +10,14 @@ class UsuarioService {
          data: userData,
          headers: Config.HEADER_REQUEST,
       });
+      console.log(response.data);
       const registerNumber = response.data.createdUser.registerNumber;
 
       return registerNumber;
    }
 
    async confirmRegistration(registeredNumber) {
-      await axios({
+      const response = await axios({
          url:
             Config.API_URL + `api/user/confirmRegistration/${registeredNumber}`,
          method: 'PUT',
@@ -66,6 +67,7 @@ class UsuarioService {
          timeout: Config.TIMEOUT_REQUEST,
          headers: Config.HEADER_REQUEST,
       });
+
       return response;
    }
 }

@@ -6,16 +6,19 @@ import {
    ScrollView,
    TextInput,
 } from 'react-native';
-import { useState } from 'react';
+import { launchImageLibraryAsync } from 'expo-image-picker';
+
+import { useState, useEffect } from 'react';
 
 import ImageButton from '../../../componnets/UserLibrarie/ImageButton';
 import UserBookTable from '../../../componnets/UserLibrarie/UserBookTable';
 import { Colors } from '../../../constants/styles';
 import Button from '../../../componnets/UI/Button';
+import ImagePreview from '../../../componnets/UserLibrarie/ImagePreview';
 
 const { width, height } = Dimensions.get('window');
 
-const UserLibrarie = () => {
+const RegisterBook = ({ route, navigation }) => {
    const [formData, setFormData] = useState({
       price: '',
       synopsis: '',
@@ -28,6 +31,24 @@ const UserLibrarie = () => {
       condition: '',
    });
 
+   // useEffect(() => {
+   //    if (
+
+   //    ) {
+   //       setFormData({
+   //          price: '',
+   //          synopsis: '',
+   //          title: '',
+   //          author: '',
+   //          language: '',
+   //          publisher: '',
+   //          format: '',
+   //          model: '',
+   //          condition: '',
+   //       });
+   //    }
+   // }, [formData]);
+
    function updateInputValueHandler(inputIdentifier, enteredValue) {
       setFormData((curInputs) => {
          return {
@@ -39,23 +60,123 @@ const UserLibrarie = () => {
 
    function submitHandler() {
       // onSubmit({
-      //    price: formData.price,
-      //    synopsis: formData.synopsis,
-      //    title: formData.title,
-      //    author: formData.author,
-      //    language: formData.language,
-      //    publisher: formData.publisher,
-      //    format: formData.format,
-      //    model: formData.model,
-      //    condition: formData.condition,
+      // price: formData.price,
+      // synopsis: formData.synopsis,
+      // title: formData.title,
+      // author: formData.author,
+      // language: formData.language,
+      // publisher: formData.publisher,
+      // format: formData.format,
+      // model: formData.model,
+      // condition: formData.condition,
       // });
-      onClose();
+      const bookData = {
+         price: formData.price,
+         synopsis: formData.synopsis,
+         title: formData.title,
+         author: formData.author,
+         language: formData.language,
+         publisher: formData.publisher,
+         format: formData.format,
+         model: formData.model,
+         condition: formData.condition,
+         bookImages: {
+            frontSideImage: frontSideImage,
+            rightSideImage: rightSide,
+            leftSideImage: leftSide,
+            backSideImage: backSide,
+         },
+      };
+      console.log(bookData);
+   }
+
+   const [frontSideImage, setFrontSideImage] = useState(null);
+   const [rightSide, setRightSide] = useState(null);
+   const [leftSide, setLeftSide] = useState(null);
+   const [backSide, setBackSide] = useState(null);
+
+   async function frontSideImageHandler() {
+      const image = await launchImageLibraryAsync({
+         allowsEditing: true,
+         aspect: [4, 8],
+         quality: 1,
+      });
+      const { uri } = image;
+      console.log(`Capa: ${uri}`);
+
+      if (!image.cancelled) {
+         setFrontSideImage(image.uri);
+      }
+   }
+   async function rightSideImageHandler() {
+      const image = await launchImageLibraryAsync({
+         allowsEditing: true,
+         aspect: [4, 8],
+         quality: 1,
+      });
+      const { uri } = image;
+      console.log(`Folha de rosto: ${uri}`);
+
+      if (!image.cancelled) {
+         setRightSide(image.uri);
+      }
+   }
+   async function leftSideImageHandler() {
+      const image = await launchImageLibraryAsync({
+         allowsEditing: true,
+         aspect: [4, 8],
+         quality: 1,
+      });
+      const { uri } = image;
+      console.log(`Lombada: ${uri}`);
+
+      if (!image.cancelled) {
+         setLeftSide(image.uri);
+      }
+   }
+   async function backSideImageHandler() {
+      const image = await launchImageLibraryAsync({
+         allowsEditing: true,
+         aspect: [4, 8],
+         quality: 1,
+      });
+      const { uri } = image;
+      console.log(`Contracapa: ${uri}`);
+
+      if (!image.cancelled) {
+         setBackSide(image.uri);
+      }
    }
 
    return (
       <ScrollView>
-         <View style={styles.container}>
-            <ImageButton />
+         <ScrollView
+            horizontal
+            pagingEnabled
+            snapToAlignment='start'
+            showsHorizontalScrollIndicator={false}
+            decelerationRate={'fast'}
+            nestedScrollEnabled={true}
+            contentContainerStyle={styles.imagePreviewItems}
+            style={styles.imagePreviewContainer}
+         >
+            {/* CRIAR UM OBJETO DESSA IMAGENS ONDE EU POSSA LOOPAR COM MAP E PASSAR O VALOR */}
+            <ImagePreview imageUrl={frontSideImage} />
+            <ImagePreview imageUrl={backSide} />
+            <ImagePreview imageUrl={leftSide} />
+            <ImagePreview imageUrl={rightSide} />
+         </ScrollView>
+         <View style={styles.imageButtonsContainer}>
+            <ImageButton setBtnTitle='Capa' onPress={frontSideImageHandler} />
+            <ImageButton
+               setBtnTitle='Contracapa'
+               onPress={backSideImageHandler}
+            />
+            <ImageButton setBtnTitle='Lombada' onPress={leftSideImageHandler} />
+            <ImageButton
+               setBtnTitle='Folha de rosto'
+               onPress={rightSideImageHandler}
+            />
          </View>
 
          <View style={styles.detailsContainer}>
@@ -146,7 +267,7 @@ const UserLibrarie = () => {
    );
 };
 
-export default UserLibrarie;
+export default RegisterBook;
 
 const styles = StyleSheet.create({
    container: {
@@ -218,4 +339,15 @@ const styles = StyleSheet.create({
    btnContainer: {
       marginVertical: 30,
    },
+   imageButtonsContainer: {
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+   },
+   imagePreviewItems: {
+      flexGrow: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+   },
+   imagePreviewContainer: {},
 });
