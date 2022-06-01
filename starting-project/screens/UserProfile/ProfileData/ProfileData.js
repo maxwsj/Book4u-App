@@ -1,26 +1,31 @@
 import { StyleSheet, Text, View, Dimensions } from 'react-native';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { Divider, Avatar } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
+import { AuthContext } from '../../../store/auth-context';
 
 import { Colors } from '../../../constants/styles';
 import { BOOK_DATA } from '../../../data/dummy-data';
 
 import IconBtn from '../../../componnets/UI/IconBtn';
 import FlatButton from '../../../componnets/UI/FlatButton';
-import BooksSection from '../../../componnets/BooksSection/BooksSection';
+import UserBookSection from '../../../componnets/ProfileData/UserLibrarie/UserBookSection';
 import TextIcon from '../../../componnets/UI/TextIcon';
 import UserAddressForm from '../../../componnets/ProfileData/UserAddressForm';
 import CellphoneForm from '../../../componnets/ProfileData/CellphoneForm';
 import TelephoneForm from '../../../componnets/ProfileData/TelephoneForm';
-
-import userService from '../../../util/http-user';
 import UserModal from '../../../componnets/ProfileData/UserModal';
 
+import userService from '../../../util/http-user';
+
 const { width, height } = Dimensions.get('window');
+const DEFAULT_ADDRESS = 'Endereço não cadastrado';
 
 const ProfileData = () => {
    const navigation = useNavigation();
+   const authCtx = useContext(AuthContext);
+   const [bookData, setBookData] = useState({});
+   const [userData, setUserData] = useState({});
 
    const [bookOption, setBookOption] = useState(true);
    const [whishOption, setWhishOption] = useState(false);
@@ -34,11 +39,30 @@ const ProfileData = () => {
    const hideTelephoneModal = () => setTelephoneIsVisible(false);
    const hideAddressModal = () => setAddressIsVisible(false);
 
-   const [bookData, setBookData] = useState({});
+   async function getUserDataHandler() {
+      const data = { ...(await userService.getUserById(authCtx.token)) };
+      setUserData({
+         id: data.id,
+         firstName: data.firstName,
+         lastName: data.lastName,
+         fullName: `${data.firstName} ${data.lastName}`,
+         address: data.personalData.address,
+         cellphone: data.personalData.cellphone,
+         complement: data.personalData.complement,
+         cpf: data.personalData.cpf,
+         email: data.personalData.email,
+         telephone: data.personalData.telephone,
+         picture: data.picture,
+      });
+   }
 
    useEffect(() => {
       setBookData(BOOK_DATA);
    }, [bookData]);
+
+   useEffect(() => {
+      getUserDataHandler();
+   }, []);
 
    function addressHandler() {
       setAddressIsVisible(true);
@@ -90,7 +114,7 @@ const ProfileData = () => {
 
    async function submitAddressHandler(userAddress) {
       // await userService.sendUserAddress(userAddress);
-
+      const address = { ...userAddress, id: authCtx.token };
       fetch(
          'https://react-lessons-8cbae-default-rtdb.firebaseio.com/userAddress.json',
          {
@@ -133,9 +157,13 @@ const ProfileData = () => {
                         size={120}
                         style={styles.profileBackgroundColor}
                      />
-                     <Text style={[styles.text, styles.userText]}>Teste</Text>
+                     <Text style={[styles.text, styles.userText]}>
+                        {userData.fullName}
+                     </Text>
                      <Text style={[styles.text, styles.userAddressText]}>
-                        Salvador, Bahia
+                        {userData.address === ''
+                           ? DEFAULT_ADDRESS
+                           : userData.address}
                      </Text>
                   </View>
                </View>
@@ -183,7 +211,7 @@ const ProfileData = () => {
                         onPress={deleteBookHandler}
                      />
                   </View>
-                  <BooksSection items={bookData} />
+                  <UserBookSection items={bookData} />
                </View>
             )}
             {whishOption && (
@@ -192,13 +220,13 @@ const ProfileData = () => {
                      Minha lista de desejo
                   </Text>
 
-                  <BooksSection items={bookData} />
+                  <UserBookSection items={bookData} />
                </View>
             )}
             {contactOption && (
                <View style={styles.userLibrary}>
                   <TextIcon
-                     text={'(11) 4141-4433'}
+                     text={userData.telephone}
                      textConfig={styles.textIconTextConfig}
                      leftIconConfig={{
                         name: 'call-outline',
@@ -214,7 +242,7 @@ const ProfileData = () => {
                      onIconBtnPress={telephoneHandler}
                   />
                   <TextIcon
-                     text={'(11) 91033-2333'}
+                     text={userData.cellphone}
                      textConfig={styles.textIconTextConfig}
                      leftIconConfig={{
                         name: 'phone-portrait-outline',
@@ -230,7 +258,11 @@ const ProfileData = () => {
                      onIconBtnPress={cellphoneHandler}
                   />
                   <TextIcon
-                     text={'Rua são vicente de almeida, Bahia'}
+                     text={
+                        userData.address === ''
+                           ? DEFAULT_ADDRESS
+                           : userData.address
+                     }
                      textConfig={styles.textIconTextConfig}
                      leftIconConfig={{
                         name: 'location-outline',
@@ -304,6 +336,7 @@ const styles = StyleSheet.create({
    profileBackgroundColor: {
       backgroundColor: Colors.silver100,
       borderColor: Colors.silver300,
+      marginBottom: 12,
    },
    text: {
       fontFamily: 'lato-light',

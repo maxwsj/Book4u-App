@@ -7,11 +7,11 @@ import IconBtn from '../UI/IconBtn';
 
 const UserAddressForm = ({ onClose, onSubmit }) => {
    const [formData, setFormData] = useState({
-      CEP: '',
-      endereco: '',
-      bairro: '',
-      numero: '',
-      complemento: '',
+      zipCode: '',
+      address: '',
+      district: '',
+      houseNumber: '',
+      complement: '',
    });
 
    function updateInputValueHandler(inputIdentifier, enteredValue) {
@@ -25,11 +25,11 @@ const UserAddressForm = ({ onClose, onSubmit }) => {
 
    function submitHandler() {
       onSubmit({
-         CEP: formData.CEP,
-         bairro: formData.bairro,
-         endereco: formData.endereco,
-         numero: formData.numero,
-         complemento: formData.complemento,
+         zipCode: formData.zipCode,
+         district: formData.district,
+         address: formData.address,
+         houseNumber: formData.houseNumber,
+         complement: formData.complement,
       });
       onClose();
    }
@@ -48,8 +48,8 @@ const UserAddressForm = ({ onClose, onSubmit }) => {
             />
          </View>
          <InputIcon
-            onUpdateValue={updateInputValueHandler.bind(this, 'CEP')}
-            value={formData.CEP}
+            onUpdateValue={updateInputValueHandler.bind(this, 'zipCode')}
+            value={formData.zipCode}
             // isInvalid={usernameIsInvalid}
             bgStyle={styles.inputBgColor}
             inputConfig={{
@@ -66,8 +66,8 @@ const UserAddressForm = ({ onClose, onSubmit }) => {
             // InvalidInputTxtStyle={styles.InvalidInputMargin}
          />
          <InputIcon
-            onUpdateValue={updateInputValueHandler.bind(this, 'bairro')}
-            value={formData.bairro}
+            onUpdateValue={updateInputValueHandler.bind(this, 'district')}
+            value={formData.district}
             // isInvalid={usernameIsInvalid}
             inputContainer={styles.inputContainer}
             bgStyle={styles.inputBgColor}
@@ -83,8 +83,8 @@ const UserAddressForm = ({ onClose, onSubmit }) => {
             // InvalidInputTxtStyle={styles.InvalidInputMargin}
          />
          <InputIcon
-            onUpdateValue={updateInputValueHandler.bind(this, 'endereco')}
-            value={formData.endereco}
+            onUpdateValue={updateInputValueHandler.bind(this, 'address')}
+            value={formData.address}
             // isInvalid={usernameIsInvalid}
             inputContainer={styles.inputContainer}
             bgStyle={styles.inputBgColor}
@@ -100,8 +100,8 @@ const UserAddressForm = ({ onClose, onSubmit }) => {
             // InvalidInputTxtStyle={styles.InvalidInputMargin}
          />
          <InputIcon
-            onUpdateValue={updateInputValueHandler.bind(this, 'numero')}
-            value={formData.numero}
+            onUpdateValue={updateInputValueHandler.bind(this, 'houseNumber')}
+            value={formData.houseNumber}
             // isInvalid={usernameIsInvalid}
             inputContainer={styles.inputContainer}
             bgStyle={styles.inputBgColor}
@@ -117,8 +117,8 @@ const UserAddressForm = ({ onClose, onSubmit }) => {
             // InvalidInputTxtStyle={styles.InvalidInputMargin}
          />
          <InputIcon
-            onUpdateValue={updateInputValueHandler.bind(this, 'complemento')}
-            value={formData.complemento}
+            onUpdateValue={updateInputValueHandler.bind(this, 'complement')}
+            value={formData.complement}
             // isInvalid={usernameIsInvalid}
             inputContainer={styles.inputContainer}
             bgStyle={styles.inputBgColor}

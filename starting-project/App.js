@@ -27,13 +27,17 @@ import NewPassword from './screens/Login/PasswordRecover/NewPassword';
 // Authenticated Stack
 import Home from './screens/Home/Home';
 import ProfileData from './screens/UserProfile/ProfileData/ProfileData';
-import ShoppingCartScreen from './screens/Payment/ShoppingCartScreen';
+import HistoryScreen from './screens/Payment/HistoryScreen';
 import RegisterBook from './screens/UserProfile/RegisterBookScreen/RegisterBook';
 import DeleteBook from './screens/UserProfile/DeleteBookScreen/DeleteBook';
 import EditBook from './screens/UserProfile/EditBookScreen/EditBook';
 import EditBookForm from './screens/UserProfile/EditBookScreen/EditBookForm';
 import UserNotification from './screens/UserProfile/UserNotification/UserNotification';
 import BookDetail from './screens/Home/BookDetail/BookDetail';
+import PaymentMethodScreen from './screens/Payment/PaymentMethodScreen';
+import UserDetailBook from './screens/UserProfile/UserLibrarie/UserBookDetail';
+import UserBookOption from './screens/Payment/UserBookOption/UserBookOption';
+import ExchangeDetail from './screens/Payment/ExchangeDetail/ExchangeDetail';
 
 import { useFonts } from 'expo-font';
 
@@ -104,7 +108,6 @@ function AuthenticatedStack() {
          })
       );
    }
-
    function profileScreenHandler() {
       navigation.dispatch(
          CommonActions.reset({
@@ -195,8 +198,8 @@ function AuthenticatedStack() {
             }}
          />
          <Drawer.Screen
-            name='ShoppingCartScreen'
-            component={ShoppingCartScreen}
+            name='HistoryScreen'
+            component={HistoryScreen}
             options={{
                headerLeft: ({ tintColor }) => (
                   <IconBtn
@@ -333,6 +336,102 @@ function AuthenticatedStack() {
                      onPress={prevScreenHandler}
                   />
                ),
+            }}
+         />
+         <Drawer.Screen
+            name='PaymentMethodScreen'
+            component={PaymentMethodScreen}
+            options={{
+               headerLeft: ({ tintColor }) => (
+                  <IconBtn
+                     icon='arrow-back-outline'
+                     color={tintColor}
+                     size={24}
+                     iconBtnStyle={styles.iconLeftBtn}
+                     onPress={prevScreenHandler}
+                  />
+               ),
+               headerTitle: 'Método de Pagamento',
+               headerStyle: { backgroundColor: Colors.white50 },
+               headerTintColor: Colors.secondary,
+               headerTitleStyle: {
+                  color: Colors.silver400,
+                  fontFamily: 'poppins-regular',
+                  fontSize: 18,
+                  marginTop: 4,
+               },
+            }}
+         />
+         <Drawer.Screen
+            name='UserDetailBook'
+            component={UserDetailBook}
+            options={{
+               headerLeft: ({ tintColor }) => (
+                  <IconBtn
+                     icon='arrow-back-outline'
+                     color={tintColor}
+                     size={24}
+                     iconBtnStyle={styles.iconLeftBtn}
+                     onPress={profileScreenHandler}
+                  />
+               ),
+               headerTitle: 'Método de Pagamento',
+               headerStyle: { backgroundColor: Colors.white50 },
+               headerTintColor: Colors.secondary,
+               headerTitleStyle: {
+                  color: Colors.silver400,
+                  fontFamily: 'poppins-regular',
+                  fontSize: 18,
+                  marginTop: 4,
+               },
+            }}
+         />
+         <Drawer.Screen
+            name='UserBookOption'
+            component={UserBookOption}
+            options={{
+               headerLeft: ({ tintColor }) => (
+                  <IconBtn
+                     icon='arrow-back-outline'
+                     color={tintColor}
+                     size={24}
+                     iconBtnStyle={styles.iconLeftBtn}
+                     onPress={profileScreenHandler}
+                  />
+               ),
+               headerTitle: 'Sua biblioteca',
+               headerStyle: { backgroundColor: Colors.white50 },
+               headerTintColor: Colors.secondary,
+               headerTitleStyle: {
+                  color: Colors.silver400,
+                  fontFamily: 'poppins-regular',
+                  fontSize: 18,
+                  marginTop: 4,
+               },
+            }}
+         />
+         <Drawer.Screen
+            name='ExchangeDetail'
+            component={ExchangeDetail}
+            options={{
+               headerLeft: ({ tintColor }) => (
+                  <IconBtn
+                     icon='arrow-back-outline'
+                     color={tintColor}
+                     size={24}
+                     iconBtnStyle={styles.iconLeftBtn}
+                     onPress={profileScreenHandler}
+                  />
+               ),
+               headerTitle: 'Detalhes da Troca',
+               headerStyle: { backgroundColor: Colors.white50 },
+               headerTintColor: Colors.secondary,
+               headerTitleStyle: {
+                  color: Colors.silver400,
+                  fontFamily: 'poppins-regular',
+                  fontSize: 18,
+                  marginTop: 4,
+               },
             }}
          />
       </Drawer.Navigator>

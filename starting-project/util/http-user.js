@@ -4,12 +4,11 @@ import Config from './Config';
 class UserService {
    async getUserById(userId) {
       const response = await axios({
-         url: Config.API_URL + `api/user/getUserById/${userId}`,
+         url: Config.API_URL + `api/user/getUserByToken/${userId}`,
          method: 'GET',
          timeout: Config.TIMEOUT_REQUEST,
          headers: Config.HEADER_REQUEST,
       });
-      console.log(response.data);
       return response.data;
    }
    async sendUserAddress(userAddress) {

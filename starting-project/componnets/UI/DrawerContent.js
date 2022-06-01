@@ -13,8 +13,8 @@ const DrawerContent = ({ props, navigation }) => {
    function profileHandler() {
       navigation.navigate('ProfileData');
    }
-   function shoppingCartHandler() {
-      navigation.navigate('ShoppingCartScreen');
+   function historyHandler() {
+      navigation.navigate('HistoryScreen');
    }
    function librarieHandler() {
       navigation.navigate('RegisterBook');
@@ -84,11 +84,11 @@ const DrawerContent = ({ props, navigation }) => {
                      onPress={profileHandler}
                   />
                   <DrawerItem
-                     label='Carrinho'
+                     label='Histórico'
                      icon={(color, size) => (
-                        <Ionicons name='cart-outline' color={color} size={24} />
+                        <Ionicons name='cash-outline' color={color} size={24} />
                      )}
-                     onPress={shoppingCartHandler}
+                     onPress={historyHandler}
                   />
                   <DrawerItem
                      label='Biblioteca'

@@ -17,7 +17,6 @@ const Home = () => {
 
    const [bookData, setBookData] = useState({});
    useEffect(() => {
-      console.log(`TOKEN: ${authCtx.token}`);
       setBookData(BOOK_DATA);
    }, [bookData]);
 

@@ -24,8 +24,6 @@ const SignUpAuth = ({ route, navigation }) => {
    const authCtx = useContext(AuthContext);
    const [isAuthenticating, setIsAuthenticating] = useState(false);
 
-   let token = Math.random().toString();
-
    const { email, registerNumber } = route.params;
 
    useEffect(() => {
@@ -43,8 +41,11 @@ const SignUpAuth = ({ route, navigation }) => {
       ) {
          setIsAuthenticating(true);
          try {
-            await usuarioService.confirmRegistration(userAuthInput);
-            authCtx.authenticate(token);
+            const response = await usuarioService.confirmRegistration(
+               userAuthInput
+            );
+            console.log(response);
+            // authCtx.authenticate(token);
          } catch (error) {
             console.log(error);
             setIsInvalid(true);

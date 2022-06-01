@@ -1,24 +1,17 @@
 import { StyleSheet, Text, View, Pressable, Dimensions } from 'react-native';
 import { useEffect, useState } from 'react';
 import { Title, Avatar } from 'react-native-paper';
-import { Colors } from '../../constants/styles';
-import Button from '../UI/Button';
-import BookDetailTable from './BookDetailTable';
-import BookInfoContainer from './BookInfoContainer';
-import BookTradeContainer from './BookTradeContainer';
-import BookSynopsisContainer from './BookSynopsisContainer';
-import { useNavigation } from '@react-navigation/native';
+import { Colors } from '../../../constants/styles';
+
+import BookDetailTable from '../../BookDetails/BookDetailTable';
+import BookInfoContainer from '../../BookDetails/BookInfoContainer';
+import BookTradeContainer from '../../BookDetails/BookTradeContainer';
+import BookSynopsisContainer from '../../BookDetails/BookSynopsisContainer';
 
 const { width } = Dimensions.get('window');
 
-const BookDetailItems = ({ bookData }) => {
-   const navigation = useNavigation();
+const UserBookDetailItem = ({ bookData }) => {
    const bookDetailData = { ...bookData };
-   function tradeButtonHandler() {
-      navigation.navigate('PaymentMethodScreen', {
-         externalBookId: bookDetailData[0].id,
-      });
-   }
 
    return (
       <View style={styles.container}>
@@ -45,16 +38,7 @@ const BookDetailItems = ({ bookData }) => {
             bookData={bookDetailData}
          />
          <BookSynopsisContainer synopsisText={bookDetailData[0].synopsis} />
-         <View style={styles.tradeWrapper}>
-            <View style={styles.tradeItems}>
-               <BookTradeContainer />
-            </View>
-            <View style={styles.tradeItems}>
-               <Button stylesBtn={styles.btnStyle} onPress={tradeButtonHandler}>
-                  Trocar
-               </Button>
-            </View>
-         </View>
+
          <View style={styles.detailsContainer}>
             <Text style={styles.detailsTitle}>Detalhes do livro</Text>
             <View style={styles.detailWrapper}>
@@ -100,7 +84,7 @@ const BookDetailItems = ({ bookData }) => {
    );
 };
 
-export default BookDetailItems;
+export default UserBookDetailItem;
 
 const styles = StyleSheet.create({
    container: {
