@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Alert } from 'react-native';
 import { useState, useEffect } from 'react';
 
 import Button from '../../componnets/UI/Button';
@@ -35,14 +35,24 @@ const PaymentMethodScreen = ({ route, navigation }) => {
    function confirmOptionHandler() {
       if (moneyIsSelected === true) {
          USER_OPTION = 'Money';
+         navigation.navigate('ExchangeDetail', {
+            externalBookId: externalId,
+            userBookId: userBookId,
+            userOption: USER_OPTION,
+         });
       } else if (bookIsSelected === true) {
          USER_OPTION = 'Book';
+         navigation.navigate('ExchangeDetail', {
+            externalBookId: externalId,
+            userBookId: userBookId,
+            userOption: USER_OPTION,
+         });
+      } else {
+         Alert.alert(
+            'Pagamento não selecionado !',
+            'Escolha um método de pagamento!'
+         );
       }
-      navigation.navigate('ExchangeDetail', {
-         externalBookId: externalId,
-         userBookId: userBookId,
-         userOption: USER_OPTION,
-      });
    }
 
    return (

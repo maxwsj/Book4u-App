@@ -38,6 +38,8 @@ import PaymentMethodScreen from './screens/Payment/PaymentMethodScreen';
 import UserDetailBook from './screens/UserProfile/UserLibrarie/UserBookDetail';
 import UserBookOption from './screens/Payment/UserBookOption/UserBookOption';
 import ExchangeDetail from './screens/Payment/ExchangeDetail/ExchangeDetail';
+import CanceledExchange from './screens/Payment/PaymentSituation/CanceledExchange';
+import SuccessfullyExchanged from './screens/Payment/PaymentSituation/SuccessfullyExchanged';
 
 import { useFonts } from 'expo-font';
 
@@ -424,6 +426,54 @@ function AuthenticatedStack() {
                   />
                ),
                headerTitle: 'Detalhes da Troca',
+               headerStyle: { backgroundColor: Colors.white50 },
+               headerTintColor: Colors.secondary,
+               headerTitleStyle: {
+                  color: Colors.silver400,
+                  fontFamily: 'poppins-regular',
+                  fontSize: 18,
+                  marginTop: 4,
+               },
+            }}
+         />
+         <Drawer.Screen
+            name='SuccessfullyExchanged'
+            component={SuccessfullyExchanged}
+            options={{
+               headerLeft: ({ tintColor }) => (
+                  <IconBtn
+                     icon='arrow-back-outline'
+                     color={tintColor}
+                     size={24}
+                     iconBtnStyle={styles.iconLeftBtn}
+                     onPress={profileScreenHandler}
+                  />
+               ),
+               headerTitle: 'Situação do Pagamento',
+               headerStyle: { backgroundColor: Colors.white50 },
+               headerTintColor: Colors.secondary,
+               headerTitleStyle: {
+                  color: Colors.silver400,
+                  fontFamily: 'poppins-regular',
+                  fontSize: 18,
+                  marginTop: 4,
+               },
+            }}
+         />
+         <Drawer.Screen
+            name='CanceledExchange'
+            component={CanceledExchange}
+            options={{
+               headerLeft: ({ tintColor }) => (
+                  <IconBtn
+                     icon='arrow-back-outline'
+                     color={tintColor}
+                     size={24}
+                     iconBtnStyle={styles.iconLeftBtn}
+                     onPress={profileScreenHandler}
+                  />
+               ),
+               headerTitle: 'Situação do Pagamento',
                headerStyle: { backgroundColor: Colors.white50 },
                headerTintColor: Colors.secondary,
                headerTitleStyle: {
