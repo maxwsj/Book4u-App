@@ -1,53 +1,38 @@
-import {
-   StyleSheet,
-   Text,
-   View,
-   Dimensions,
-   ScrollView,
-   TextInput,
-} from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TextInput } from 'react-native';
 import { launchImageLibraryAsync } from 'expo-image-picker';
-
-import { useState, useEffect } from 'react';
+import { Divider, Checkbox } from 'react-native-paper';
+import { CommonActions } from '@react-navigation/native';
+import { useState, useContext, useEffect } from 'react';
 
 import ImageButton from '../../../componnets/UserLibrarie/ImageButton';
 import UserBookTable from '../../../componnets/UserLibrarie/UserBookTable';
 import { Colors } from '../../../constants/styles';
 import Button from '../../../componnets/UI/Button';
 import ImagePreview from '../../../componnets/UserLibrarie/ImagePreview';
-
-const { width, height } = Dimensions.get('window');
+import bookService from '../../../util/http-book';
+import { AuthContext } from '../../../store/auth-context';
 
 const RegisterBook = ({ route, navigation }) => {
+   const authCtx = useContext(AuthContext);
+   const [isNewBook, setIsNewBook] = useState(false);
+   const [isSemiNewBook, setIsSemiNewBook] = useState(false);
+   const [isUsedBook, setIsUsedBook] = useState(false);
+   const [bookCondition, setBookCondition] = useState('');
+   const [frontSideImage, setFrontSideImage] = useState(null);
+   const [rightSide, setRightSide] = useState(null);
+   const [leftSide, setLeftSide] = useState(null);
+   const [backSide, setBackSide] = useState(null);
    const [formData, setFormData] = useState({
+      title: '',
       price: '',
       synopsis: '',
-      title: '',
       author: '',
       language: '',
       publisher: '',
-      format: '',
-      model: '',
+      pageQuantity: '',
       condition: '',
+      category: '',
    });
-
-   // useEffect(() => {
-   //    if (
-
-   //    ) {
-   //       setFormData({
-   //          price: '',
-   //          synopsis: '',
-   //          title: '',
-   //          author: '',
-   //          language: '',
-   //          publisher: '',
-   //          format: '',
-   //          model: '',
-   //          condition: '',
-   //       });
-   //    }
-   // }, [formData]);
 
    function updateInputValueHandler(inputIdentifier, enteredValue) {
       setFormData((curInputs) => {
@@ -58,42 +43,35 @@ const RegisterBook = ({ route, navigation }) => {
       });
    }
 
-   function submitHandler() {
-      // onSubmit({
-      // price: formData.price,
-      // synopsis: formData.synopsis,
-      // title: formData.title,
-      // author: formData.author,
-      // language: formData.language,
-      // publisher: formData.publisher,
-      // format: formData.format,
-      // model: formData.model,
-      // condition: formData.condition,
-      // });
-      const bookData = {
-         price: formData.price,
-         synopsis: formData.synopsis,
-         title: formData.title,
-         author: formData.author,
-         language: formData.language,
-         publisher: formData.publisher,
-         format: formData.format,
-         model: formData.model,
-         condition: formData.condition,
-         bookImages: {
-            frontSideImage: frontSideImage,
-            rightSideImage: rightSide,
-            leftSideImage: leftSide,
-            backSideImage: backSide,
-         },
-      };
-      console.log(bookData);
+   function newBookCheckBoxHandler() {
+      setIsNewBook(!isNewBook);
+      setIsSemiNewBook(false);
+      setIsUsedBook(false);
+   }
+   function semiNewBookCheckBoxHandler() {
+      setIsSemiNewBook(!isSemiNewBook);
+      setIsNewBook(false);
+      setIsUsedBook(false);
+   }
+   function usedBookCheckBoxHandler() {
+      setIsUsedBook(!isUsedBook);
+      setIsNewBook(false);
+      setIsSemiNewBook(false);
    }
 
-   const [frontSideImage, setFrontSideImage] = useState(null);
-   const [rightSide, setRightSide] = useState(null);
-   const [leftSide, setLeftSide] = useState(null);
-   const [backSide, setBackSide] = useState(null);
+   useEffect(() => {
+      if (isUsedBook) {
+         setBookCondition('Usado');
+      }
+
+      if (isNewBook) {
+         setBookCondition('Novo');
+      }
+
+      if (isSemiNewBook) {
+         setBookCondition('Semi-novo');
+      }
+   }, [isUsedBook, isNewBook, isSemiNewBook]);
 
    async function frontSideImageHandler() {
       const image = await launchImageLibraryAsync({
@@ -101,8 +79,6 @@ const RegisterBook = ({ route, navigation }) => {
          aspect: [4, 8],
          quality: 1,
       });
-      const { uri } = image;
-      console.log(`Capa: ${uri}`);
 
       if (!image.cancelled) {
          setFrontSideImage(image.uri);
@@ -114,12 +90,56 @@ const RegisterBook = ({ route, navigation }) => {
          aspect: [4, 8],
          quality: 1,
       });
-      const { uri } = image;
-      console.log(`Folha de rosto: ${uri}`);
 
       if (!image.cancelled) {
          setRightSide(image.uri);
       }
+   }
+
+   async function submitHandler() {
+      const bookData = {
+         name: formData.title,
+         pagesQuantity: +formData.pageQuantity,
+         synopsis: formData.synopsis,
+         status: 'Disponível',
+         condition: bookCondition,
+         createdAt: '',
+         price: formData.price,
+         author: {
+            name: formData.author,
+         },
+         language: {
+            name: formData.language,
+         },
+         publisher: {
+            name: formData.publisher,
+         },
+         category: [
+            {
+               name: formData.category,
+            },
+         ],
+         bookImages: {
+            frontSideImage: frontSideImage,
+            rightSideImage: rightSide,
+            leftSideImage: leftSide,
+            backSideImage: backSide,
+         },
+      };
+
+      await bookService.registerBook(bookData, authCtx.token);
+
+      navigation.dispatch(
+         CommonActions.reset({
+            index: 1,
+            routes: [
+               { name: 'RegisterBook' },
+               {
+                  name: 'ProfileData',
+               },
+            ],
+         })
+      );
    }
    async function leftSideImageHandler() {
       const image = await launchImageLibraryAsync({
@@ -127,8 +147,6 @@ const RegisterBook = ({ route, navigation }) => {
          aspect: [4, 8],
          quality: 1,
       });
-      const { uri } = image;
-      console.log(`Lombada: ${uri}`);
 
       if (!image.cancelled) {
          setLeftSide(image.uri);
@@ -140,8 +158,6 @@ const RegisterBook = ({ route, navigation }) => {
          aspect: [4, 8],
          quality: 1,
       });
-      const { uri } = image;
-      console.log(`Contracapa: ${uri}`);
 
       if (!image.cancelled) {
          setBackSide(image.uri);
@@ -218,6 +234,13 @@ const RegisterBook = ({ route, navigation }) => {
                   value={formData.author}
                />
                <UserBookTable
+                  detailTitle={'Categoria'}
+                  title={'Insira uma categoria'}
+                  setDivider={true}
+                  onUpdateValue={updateInputValueHandler.bind(this, 'category')}
+                  value={formData.category}
+               />
+               <UserBookTable
                   detailTitle={'Idioma'}
                   title={'Insira um idioma'}
                   setDivider={true}
@@ -235,29 +258,50 @@ const RegisterBook = ({ route, navigation }) => {
                   value={formData.publisher}
                />
                <UserBookTable
-                  detailTitle={'Formato'}
-                  title={'Insira um formato'}
+                  detailTitle={'Número de páginas'}
+                  title={'Número de Páginas'}
                   setDivider={true}
-                  onUpdateValue={updateInputValueHandler.bind(this, 'format')}
-                  value={formData.format}
+                  onUpdateValue={updateInputValueHandler.bind(this, 'numPag')}
+                  value={formData.pageQuantity}
                />
-               <UserBookTable
-                  detailTitle={'Modelo'}
-                  title={'Insira o modelo'}
-                  setDivider={true}
-                  onUpdateValue={updateInputValueHandler.bind(this, 'model')}
-                  value={formData.model}
-               />
-               <UserBookTable
-                  detailTitle={'Condição'}
-                  title={'Insira a condição'}
-                  detailStyles={styles.bottomDetail}
-                  onUpdateValue={updateInputValueHandler.bind(
-                     this,
-                     'condition'
-                  )}
-                  value={formData.condition}
-               />
+               <View style={[styles.detailItems, styles.bottomDetail]}>
+                  <View style={styles.detailTitleWrapper}>
+                     <Text style={styles.detailItemTitle}>Condição</Text>
+                  </View>
+                  <Divider style={styles.dividerCheckbox} />
+                  <View style={styles.detailTextWrapper}>
+                     <View>
+                        <Checkbox.Item
+                           labelStyle={styles.checkBoxLabelStyle}
+                           position='leading'
+                           label='Novo'
+                           status={isNewBook ? 'checked' : 'unchecked'}
+                           onPress={newBookCheckBoxHandler}
+                           color='#FF722D'
+                        />
+                     </View>
+                     <View>
+                        <Checkbox.Item
+                           labelStyle={styles.checkBoxLabelStyle}
+                           position='leading'
+                           label='Semi-novo'
+                           status={isSemiNewBook ? 'checked' : 'unchecked'}
+                           onPress={semiNewBookCheckBoxHandler}
+                           color='#FF722D'
+                        />
+                     </View>
+                     <View>
+                        <Checkbox.Item
+                           labelStyle={styles.checkBoxLabelStyle}
+                           position='leading'
+                           label='Usado'
+                           status={isUsedBook ? 'checked' : 'unchecked'}
+                           onPress={usedBookCheckBoxHandler}
+                           color='#FF722D'
+                        />
+                     </View>
+                  </View>
+               </View>
             </View>
             <View style={styles.btnContainer}>
                <Button onPress={submitHandler}>Confirmar</Button>
@@ -350,4 +394,61 @@ const styles = StyleSheet.create({
       alignItems: 'center',
    },
    imagePreviewContainer: {},
+   detailItems: {
+      justifyContent: 'space-evenly',
+      alignItems: 'center',
+      flexDirection: 'row',
+      marginTop: 14,
+   },
+
+   detailTitleWrapper: {
+      width: 65,
+   },
+
+   detailTextWrapper: {
+      width: 200,
+   },
+
+   detailItemTitle: {
+      fontFamily: 'lato-bold',
+      color: Colors.silver400,
+      fontSize: 14,
+      textAlign: 'center',
+   },
+
+   detailText: {
+      fontFamily: 'lato-regular',
+      color: Colors.silver300,
+      fontSize: 14,
+      textAlign: 'center',
+   },
+
+   dividerPaper: {
+      height: 1,
+      marginHorizontal: 15,
+      marginVertical: 24,
+      backgroundColor: Colors.silver200,
+   },
+
+   dividerVertical: {
+      width: 1,
+      height: 30,
+      backgroundColor: Colors.silver400,
+   },
+   dividerCheckbox: {
+      width: 1,
+      height: '60%',
+      backgroundColor: Colors.silver400,
+   },
+
+   inputContainer: {
+      borderBottomWidth: 0,
+   },
+
+   checkBoxLabelStyle: {
+      fontFamily: 'lato-bold',
+      color: Colors.silver200,
+      fontSize: 14,
+      textAlign: 'center',
+   },
 });

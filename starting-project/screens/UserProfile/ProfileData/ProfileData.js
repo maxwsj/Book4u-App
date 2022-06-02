@@ -46,7 +46,7 @@ const ProfileData = () => {
          firstName: data.firstName,
          lastName: data.lastName,
          fullName: `${data.firstName} ${data.lastName}`,
-         address: data.personalData.address,
+         address: data.personalData.streetName,
          cellphone: data.personalData.cellphone,
          complement: data.personalData.complement,
          cpf: data.personalData.cpf,
@@ -56,12 +56,14 @@ const ProfileData = () => {
       });
    }
 
-   useEffect(() => {
-      setBookData(BOOK_DATA);
-   }, [bookData]);
+   async function getUserLibrarie() {
+      const userBookData = await userService.getUserLibrarie(authCtx.token);
+      setBookData(userBookData);
+   }
 
    useEffect(() => {
       getUserDataHandler();
+      getUserLibrarie();
    }, []);
 
    function addressHandler() {
@@ -113,15 +115,9 @@ const ProfileData = () => {
    }
 
    async function submitAddressHandler(userAddress) {
-      // await userService.sendUserAddress(userAddress);
-      const address = { ...userAddress, id: authCtx.token };
-      fetch(
-         'https://react-lessons-8cbae-default-rtdb.firebaseio.com/userAddress.json',
-         {
-            method: 'PUT',
-            body: JSON.stringify(userAddress),
-         }
-      );
+      // const address = { ...userAddress, id: authCtx.token };
+      await userService.sendUserAddress(userAddress, authCtx.token);
+      getUserDataHandler();
    }
 
    async function submitCellphoneHandler(userCellphone) {
@@ -161,7 +157,7 @@ const ProfileData = () => {
                         {userData.fullName}
                      </Text>
                      <Text style={[styles.text, styles.userAddressText]}>
-                        {userData.address === ''
+                        {userData.address === undefined
                            ? DEFAULT_ADDRESS
                            : userData.address}
                      </Text>
@@ -259,7 +255,7 @@ const ProfileData = () => {
                   />
                   <TextIcon
                      text={
-                        userData.address === ''
+                        userData.address === undefined
                            ? DEFAULT_ADDRESS
                            : userData.address
                      }

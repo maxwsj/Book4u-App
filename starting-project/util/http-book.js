@@ -2,17 +2,19 @@ import axios from 'axios';
 import Config from './Config';
 
 class BookService {
-   async registerBook(bookData, userId) {
+   async registerBook(bookData, userToken) {
+      console.log(`TOKE RECEBIDA COM SUCESSO:${userToken}`);
       const response = await axios({
-         url: Config.API_URL + `/api/book/${userId}`,
+         url: Config.API_URL + `api/book/${userToken}`,
          method: 'POST',
          timeout: Config.TIMEOUT_REQUEST,
          data: bookData,
-         headers: Config.HEADER_REQUEST,
+         headers: {
+            token: userToken,
+            Authorization: `Bearer ${userToken}`,
+            'Content-Type': 'application/json',
+         },
       });
-      const bookResponse = response;
-      console.log(bookResponse);
-      return bookResponse;
    }
 }
 

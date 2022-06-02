@@ -42,7 +42,7 @@ const SignInContent = ({ onAuth }) => {
                throw new Error(`E-mail pendente`);
             }
 
-            authCtx.authenticate(response.data.token.access_token);
+            authCtx.authenticate(response.data.access_token);
          } catch (error) {
             if (error.message == 'E-mail pendente') {
                Alert.alert(

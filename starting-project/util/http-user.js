@@ -11,15 +11,31 @@ class UserService {
       });
       return response.data;
    }
-   async sendUserAddress(userAddress) {
+   async sendUserAddress(userAddress, userToken) {
       const response = await axios({
-         url: Config.API_URL + `api/personal-data/`,
+         url: Config.API_URL + `api/personal-data/${userToken}`,
          method: 'POST',
          data: userAddress,
          timeout: Config.TIMEOUT_REQUEST,
-         headers: Config.HEADER_REQUEST,
+         headers: {
+            token: userToken,
+            Authorization: `Bearer ${userToken}`,
+            'Content-Type': 'application/json',
+         },
       });
-      console.log(response);
+   }
+   async getUserLibrarie(userToken) {
+      const response = await axios({
+         url: Config.API_URL + `api/book/userLibrary/${userToken}`,
+         method: 'GET',
+         timeout: Config.TIMEOUT_REQUEST,
+         headers: {
+            token: userToken,
+            Authorization: `Bearer ${userToken}`,
+            'Content-Type': 'application/json',
+         },
+      });
+      return response.data;
    }
 }
 

@@ -11,7 +11,6 @@ const SignUpContent = ({ onSubmitUser, isInvalid }) => {
       email: false,
       password: false,
       confirmPassword: false,
-      rg: false,
       cpf: false,
       cellphone: false,
       telephone: false,
@@ -24,7 +23,6 @@ const SignUpContent = ({ onSubmitUser, isInvalid }) => {
          email,
          password,
          confirmPassword,
-         rg,
          cpf,
          cellphone,
          telephone,
@@ -33,7 +31,6 @@ const SignUpContent = ({ onSubmitUser, isInvalid }) => {
       firstName = firstName.trim();
       lastName = lastName.trim();
       email = email.trim();
-      rg = rg.trim();
       cpf = cpf.trim();
       cellphone = cellphone.trim();
 
@@ -42,7 +39,6 @@ const SignUpContent = ({ onSubmitUser, isInvalid }) => {
       const emailIsValid = email.includes('@');
       const passwordIsValid = password.length > 8;
       const passwordsAreEqual = password === confirmPassword;
-      const rgIsValid = rg.length > 8;
       const cpfIsValid = cpf.length > 10;
       const cellphoneIsValid = cellphone.length > 0;
 
@@ -52,7 +48,6 @@ const SignUpContent = ({ onSubmitUser, isInvalid }) => {
          !emailIsValid ||
          !passwordIsValid ||
          !passwordsAreEqual ||
-         !rgIsValid ||
          !cpfIsValid ||
          !cellphoneIsValid
       ) {
@@ -62,7 +57,6 @@ const SignUpContent = ({ onSubmitUser, isInvalid }) => {
             email: !emailIsValid,
             password: !passwordIsValid,
             confirmPassword: !passwordIsValid || !passwordsAreEqual,
-            rg: !rgIsValid,
             cpf: !cpfIsValid,
             cellphone: !cellphoneIsValid,
          });
@@ -74,7 +68,6 @@ const SignUpContent = ({ onSubmitUser, isInvalid }) => {
             personalData: {
                email: email,
                password: password,
-               rg: rg,
                cpf: cpf,
                cellphone: cellphone,
                telephone: telephone,

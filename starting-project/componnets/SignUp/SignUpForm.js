@@ -23,7 +23,6 @@ const SignUpForm = ({ onSubmit, credentialsInvalid, isInvalid }) => {
       email: '',
       password: '',
       confirmPassword: '',
-      rg: '',
       cpf: '',
       cellphone: '',
       telephone: '',
@@ -35,7 +34,6 @@ const SignUpForm = ({ onSubmit, credentialsInvalid, isInvalid }) => {
       email: emailIsInvalid,
       password: passwordIsInvalid,
       confirmPassword: passwordsDontMatch,
-      rg: rgIsInvalid,
       cpf: cpfIsInvalid,
       cellphone: cellphoneIsInvalid,
       telephone: telephoneIsInvalid,
@@ -57,7 +55,6 @@ const SignUpForm = ({ onSubmit, credentialsInvalid, isInvalid }) => {
          email: formData.email,
          password: formData.password,
          confirmPassword: formData.confirmPassword,
-         rg: formData.rg,
          cpf: formData.cpf,
          cellphone: formData.cellphone,
          telephone: formData.telephone,
@@ -153,20 +150,6 @@ const SignUpForm = ({ onSubmit, credentialsInvalid, isInvalid }) => {
                inputContainer={styles.inputContainer}
                children='* Dados incorretos'
                iconBtnConfig={styles.iconBtnConfig}
-            />
-         </View>
-         <View>
-            <Input
-               onUpdateValue={updateInputValueHandler.bind(this, 'rg')}
-               value={formData.rg}
-               isInvalid={rgIsInvalid || isInvalid}
-               inputConfig={{
-                  placeholder: 'RG: (Somento números)',
-                  keyboardType: 'numeric',
-                  maxLength: 9,
-               }}
-               inputContainer={styles.inputContainer}
-               children='* Dados incorretos'
             />
          </View>
          <View>

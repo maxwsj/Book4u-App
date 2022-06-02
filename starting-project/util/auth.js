@@ -10,7 +10,7 @@ class UsuarioService {
          data: userData,
          headers: Config.HEADER_REQUEST,
       });
-      console.log(response.data);
+      console.log(response);
       const registerNumber = response.data.createdUser.registerNumber;
 
       return registerNumber;

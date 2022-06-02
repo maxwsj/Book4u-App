@@ -8,7 +8,7 @@ import IconBtn from '../UI/IconBtn';
 const UserAddressForm = ({ onClose, onSubmit }) => {
    const [formData, setFormData] = useState({
       zipCode: '',
-      address: '',
+      streetName: '',
       district: '',
       houseNumber: '',
       complement: '',
@@ -27,7 +27,7 @@ const UserAddressForm = ({ onClose, onSubmit }) => {
       onSubmit({
          zipCode: formData.zipCode,
          district: formData.district,
-         address: formData.address,
+         streetName: formData.streetName,
          houseNumber: formData.houseNumber,
          complement: formData.complement,
       });
@@ -35,7 +35,7 @@ const UserAddressForm = ({ onClose, onSubmit }) => {
    }
 
    return (
-      <View style={styles.addressContainer}>
+      <View style={styles.streetNameContainer}>
          <View style={{ alignItems: 'flex-end' }}>
             <IconBtn
                onPress={onClose}
@@ -83,8 +83,8 @@ const UserAddressForm = ({ onClose, onSubmit }) => {
             // InvalidInputTxtStyle={styles.InvalidInputMargin}
          />
          <InputIcon
-            onUpdateValue={updateInputValueHandler.bind(this, 'address')}
-            value={formData.address}
+            onUpdateValue={updateInputValueHandler.bind(this, 'streetName')}
+            value={formData.streetName}
             // isInvalid={usernameIsInvalid}
             inputContainer={styles.inputContainer}
             bgStyle={styles.inputBgColor}

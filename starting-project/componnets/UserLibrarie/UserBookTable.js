@@ -1,9 +1,6 @@
 import { StyleSheet, Text, View, TextInput } from 'react-native';
 import { Divider } from 'react-native-paper';
-import React from 'react';
-
 import { Colors } from '../../constants/styles';
-import Input from '../UI/Input';
 
 const UserBookTable = ({
    detailTitle,
@@ -45,7 +42,7 @@ const styles = StyleSheet.create({
    },
 
    detailTitleWrapper: {
-      width: 60,
+      width: 65,
    },
 
    detailTextWrapper: {
