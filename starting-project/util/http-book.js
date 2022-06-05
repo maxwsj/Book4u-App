@@ -3,7 +3,6 @@ import Config from './Config';
 
 class BookService {
    async registerBook(bookData, userToken) {
-      console.log(`TOKE RECEBIDA COM SUCESSO:${userToken}`);
       const response = await axios({
          url: Config.API_URL + `api/book/${userToken}`,
          method: 'POST',
@@ -15,6 +14,46 @@ class BookService {
             'Content-Type': 'application/json',
          },
       });
+   }
+
+   async getBookData(userToken) {
+      const response = await axios({
+         url: Config.API_URL + `api/book/list/${userToken}`,
+         method: 'GET',
+         timeout: Config.TIMEOUT_REQUEST,
+         headers: {
+            token: userToken,
+            Authorization: `Bearer ${userToken}`,
+            'Content-Type': 'application/json',
+         },
+      })
+         .then((response) => {
+            console.log('NO ERROR');
+            console.log(`RESPOSTA LOGADA: ${response.request}`);
+         })
+         .catch((error) => {
+            console.log('ERROR');
+
+            if (error.response) {
+               // The request was made and the server responded with a status code
+               // that falls out of the range of 2xx
+               console.log(error.response.data);
+               console.log(error.response.status);
+               console.log(error.response.headers);
+            } else if (error.request) {
+               // The request was made but no response was received
+               // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+               // http.ClientRequest in node.js
+               console.log(error.request);
+            } else {
+               // Something happened in setting up the request that triggered an Error
+               console.log('Error', error.message);
+            }
+            return Promise.reject(error);
+         });
+
+      console.log(response);
+      return response.data;
    }
 }
 

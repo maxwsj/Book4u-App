@@ -87,7 +87,6 @@ const EditBookForm = ({ route, navigation }) => {
             backSideImage: backSide,
          },
       };
-      console.log(bookData);
    }
 
    const [frontSideImage, setFrontSideImage] = useState(null);
@@ -102,7 +101,6 @@ const EditBookForm = ({ route, navigation }) => {
          quality: 1,
       });
       const { uri } = image;
-      console.log(`Capa: ${uri}`);
 
       if (!image.cancelled) {
          setFrontSideImage(image.uri);
@@ -115,7 +113,6 @@ const EditBookForm = ({ route, navigation }) => {
          quality: 1,
       });
       const { uri } = image;
-      console.log(`Folha de rosto: ${uri}`);
 
       if (!image.cancelled) {
          setRightSide(image.uri);
@@ -128,7 +125,6 @@ const EditBookForm = ({ route, navigation }) => {
          quality: 1,
       });
       const { uri } = image;
-      console.log(`Lombada: ${uri}`);
 
       if (!image.cancelled) {
          setLeftSide(image.uri);
@@ -141,7 +137,6 @@ const EditBookForm = ({ route, navigation }) => {
          quality: 1,
       });
       const { uri } = image;
-      console.log(`Contracapa: ${uri}`);
 
       if (!image.cancelled) {
          setBackSide(image.uri);

@@ -38,9 +38,7 @@ const PasswordRecoverAuth = ({ route, navigation }) => {
          } else {
             setIsInvalid(true);
          }
-      } catch (error) {
-         console.log(error);
-      }
+      } catch (error) {}
    }
 
    function handleFormChange(enteredValue) {

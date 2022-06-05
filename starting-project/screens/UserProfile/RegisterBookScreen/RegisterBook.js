@@ -76,7 +76,7 @@ const RegisterBook = ({ route, navigation }) => {
    async function frontSideImageHandler() {
       const image = await launchImageLibraryAsync({
          allowsEditing: true,
-         aspect: [4, 8],
+         aspect: [4, 6],
          quality: 1,
       });
 
@@ -87,7 +87,7 @@ const RegisterBook = ({ route, navigation }) => {
    async function rightSideImageHandler() {
       const image = await launchImageLibraryAsync({
          allowsEditing: true,
-         aspect: [4, 8],
+         aspect: [4, 6],
          quality: 1,
       });
 
@@ -144,7 +144,7 @@ const RegisterBook = ({ route, navigation }) => {
    async function leftSideImageHandler() {
       const image = await launchImageLibraryAsync({
          allowsEditing: true,
-         aspect: [4, 8],
+         aspect: [4, 6],
          quality: 1,
       });
 
@@ -155,7 +155,7 @@ const RegisterBook = ({ route, navigation }) => {
    async function backSideImageHandler() {
       const image = await launchImageLibraryAsync({
          allowsEditing: true,
-         aspect: [4, 8],
+         aspect: [4, 6],
          quality: 1,
       });
 
@@ -261,9 +261,16 @@ const RegisterBook = ({ route, navigation }) => {
                   detailTitle={'Número de páginas'}
                   title={'Número de Páginas'}
                   setDivider={true}
-                  onUpdateValue={updateInputValueHandler.bind(this, 'numPag')}
+                  onUpdateValue={updateInputValueHandler.bind(
+                     this,
+                     'pageQuantity'
+                  )}
                   value={formData.pageQuantity}
+                  inputConfig={{
+                     keyboardType: 'numeric',
+                  }}
                />
+
                <View style={[styles.detailItems, styles.bottomDetail]}>
                   <View style={styles.detailTitleWrapper}>
                      <Text style={styles.detailItemTitle}>Condição</Text>

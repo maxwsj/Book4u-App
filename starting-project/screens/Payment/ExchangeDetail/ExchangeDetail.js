@@ -5,10 +5,6 @@ import { BOOK_DATA } from '../../../data/dummy-data';
 import Button from '../../../componnets/UI/Button';
 const ExchangeDetail = ({ route, navigation }) => {
    const { externalBookId, userBookId, userOption } = route.params;
-   console.log(`EXTERNAL ID:${externalBookId}`);
-   console.log(`SELECTED ID:${userBookId}`);
-   console.log(`userOption: ${userOption}`);
-
    const [userOfferedBook, setUserOfferedBook] = useState({});
 
    const bookDetails = BOOK_DATA.filter((bookItem) => {

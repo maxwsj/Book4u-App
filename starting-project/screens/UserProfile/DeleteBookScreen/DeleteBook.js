@@ -6,10 +6,7 @@ import { BOOK_DATA } from '../../../data/dummy-data';
 
 const DeleteBook = ({ navigation }) => {
    function renderBookItem(itemData) {
-      function pressHandler() {
-         console.log('Item Deletado');
-         console.log(itemData.item.id);
-      }
+      function pressHandler() {}
 
       const book = itemData.item;
 

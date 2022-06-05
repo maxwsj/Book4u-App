@@ -8,17 +8,20 @@ import { Colors } from '../../constants/styles';
 
 // import { Divider } from 'react-native-paper';
 import { Divider, Modal, Portal, Provider } from 'react-native-paper';
+import { useSelector, useDispatch } from 'react-redux';
 
-import { BOOK_DATA } from '../../data/dummy-data';
 import { AuthContext } from '../../store/auth-context';
+
+import { fetchUserData } from '../../store/redux-store/user/user-actions';
 
 const Home = () => {
    const authCtx = useContext(AuthContext);
+   const dispatch = useDispatch();
+   const book = useSelector((state) => state.book.bookData);
 
-   const [bookData, setBookData] = useState({});
    useEffect(() => {
-      setBookData(BOOK_DATA);
-   }, [bookData]);
+      dispatch(fetchUserData(authCtx.token));
+   }, [dispatch]);
 
    const [visible, setVisible] = useState(false);
 
@@ -54,13 +57,13 @@ const Home = () => {
                   onIconBtnPress={filterHandler}
                />
                <Text style={styles.sectionTitle}>Livros mais trocados</Text>
-               <BooksSection items={bookData} />
+               <BooksSection items={book} />
                <Divider style={styles.dividerStyles} />
                <Text style={styles.sectionTitle}>Anuncios recentes</Text>
-               <BooksSection items={bookData} />
+               <BooksSection items={book} />
                <Divider style={styles.dividerStyles} />
                <Text style={styles.sectionTitle}>Populares</Text>
-               <BooksSection items={bookData} />
+               <BooksSection items={book} />
                <Divider style={styles.dividerStyles} />
             </View>
          </View>

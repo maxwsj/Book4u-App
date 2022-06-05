@@ -1,6 +1,6 @@
 export const BOOK_DATA = [
    {
-      id: 'b1',
+      id: '1',
       owner: { name: 'André Damázio' },
       createdAt: '10/05/2022',
       price: '18.00',
@@ -37,7 +37,7 @@ export const BOOK_DATA = [
       },
    },
    {
-      id: 'b2',
+      id: '2',
       owner: { name: 'Gustavo Fontana' },
       price: '35.00',
       createdAt: '10/02/2022',
@@ -70,7 +70,7 @@ export const BOOK_DATA = [
       },
    },
    {
-      id: 'b3',
+      id: '3',
       owner: { name: 'Max William' },
       price: '25.00',
       createdAt: '10/04/2022',
@@ -103,7 +103,7 @@ export const BOOK_DATA = [
       },
    },
    {
-      id: 'b4',
+      id: '4',
       createdAt: '10/01/2022',
       price: '40.00',
       owner: { name: 'Andressa Gomes' },

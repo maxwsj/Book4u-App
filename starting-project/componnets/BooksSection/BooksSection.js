@@ -1,19 +1,17 @@
 import { StyleSheet, View, FlatList, Dimensions } from 'react-native';
 import BookItems from './BookItems';
 import { useNavigation } from '@react-navigation/native';
-
 import { Colors } from '../../constants/styles';
-import { useEffect } from 'react';
 
 const { width } = Dimensions.get('window');
 
 const BooksSection = ({ items }) => {
    const navigation = useNavigation();
-
    function renderBookItem(itemData) {
       function pressHandler() {
          navigation.navigate('BookDetail', {
             bookId: itemData.item.id,
+            bookData: items,
          });
       }
 

@@ -10,7 +10,6 @@ class UsuarioService {
          data: userData,
          headers: Config.HEADER_REQUEST,
       });
-      console.log(response);
       const registerNumber = response.data.createdUser.registerNumber;
 
       return registerNumber;
@@ -24,6 +23,7 @@ class UsuarioService {
          timeout: Config.TIMEOUT_REQUEST,
          headers: Config.HEADER_REQUEST,
       });
+      return response.data.access_token;
    }
 
    async userRecoverEmail(email) {

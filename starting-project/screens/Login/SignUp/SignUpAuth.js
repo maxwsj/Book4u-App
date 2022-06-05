@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native';
-import { useContext, useState, useEffect } from 'react';
+import { useContext, useState } from 'react';
 
 import { Colors } from '../../../constants/styles';
 import Logo from '../../../componnets/UI/Logo';
@@ -15,39 +15,37 @@ import HorizontalButton from '../../../componnets/UI/HorizontalButton';
 import GoogleBtn from '../../../componnets/UI/GoogleBtn';
 
 import { AuthContext } from '../../../store/auth-context';
-
 const SignUpAuth = ({ route, navigation }) => {
    const [isInvalid, setIsInvalid] = useState(false);
    const [userAuthInput, setUserAuthInput] = useState('');
    const [registeredNumber, setRegisteredNumber] = useState('');
-   const [resendToken, setResendToken] = useState(null);
    const authCtx = useContext(AuthContext);
    const [isAuthenticating, setIsAuthenticating] = useState(false);
 
    const { email, registerNumber } = route.params;
 
-   useEffect(() => {
-      setRegisteredNumber(registerNumber);
-   }, [registeredNumber]);
-
    function signInHandler() {
       navigation.replace('SignIn');
    }
 
+   async function resendTokenHandler() {
+      const newToken = await usuarioService.userRecoverToken(email);
+      console.log(typeof newToken);
+      setRegisteredNumber(newToken);
+   }
+
    async function confirmRegisterHandler() {
       if (
-         userAuthInput === registeredNumber ||
-         +userAuthInput === resendToken
+         userAuthInput === +registerNumber ||
+         userAuthInput === registeredNumber
       ) {
          setIsAuthenticating(true);
          try {
-            const response = await usuarioService.confirmRegistration(
+            const authToken = await usuarioService.confirmRegistration(
                userAuthInput
             );
-            console.log(response);
-            // authCtx.authenticate(token);
+            authCtx.authenticate(authToken);
          } catch (error) {
-            console.log(error);
             setIsInvalid(true);
          }
          setIsAuthenticating(false);
@@ -62,12 +60,8 @@ const SignUpAuth = ({ route, navigation }) => {
    }
 
    function handleFormChange(enteredValue) {
-      setUserAuthInput(enteredValue);
-   }
-
-   async function resendTokenHandler() {
-      const newToken = await usuarioService.userRecoverToken(email);
-      setResendToken(newToken);
+      const userEnteredValue = +enteredValue;
+      setUserAuthInput(userEnteredValue);
    }
 
    return (

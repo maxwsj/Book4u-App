@@ -3,7 +3,9 @@ import 'react-native-gesture-handler';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, LogBox } from 'react-native';
 import { useContext, useState, useEffect } from 'react';
+import { Provider } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import store from './store/redux-store';
 
 import AppLoading from 'expo-app-loading';
 
@@ -48,6 +50,8 @@ import LogoButton from './componnets/UI/LogoButton';
 import DrawerContent from './componnets/UI/DrawerContent';
 
 import AuthContextProvider, { AuthContext } from './store/auth-context';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchBookData } from './store/redux-store/book/book-actions';
 
 LogBox.ignoreAllLogs(); //Ignore all log notifications
 LogBox.ignoreLogs(['']);
@@ -56,9 +60,6 @@ const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
 function AuthStack() {
-   function testeHandler(isInvalid) {
-      console.log(isInvalid);
-   }
    return (
       <Stack.Navigator
          screenOptions={{
@@ -66,11 +67,7 @@ function AuthStack() {
             headerShown: false,
          }}
       >
-         <Stack.Screen
-            name='SignIn'
-            component={SignIn}
-            onTeste={testeHandler}
-         />
+         <Stack.Screen name='SignIn' component={SignIn} />
          <Stack.Screen name='SignUp' component={SignUp} />
          <Stack.Screen name='SignUpAuth' component={SignUpAuth} />
          <Stack.Screen name='PasswordRecover' component={PasswordRecover} />
@@ -85,6 +82,13 @@ function AuthStack() {
 
 function AuthenticatedStack() {
    const navigation = useNavigation();
+   const authCtx = useContext(AuthContext);
+   const dispatch = useDispatch();
+
+   useEffect(() => {
+      dispatch(fetchBookData(authCtx.token));
+   }, [dispatch]);
+
    function logoBtn() {
       function buttonLogoHandler() {
          navigation.navigate('Home');
@@ -492,7 +496,13 @@ function Navigation() {
    const authCtx = useContext(AuthContext);
    return (
       <NavigationContainer>
-         {!authCtx.isAuthenticated ? <AuthStack /> : <AuthenticatedStack />}
+         {!authCtx.isAuthenticated ? (
+            <AuthStack />
+         ) : (
+            <Provider store={store}>
+               <AuthenticatedStack />
+            </Provider>
+         )}
       </NavigationContainer>
    );
 }

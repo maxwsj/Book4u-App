@@ -8,6 +8,7 @@ const UserBookTable = ({
    setDivider,
    detailStyles,
    onUpdateValue,
+   inputConfig,
 }) => {
    return (
       <>
@@ -22,6 +23,7 @@ const UserBookTable = ({
                      style={styles.inputStyles}
                      placeholder={title}
                      onChangeText={onUpdateValue}
+                     {...inputConfig}
                   />
                </View>
             </View>

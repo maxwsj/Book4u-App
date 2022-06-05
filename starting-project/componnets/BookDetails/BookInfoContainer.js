@@ -11,7 +11,7 @@ const BookInfoContainer = ({ bookData }) => {
                <Text>Número de Páginas</Text>
             </View>
             <View>
-               <Text>{bookData[0].pagesQuantity}</Text>
+               <Text>{bookData.pagesQuantity}</Text>
             </View>
          </View>
          <Divider style={styles.dividerPaper} />
@@ -20,7 +20,7 @@ const BookInfoContainer = ({ bookData }) => {
                <Text>Idioma</Text>
             </View>
             <View>
-               <Text>{bookData[0].language.name}</Text>
+               <Text>{bookData.language}</Text>
             </View>
          </View>
       </View>

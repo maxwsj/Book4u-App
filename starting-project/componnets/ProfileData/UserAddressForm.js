@@ -12,6 +12,8 @@ const UserAddressForm = ({ onClose, onSubmit }) => {
       district: '',
       houseNumber: '',
       complement: '',
+      city: '',
+      state: '',
    });
 
    function updateInputValueHandler(inputIdentifier, enteredValue) {
@@ -30,12 +32,14 @@ const UserAddressForm = ({ onClose, onSubmit }) => {
          streetName: formData.streetName,
          houseNumber: formData.houseNumber,
          complement: formData.complement,
+         city: formData.city,
+         state: formData.state,
       });
       onClose();
    }
 
    return (
-      <View style={styles.streetNameContainer}>
+      <>
          <View style={{ alignItems: 'flex-end' }}>
             <IconBtn
                onPress={onClose}
@@ -59,6 +63,40 @@ const UserAddressForm = ({ onClose, onSubmit }) => {
             }}
             iconConfig={{
                name: 'location-outline',
+               size: 20,
+               color: Colors.silver200,
+            }}
+            // children='* Dados incorretos'
+            // InvalidInputTxtStyle={styles.InvalidInputMargin}
+         />
+         <InputIcon
+            onUpdateValue={updateInputValueHandler.bind(this, 'state')}
+            value={formData.state}
+            // isInvalid={usernameIsInvalid}
+            inputContainer={styles.inputContainer}
+            bgStyle={styles.inputBgColor}
+            inputConfig={{
+               placeholder: 'Estado',
+            }}
+            iconConfig={{
+               name: 'map-outline',
+               size: 20,
+               color: Colors.silver200,
+            }}
+            // children='* Dados incorretos'
+            // InvalidInputTxtStyle={styles.InvalidInputMargin}
+         />
+         <InputIcon
+            onUpdateValue={updateInputValueHandler.bind(this, 'city')}
+            value={formData.state}
+            // isInvalid={usernameIsInvalid}
+            inputContainer={styles.inputContainer}
+            bgStyle={styles.inputBgColor}
+            inputConfig={{
+               placeholder: 'Cidade',
+            }}
+            iconConfig={{
+               name: 'map-outline',
                size: 20,
                color: Colors.silver200,
             }}
@@ -134,10 +172,11 @@ const UserAddressForm = ({ onClose, onSubmit }) => {
             // children='* Dados incorretos'
             // InvalidInputTxtStyle={styles.InvalidInputMargin}
          />
+
          <View style={styles.buttonWrapper}>
             <Button onPress={submitHandler}>Confirmar</Button>
          </View>
-      </View>
+      </>
    );
 };
 
@@ -155,5 +194,8 @@ const styles = StyleSheet.create({
    },
    inputContainer: {
       marginTop: 15,
+   },
+   modalWidth: {
+      marginTop: 30,
    },
 });

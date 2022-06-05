@@ -13,7 +13,7 @@ import LoadingOverlay from '../../../componnets/UI/LoadingOverlay';
 
 const { width } = Dimensions.get('window');
 
-const SignIn = ({ navigation, onTeste }) => {
+const SignIn = ({ navigation }) => {
    const [isAuthenticating, setIsAuthenticating] = useState(false);
 
    function signUpHandler() {

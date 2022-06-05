@@ -4,7 +4,7 @@ import Modal from 'react-native-modal';
 import { Colors } from '../../constants/styles';
 const { width, height } = Dimensions.get('window');
 
-const UserModal = ({ onShow, onHideModal, formData }) => {
+const UserModal = ({ onShow, onHideModal, formData, modalHeight }) => {
    return (
       <Modal
          isVisible={onShow}
@@ -12,7 +12,7 @@ const UserModal = ({ onShow, onHideModal, formData }) => {
          onBackdropPress={onHideModal}
          deviceWidth={width}
          deviceHeight={height}
-         style={styles.containerStyle}
+         style={[styles.containerStyle, modalHeight]}
       >
          <View style={styles.formContainer}>{formData}</View>
       </Modal>
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
       borderTopLeftRadius: width * 0.15,
       marginHorizontal: 0,
       marginBottom: 0,
-      marginTop: width,
+      marginTop: height / 3,
    },
    formContainer: {
       marginHorizontal: 30,

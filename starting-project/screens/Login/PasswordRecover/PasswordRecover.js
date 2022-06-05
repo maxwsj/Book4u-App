@@ -36,9 +36,7 @@ const PasswordRecoverAuth = ({ navigation }) => {
                   recoverToken: userValidationToken,
                });
             }
-         } catch (error) {
-            console.log(error);
-         }
+         } catch (error) {}
       }
    }
 

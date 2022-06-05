@@ -9,13 +9,14 @@ const IconBtn = ({
    color,
    size,
    iconBtnStyle,
+   iconContainer,
 }) => {
    return (
       <Pressable
          onPress={onPress}
          style={({ pressed }) => [pressed && styles.pressed]}
       >
-         <View style={[styles.iconContainer]}>
+         <View style={[styles.iconContainer, iconContainer]}>
             <Ionicons
                style={[styles.searchIcon, iconBtnStyle]}
                name={icon}

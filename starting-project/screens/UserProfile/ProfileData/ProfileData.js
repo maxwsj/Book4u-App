@@ -1,11 +1,10 @@
-import { StyleSheet, Text, View, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, Pressable } from 'react-native';
 import { useEffect, useState, useContext } from 'react';
 import { Divider, Avatar } from 'react-native-paper';
-import { useNavigation } from '@react-navigation/native';
 import { AuthContext } from '../../../store/auth-context';
+import { launchImageLibraryAsync } from 'expo-image-picker';
 
 import { Colors } from '../../../constants/styles';
-import { BOOK_DATA } from '../../../data/dummy-data';
 
 import IconBtn from '../../../componnets/UI/IconBtn';
 import FlatButton from '../../../componnets/UI/FlatButton';
@@ -17,16 +16,27 @@ import TelephoneForm from '../../../componnets/ProfileData/TelephoneForm';
 import UserModal from '../../../componnets/ProfileData/UserModal';
 
 import userService from '../../../util/http-user';
+import {
+   fetchUserData,
+   sendUserPersonalData,
+   sendUserProfilePicture,
+} from '../../../store/redux-store/user/user-actions';
+import { useSelector, useDispatch } from 'react-redux';
 
 const { width, height } = Dimensions.get('window');
-const DEFAULT_ADDRESS = 'Endereço não cadastrado';
-
-const ProfileData = () => {
-   const navigation = useNavigation();
+const DEFAULT_STATE = 'Estado não cadastrado';
+const DEFAULT_CITY = 'Cidade não cadastrada';
+const DEFAULT_ADDRESS = 'Cidade não cadastrada';
+const DEFAULT_USER_IMG = require('../../../assets/userImg/userProfileDefault.png');
+const ProfileData = ({ navigation }) => {
    const authCtx = useContext(AuthContext);
-   const [bookData, setBookData] = useState({});
-   const [userData, setUserData] = useState({});
+   const dispatch = useDispatch();
+   const userData = useSelector((state) => state.user.userData);
+   const userImg =
+      userData.picture === '' ? DEFAULT_USER_IMG : { uri: userData.picture };
 
+   const [bookData, setBookData] = useState({});
+   const [profileImage, setProfileImage] = useState(DEFAULT_USER_IMG);
    const [bookOption, setBookOption] = useState(true);
    const [whishOption, setWhishOption] = useState(false);
    const [contactOption, setContactOption] = useState(false);
@@ -39,30 +49,12 @@ const ProfileData = () => {
    const hideTelephoneModal = () => setTelephoneIsVisible(false);
    const hideAddressModal = () => setAddressIsVisible(false);
 
-   async function getUserDataHandler() {
-      const data = { ...(await userService.getUserById(authCtx.token)) };
-      setUserData({
-         id: data.id,
-         firstName: data.firstName,
-         lastName: data.lastName,
-         fullName: `${data.firstName} ${data.lastName}`,
-         address: data.personalData.streetName,
-         cellphone: data.personalData.cellphone,
-         complement: data.personalData.complement,
-         cpf: data.personalData.cpf,
-         email: data.personalData.email,
-         telephone: data.personalData.telephone,
-         picture: data.picture,
-      });
-   }
-
    async function getUserLibrarie() {
       const userBookData = await userService.getUserLibrarie(authCtx.token);
       setBookData(userBookData);
    }
 
    useEffect(() => {
-      getUserDataHandler();
       getUserLibrarie();
    }, []);
 
@@ -114,33 +106,33 @@ const ProfileData = () => {
       navigation.navigate('DeleteBook');
    }
 
-   async function submitAddressHandler(userAddress) {
-      // const address = { ...userAddress, id: authCtx.token };
-      await userService.sendUserAddress(userAddress, authCtx.token);
-      getUserDataHandler();
+   async function submitAddressHandler(userPersonalData) {
+      dispatch(sendUserPersonalData(authCtx.token, userPersonalData));
+      dispatch(fetchUserData(authCtx.token));
    }
 
    async function submitCellphoneHandler(userCellphone) {
-      // await userService.sendUserAddress(userCellphone);
-
-      fetch(
-         'https://react-lessons-8cbae-default-rtdb.firebaseio.com/userCellphone.json',
-         {
-            method: 'PUT',
-            body: JSON.stringify(userCellphone),
-         }
-      );
+      dispatch(sendUserPersonalData(authCtx.token, userCellphone));
+      dispatch(fetchUserData(authCtx.token));
    }
 
    async function submitTelephoneHandler(userTelephone) {
-      // await userService.sendUserAddress(userTelephone);
-      fetch(
-         'https://react-lessons-8cbae-default-rtdb.firebaseio.com/telephone.json',
-         {
-            method: 'PUT',
-            body: JSON.stringify(userTelephone),
-         }
-      );
+      dispatch(sendUserPersonalData(authCtx.token, userTelephone));
+      dispatch(fetchUserData(authCtx.token));
+   }
+
+   async function profilePictureHandler() {
+      const image = await launchImageLibraryAsync({
+         allowsEditing: true,
+         aspect: [4, 6],
+         quality: 1,
+      });
+
+      if (!image.cancelled) {
+         const userPicture = { picture: image.uri };
+         dispatch(sendUserProfilePicture(authCtx.token, userPicture));
+      }
+      dispatch(fetchUserData(authCtx.token));
    }
 
    return (
@@ -149,17 +141,24 @@ const ProfileData = () => {
             <View style={styles.profileContainer}>
                <View style={styles.profileBackgroundImg}>
                   <View style={styles.profileWrapper}>
-                     <Avatar.Image
-                        size={120}
-                        style={styles.profileBackgroundColor}
-                     />
+                     <Pressable onPress={profilePictureHandler}>
+                        <Avatar.Image
+                           size={120}
+                           style={styles.profileBackgroundColor}
+                           source={userImg}
+                        />
+                     </Pressable>
+
                      <Text style={[styles.text, styles.userText]}>
                         {userData.fullName}
                      </Text>
-                     <Text style={[styles.text, styles.userAddressText]}>
-                        {userData.address === undefined
-                           ? DEFAULT_ADDRESS
-                           : userData.address}
+                     <Text style={[styles.text, styles.userState]}>
+                        {userData.state === null
+                           ? DEFAULT_STATE
+                           : userData.state}
+                     </Text>
+                     <Text style={[styles.text, styles.userCity]}>
+                        {userData.city === null ? DEFAULT_CITY : userData.city}
                      </Text>
                   </View>
                </View>
@@ -255,7 +254,7 @@ const ProfileData = () => {
                   />
                   <TextIcon
                      text={
-                        userData.address === undefined
+                        userData.address === null
                            ? DEFAULT_ADDRESS
                            : userData.address
                      }
@@ -296,6 +295,7 @@ const ProfileData = () => {
                   onClose={cellPhoneFormCloseHandler}
                />
             }
+            modalHeight={styles.modalWidth}
          />
          <UserModal
             onShow={telephoneIsVisible}
@@ -306,6 +306,7 @@ const ProfileData = () => {
                   onClose={telephoneFormCloseHandler}
                />
             }
+            modalHeight={styles.modalWidth}
          />
       </>
    );
@@ -330,8 +331,9 @@ const styles = StyleSheet.create({
       height: width * 0.4,
    },
    profileBackgroundColor: {
-      backgroundColor: Colors.silver100,
+      backgroundColor: Colors.snow,
       borderColor: Colors.silver300,
+      elevation: 2,
       marginBottom: 12,
    },
    text: {
@@ -341,9 +343,13 @@ const styles = StyleSheet.create({
    userText: {
       fontSize: 24,
    },
-   userAddressText: {
+   userState: {
       fontSize: 16,
-      marginTop: 12,
+      marginTop: 6,
+   },
+   userCity: {
+      fontSize: 16,
+      marginTop: 4,
    },
    profileOptionsContainer: {
       marginHorizontal: 30,
@@ -383,5 +389,8 @@ const styles = StyleSheet.create({
    },
    addWishlistIcon: {
       color: Colors.secondary,
+   },
+   modalWidth: {
+      marginTop: width * 1.2,
    },
 });

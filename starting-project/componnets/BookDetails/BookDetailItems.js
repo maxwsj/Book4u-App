@@ -12,23 +12,20 @@ import { useNavigation } from '@react-navigation/native';
 const { width } = Dimensions.get('window');
 
 const BookDetailItems = ({ bookData }) => {
+   console.log(bookData);
    const navigation = useNavigation();
-   const bookDetailData = { ...bookData };
    function tradeButtonHandler() {
       navigation.navigate('PaymentMethodScreen', {
-         externalBookId: bookDetailData[0].id,
+         externalBookId: bookData.id,
       });
    }
-
    return (
       <View style={styles.container}>
          <View style={styles.sectionInfo}>
             <View>
-               <Text style={styles.price}>R${bookDetailData[0].price}</Text>
-               <Title style={styles.title}>{bookDetailData[0].name}</Title>
-               <Text style={styles.author}>
-                  {bookDetailData[0].author.name}
-               </Text>
+               <Text style={styles.price}>R${bookData.price}</Text>
+               <Title style={styles.title}>{bookData.name}</Title>
+               <Text style={styles.author}>{bookData.author}</Text>
             </View>
             <View style={styles.userProfile}>
                <Pressable onPress={() => console.log('profile')}>
@@ -37,14 +34,13 @@ const BookDetailItems = ({ bookData }) => {
                      style={styles.profileBackgroundColor}
                   />
                </Pressable>
-               <Text style={styles.userProfileText}>Fernando de Morais</Text>
+               <Text style={styles.userProfileText}>
+                  {`${bookData.ownerFirstName} ${bookData.ownerLastName}`}
+               </Text>
             </View>
          </View>
-         <BookInfoContainer
-            dividerStyle={styles.divider}
-            bookData={bookDetailData}
-         />
-         <BookSynopsisContainer synopsisText={bookDetailData[0].synopsis} />
+         <BookInfoContainer dividerStyle={styles.divider} bookData={bookData} />
+         <BookSynopsisContainer synopsisText={bookData.synopsis} />
          <View style={styles.tradeWrapper}>
             <View style={styles.tradeItems}>
                <BookTradeContainer />
@@ -60,38 +56,29 @@ const BookDetailItems = ({ bookData }) => {
             <View style={styles.detailWrapper}>
                <BookDetailTable
                   detailTitle={'Título do Livro'}
-                  title={'How Innovation Works'}
+                  title={bookData.name}
                   setDivider={true}
                   detailStyles={styles.topDetail}
                />
                <BookDetailTable
                   detailTitle={'Autor'}
-                  title={'Matt Ridley'}
+                  title={bookData.author}
                   setDivider={true}
                />
                <BookDetailTable
                   detailTitle={'Idioma'}
-                  title={'Matt Ridley'}
+                  title={bookData.language}
                   setDivider={true}
                />
                <BookDetailTable
                   detailTitle={'Editora'}
-                  title={'Arqueiro'}
+                  title={bookData.publisher}
                   setDivider={true}
                />
-               <BookDetailTable
-                  detailTitle={'Formato'}
-                  title={'Papel'}
-                  setDivider={true}
-               />
-               <BookDetailTable
-                  detailTitle={'Modelo'}
-                  title={'9999830'}
-                  setDivider={true}
-               />
+
                <BookDetailTable
                   detailTitle={'Condição'}
-                  title={'Novo'}
+                  title={bookData.condition}
                   detailStyles={styles.bottomDetail}
                />
             </View>
