@@ -20,6 +20,7 @@ import {
    fetchUserData,
    sendUserPersonalData,
    sendUserProfilePicture,
+   fetchUserLibrarie,
 } from '../../../store/redux-store/user/user-actions';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -28,15 +29,17 @@ const DEFAULT_STATE = 'Estado não cadastrado';
 const DEFAULT_CITY = 'Cidade não cadastrada';
 const DEFAULT_ADDRESS = 'Cidade não cadastrada';
 const DEFAULT_USER_IMG = require('../../../assets/userImg/userProfileDefault.png');
+
 const ProfileData = ({ navigation }) => {
    const authCtx = useContext(AuthContext);
    const dispatch = useDispatch();
    const userData = useSelector((state) => state.user.userData);
+   const userLibrarie = useSelector((state) => state.user.userLibrarie);
+
    const userImg =
       userData.picture === '' ? DEFAULT_USER_IMG : { uri: userData.picture };
 
    const [bookData, setBookData] = useState({});
-   const [profileImage, setProfileImage] = useState(DEFAULT_USER_IMG);
    const [bookOption, setBookOption] = useState(true);
    const [whishOption, setWhishOption] = useState(false);
    const [contactOption, setContactOption] = useState(false);
@@ -49,14 +52,9 @@ const ProfileData = ({ navigation }) => {
    const hideTelephoneModal = () => setTelephoneIsVisible(false);
    const hideAddressModal = () => setAddressIsVisible(false);
 
-   async function getUserLibrarie() {
-      const userBookData = await userService.getUserLibrarie(authCtx.token);
-      setBookData(userBookData);
-   }
-
    useEffect(() => {
-      getUserLibrarie();
-   }, []);
+      dispatch(fetchUserLibrarie(authCtx.token));
+   }, [dispatch]);
 
    function addressHandler() {
       setAddressIsVisible(true);
@@ -100,7 +98,9 @@ const ProfileData = ({ navigation }) => {
       navigation.navigate('RegisterBook');
    }
    function editBookHandler() {
-      navigation.navigate('EditBook');
+      navigation.navigate('EditBook', {
+         userBooks: userLibrarie,
+      });
    }
    function deleteBookHandler() {
       navigation.navigate('DeleteBook');
@@ -206,7 +206,7 @@ const ProfileData = ({ navigation }) => {
                         onPress={deleteBookHandler}
                      />
                   </View>
-                  <UserBookSection items={bookData} />
+                  <UserBookSection items={userLibrarie} />
                </View>
             )}
             {whishOption && (

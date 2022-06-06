@@ -14,6 +14,7 @@ import { AuthContext } from '../../../store/auth-context';
 
 const RegisterBook = ({ route, navigation }) => {
    const authCtx = useContext(AuthContext);
+
    const [isNewBook, setIsNewBook] = useState(false);
    const [isSemiNewBook, setIsSemiNewBook] = useState(false);
    const [isUsedBook, setIsUsedBook] = useState(false);
@@ -127,8 +128,7 @@ const RegisterBook = ({ route, navigation }) => {
          },
       };
 
-      await bookService.registerBook(bookData, authCtx.token);
-
+      bookService.registerBook(bookData, authCtx.token);
       navigation.dispatch(
          CommonActions.reset({
             index: 1,

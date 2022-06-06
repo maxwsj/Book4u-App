@@ -12,7 +12,6 @@ import { useNavigation } from '@react-navigation/native';
 const { width } = Dimensions.get('window');
 
 const BookDetailItems = ({ bookData }) => {
-   console.log(bookData);
    const navigation = useNavigation();
    function tradeButtonHandler() {
       navigation.navigate('PaymentMethodScreen', {

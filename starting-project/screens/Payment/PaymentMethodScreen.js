@@ -11,7 +11,7 @@ const PaymentMethodScreen = ({ route, navigation }) => {
    const { userBookId, externalBookId, userBookIsSelected } = route.params;
    const [externalId, setExternalId] = useState('');
    const [moneyIsSelected, setMoneyIsSelected] = useState(false);
-   const [bookIsSelected, setBookIsSelected] = useState();
+   const [bookIsSelected, setBookIsSelected] = useState(false);
 
    useEffect(() => {
       setExternalId(externalBookId);

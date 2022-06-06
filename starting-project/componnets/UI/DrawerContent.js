@@ -6,9 +6,11 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { Colors } from '../../constants/styles';
 
 import { AuthContext } from '../../store/auth-context';
-
+import { useDispatch } from 'react-redux';
+import { userActions } from '../../store/redux-store/user/user-slice';
 const DrawerContent = ({ props, navigation }) => {
    const authCtx = useContext(AuthContext);
+   const dispatch = useDispatch();
 
    function profileHandler() {
       navigation.navigate('ProfileData');
@@ -21,6 +23,10 @@ const DrawerContent = ({ props, navigation }) => {
    }
    function notificationHandler() {
       navigation.navigate('UserNotification');
+   }
+   function userLogoutHandler() {
+      authCtx.logout();
+      dispatch(userActions.logout());
    }
 
    return (
@@ -144,7 +150,7 @@ const DrawerContent = ({ props, navigation }) => {
                icon={(color, size) => (
                   <Ionicons name='exit-outline' color={color} size={24} />
                )}
-               onPress={authCtx.logout}
+               onPress={userLogoutHandler}
             />
          </Drawer.Section>
       </View>

@@ -1,10 +1,9 @@
-import { StyleSheet, View, FlatList, Dimensions } from 'react-native';
+import { StyleSheet, View, FlatList } from 'react-native';
 import BookVerticalItem from '../../../componnets/UserLibrarie/BookVerticalItem';
 
-const { width } = Dimensions.get('window');
-import { BOOK_DATA } from '../../../data/dummy-data';
+const EditBook = ({ navigation, route }) => {
+   const { userBooks } = route.params;
 
-const EditBook = ({ navigation }) => {
    function renderBookItem(itemData) {
       function pressHandler() {
          navigation.navigate('EditBookForm', {
@@ -27,7 +26,7 @@ const EditBook = ({ navigation }) => {
    return (
       <View>
          <FlatList
-            data={BOOK_DATA}
+            data={userBooks}
             showsHorizontalScrollIndicator={false}
             keyExtractor={(item) => item.id}
             decelerationRate={'fast'}

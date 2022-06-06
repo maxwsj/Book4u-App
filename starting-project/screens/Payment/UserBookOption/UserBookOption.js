@@ -1,11 +1,23 @@
-import { StyleSheet, View, FlatList, Dimensions } from 'react-native';
+import { useContext, useEffect } from 'react';
+import { StyleSheet, View, FlatList } from 'react-native';
 import BookVerticalItem from '../../../componnets/UserLibrarie/BookVerticalItem';
 
-import { BOOK_DATA } from '../../../data/dummy-data';
+import { useDispatch, useSelector } from 'react-redux';
+import { filteredUserBook } from '../../../store/redux-store/user/user-actions';
 
 const UserBookOption = ({ navigation }) => {
+   const userLibrarie = useSelector((state) => state.user.userLibrarie);
+   const dispatch = useDispatch();
+   function filteredUserBookDataHandler(userBookId) {
+      const selectedBookData = userLibrarie.filter((bookItem) => {
+         return bookItem.id === userBookId;
+      });
+      dispatch(filteredUserBook(selectedBookData));
+   }
+
    function renderBookItem(itemData) {
       function pressHandler() {
+         filteredUserBookDataHandler(itemData.item.id);
          navigation.navigate('PaymentMethodScreen', {
             userBookId: itemData.item.id,
             userBookIsSelected: true,
@@ -27,7 +39,7 @@ const UserBookOption = ({ navigation }) => {
    return (
       <View>
          <FlatList
-            data={BOOK_DATA}
+            data={userLibrarie}
             showsHorizontalScrollIndicator={false}
             keyExtractor={(item) => item.id}
             decelerationRate={'fast'}

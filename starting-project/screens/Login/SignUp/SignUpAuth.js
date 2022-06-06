@@ -30,7 +30,6 @@ const SignUpAuth = ({ route, navigation }) => {
 
    async function resendTokenHandler() {
       const newToken = await usuarioService.userRecoverToken(email);
-      console.log(typeof newToken);
       setRegisteredNumber(newToken);
    }
 

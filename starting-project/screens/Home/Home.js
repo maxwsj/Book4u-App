@@ -12,7 +12,10 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { AuthContext } from '../../store/auth-context';
 
-import { fetchUserData } from '../../store/redux-store/user/user-actions';
+import {
+   fetchUserData,
+   fetchUserLibrarie,
+} from '../../store/redux-store/user/user-actions';
 
 const Home = () => {
    const authCtx = useContext(AuthContext);
@@ -21,6 +24,7 @@ const Home = () => {
 
    useEffect(() => {
       dispatch(fetchUserData(authCtx.token));
+      dispatch(fetchUserLibrarie(authCtx.token));
    }, [dispatch]);
 
    const [visible, setVisible] = useState(false);

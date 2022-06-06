@@ -16,7 +16,6 @@ export function fetchBookData(userToken) {
             },
          });
          const data = response.data;
-         console.log(data);
          return data;
       }
       try {
@@ -34,6 +33,15 @@ export function fetchBookData(userToken) {
                      id: book.owner.id,
                      lastName: book.owner.lastName,
                      picture: book.owner.picture,
+                     cellphone: book.owner.personalData.cellphone,
+                     city: book.owner.personalData.city,
+                     complement: book.owner.personalData.complement,
+                     district: book.owner.personalData.district,
+                     houseNumber: book.owner.personalData.houseNumber,
+                     state: book.owner.personalData.state,
+                     streetName: book.owner.personalData.streetName,
+                     telephone: book.owner.personalData.telephone,
+                     zipCode: book.owner.personalData.zipCode,
                   },
                   publisher: book.publisher.name,
                   pagesQuantity: book.pagesQuantity,
@@ -61,11 +69,20 @@ export function filteredBookData(bookData) {
                name: book.name,
                language: book.language,
                author: book.author,
+               ownerId: book.owner.id,
                ownerCredits: book.owner.credits,
                ownerFirstName: book.owner.firstName,
-               ownerId: book.owner.id,
                ownerLastName: book.owner.lastName,
                ownerPicture: book.owner.picture,
+               ownerCellphone: book.owner.cellphone,
+               ownerCity: book.owner.city,
+               ownerComplement: book.owner.complement,
+               ownerDistrict: book.owner.district,
+               ownerHouseNumber: book.owner.houseNumber,
+               ownerState: book.owner.state,
+               ownerStreetName: book.owner.streetName,
+               ownerTelephone: book.owner.telephone,
+               ownerZipCode: book.owner.zipCode,
                publisher: book.publisher,
                pagesQuantity: book.pagesQuantity,
                price: book.price,

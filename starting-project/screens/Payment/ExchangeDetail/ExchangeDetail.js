@@ -1,44 +1,31 @@
 import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
 import { useState, useEffect } from 'react';
 import { Colors } from '../../../constants/styles';
-import { BOOK_DATA } from '../../../data/dummy-data';
 import Button from '../../../componnets/UI/Button';
+import UserBookOffer from '../../../componnets/ProfileData/Payment/UserBookOffer';
+
+import { useSelector, useDispatch } from 'react-redux';
+import { filteredBookData } from '../../../store/redux-store/book/book-actions';
+import { filteredUserBook } from '../../../store/redux-store/user/user-actions';
+
 const ExchangeDetail = ({ route, navigation }) => {
    const { externalBookId, userBookId, userOption } = route.params;
-   const [userOfferedBook, setUserOfferedBook] = useState({});
+   const dispatch = useDispatch();
+   const book = useSelector((state) => state.book.bookData);
 
-   const bookDetails = BOOK_DATA.filter((bookItem) => {
-      return bookItem.id === externalBookId;
-   });
-   let userBookOffer;
-
-   if (userOption === 'Book') {
-      const userBookData = BOOK_DATA.filter((bookItem) => {
-         return bookItem.id === userBookId;
+   function selectedBookDataHandler() {
+      const selectedBookData = book.filter((bookItem) => {
+         return bookItem.id === externalBookId;
       });
-      userBookOffer = (
-         <View style={styles.bookContainer}>
-            <View style={styles.imageContainer}>
-               <Image
-                  style={styles.bookImage}
-                  source={{ uri: userBookData[0].bookImages.frontSideImage }}
-               />
-            </View>
-            <View style={styles.bookInfoContainer}>
-               <Text style={styles.bookTitle}>{userBookData[0].name}</Text>
-               <Text style={styles.bookAuthor}>
-                  {userBookData[0].author.name}
-               </Text>
-               <Text
-                  style={styles.bookPrice}
-               >{`R$${userBookData[0].price}`}</Text>
-            </View>
-         </View>
-      );
-   } else {
-      userBookOffer = '';
+      dispatch(filteredBookData(selectedBookData));
    }
 
+   useEffect(() => {
+      selectedBookDataHandler();
+   }, [dispatch]);
+
+   const selectedBookData = useSelector((state) => state.book.filteredBook);
+   const filteredUserBookData = useSelector((state) => state.user.filteredBook);
    function confirmExchangeHandler() {
       navigation.navigate('SuccessfullyExchanged');
    }
@@ -51,15 +38,17 @@ const ExchangeDetail = ({ route, navigation }) => {
          <View style={styles.container}>
             <Text style={styles.title}>Usuário</Text>
             <View style={styles.card}>
-               <Text style={styles.text}>Aragon Swift</Text>
+               <Text
+                  style={styles.text}
+               >{`${selectedBookData.ownerFirstName} ${selectedBookData.ownerLastName}`}</Text>
             </View>
             <Text style={styles.title}>Endereço</Text>
             <View style={styles.card}>
                <Text style={styles.text}>
-                  Rua Alphelia Josephina Simionato Moreno
+                  {`${selectedBookData.ownerCity}, ${selectedBookData.ownerState}, ${selectedBookData.ownerStreetName}, ${selectedBookData.ownerStreetName}`}
                </Text>
                <Text style={[styles.text, styles.subText]}>
-                  Parque Suburbano
+                  {`${selectedBookData.ownerStreetName}`}
                </Text>
             </View>
             <Text style={styles.title}>Pedido</Text>
@@ -67,17 +56,19 @@ const ExchangeDetail = ({ route, navigation }) => {
                <View style={styles.imageContainer}>
                   <Image
                      style={styles.bookImage}
-                     source={{ uri: bookDetails[0].bookImages.frontSideImage }}
+                     source={{
+                        uri: selectedBookData.bookImages.frontSideImage,
+                     }}
                   />
                </View>
                <View style={styles.bookInfoContainer}>
-                  <Text style={styles.bookTitle}>{bookDetails[0].name}</Text>
+                  <Text style={styles.bookTitle}>{selectedBookData.name}</Text>
                   <Text style={styles.bookAuthor}>
-                     {bookDetails[0].author.name}
+                     {selectedBookData.author}
                   </Text>
                   <Text
                      style={styles.bookPrice}
-                  >{`R$${bookDetails[0].price}`}</Text>
+                  >{`R$${selectedBookData.price}`}</Text>
                </View>
             </View>
             <Text style={styles.title}>Método de pagamento</Text>
@@ -86,7 +77,9 @@ const ExchangeDetail = ({ route, navigation }) => {
                   {userOption === 'Book' ? 'Livro' : 'Pontos'}
                </Text>
             </View>
-            {userOption === 'Book' ? userBookOffer : null}
+            {userOption === 'Book' ? (
+               <UserBookOffer offerBookData={filteredUserBookData} />
+            ) : null}
             <View style={styles.buttonContainer}>
                <Button
                   onPress={cancelExchangeHandler}

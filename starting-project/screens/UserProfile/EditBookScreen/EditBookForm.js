@@ -19,6 +19,8 @@ import ImagePreview from '../../../componnets/UserLibrarie/ImagePreview';
 const { width, height } = Dimensions.get('window');
 
 const EditBookForm = ({ route, navigation }) => {
+   const { bookId } = route.params;
+
    const [formData, setFormData] = useState({
       price: '',
       synopsis: '',

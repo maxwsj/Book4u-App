@@ -1,42 +1,8 @@
 import axios from 'axios';
 import Config from '../../../util/Config';
-import { userActions } from './user-slice';
+import { externalUserActions } from './externalUser-slice';
 
-export function sendUserPersonalData(userToken, userPersonalData) {
-   return async (dispatch) => {
-      async function sendData() {
-         const response = await axios({
-            url: Config.API_URL + `api/personal-data/${userToken}`,
-            method: 'POST',
-            data: userPersonalData,
-            timeout: Config.TIMEOUT_REQUEST,
-            headers: {
-               token: userToken,
-               Authorization: `Bearer ${userToken}`,
-               'Content-Type': 'application/json',
-            },
-         });
-         return response.status;
-      }
-      try {
-         const response = await sendData();
-         const { state, city, address, cellphone, complement, telephone } =
-            userPersonalData;
-         dispatch(
-            userActions.getUserData({
-               state,
-               city,
-               address,
-               cellphone,
-               complement,
-               telephone,
-            })
-         );
-      } catch (error) {}
-   };
-}
-
-export function fetchUserData(userToken) {
+export function fetchExternalUserData(userToken) {
    return async (dispatch) => {
       async function fetchData() {
          const response = await axios({
@@ -55,7 +21,7 @@ export function fetchUserData(userToken) {
       try {
          const userData = await fetchData();
          dispatch(
-            userActions.getUserData({
+            externalUserActions.getUserData({
                id: userData.id,
                firstName: userData.firstName,
                lastName: userData.lastName,
@@ -75,39 +41,11 @@ export function fetchUserData(userToken) {
    };
 }
 
-export function sendUserProfilePicture(userToken, userProfilePicture) {
-   return async (dispatch) => {
-      async function sendData() {
-         const response = await axios({
-            url: Config.API_URL + `api/user/${userToken}`,
-            method: 'PUT',
-            data: userProfilePicture,
-            timeout: Config.TIMEOUT_REQUEST,
-            headers: {
-               token: userToken,
-               Authorization: `Bearer ${userToken}`,
-               'Content-Type': 'application/json',
-            },
-         });
-         return response;
-      }
-      try {
-         const response = await sendData();
-         const { picture } = userProfilePicture;
-         dispatch(
-            userActions.getUserData({
-               picture,
-            })
-         );
-      } catch (error) {}
-   };
-}
-
 export function filteredUserBook(bookData) {
    return (dispatch) => {
       for (const book of bookData) {
          dispatch(
-            userActions.getFilteredBook({
+            externalUserActions.getFilteredBook({
                id: book.id,
                name: book.name,
                language: book.language,
@@ -154,7 +92,7 @@ export function fetchUserLibrarie(userToken) {
          const librarieData = await fetchData();
          for (const book of librarieData) {
             dispatch(
-               userActions.getLibrarie({
+               externalUserActions.getLibrarie({
                   id: book.id,
                   name: book.name,
                   language: book.language.name,

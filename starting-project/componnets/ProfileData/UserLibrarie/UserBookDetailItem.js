@@ -1,27 +1,21 @@
 import { StyleSheet, Text, View, Pressable, Dimensions } from 'react-native';
-import { useEffect, useState } from 'react';
 import { Title, Avatar } from 'react-native-paper';
 import { Colors } from '../../../constants/styles';
 
 import BookDetailTable from '../../BookDetails/BookDetailTable';
 import BookInfoContainer from '../../BookDetails/BookInfoContainer';
-import BookTradeContainer from '../../BookDetails/BookTradeContainer';
 import BookSynopsisContainer from '../../BookDetails/BookSynopsisContainer';
 
 const { width } = Dimensions.get('window');
 
 const UserBookDetailItem = ({ bookData }) => {
-   const bookDetailData = { ...bookData };
-
    return (
       <View style={styles.container}>
          <View style={styles.sectionInfo}>
             <View>
-               <Text style={styles.price}>R${bookDetailData[0].price}</Text>
-               <Title style={styles.title}>{bookDetailData[0].name}</Title>
-               <Text style={styles.author}>
-                  {bookDetailData[0].author.name}
-               </Text>
+               <Text style={styles.price}>R${bookData.price}</Text>
+               <Title style={styles.title}>{bookData.name}</Title>
+               <Text style={styles.author}>{bookData.author}</Text>
             </View>
             <View style={styles.userProfile}>
                <Pressable onPress={() => console.log('profile')}>
@@ -33,49 +27,36 @@ const UserBookDetailItem = ({ bookData }) => {
                <Text style={styles.userProfileText}>Fernando de Morais</Text>
             </View>
          </View>
-         <BookInfoContainer
-            dividerStyle={styles.divider}
-            bookData={bookDetailData}
-         />
-         <BookSynopsisContainer synopsisText={bookDetailData[0].synopsis} />
+         <BookInfoContainer dividerStyle={styles.divider} bookData={bookData} />
+         <BookSynopsisContainer synopsisText={bookData.synopsis} />
 
          <View style={styles.detailsContainer}>
             <Text style={styles.detailsTitle}>Detalhes do livro</Text>
             <View style={styles.detailWrapper}>
                <BookDetailTable
                   detailTitle={'Título do Livro'}
-                  title={'How Innovation Works'}
+                  title={bookData.name}
                   setDivider={true}
                   detailStyles={styles.topDetail}
                />
                <BookDetailTable
                   detailTitle={'Autor'}
-                  title={'Matt Ridley'}
+                  title={bookData.author}
                   setDivider={true}
                />
                <BookDetailTable
                   detailTitle={'Idioma'}
-                  title={'Matt Ridley'}
+                  title={bookData.language}
                   setDivider={true}
                />
                <BookDetailTable
                   detailTitle={'Editora'}
-                  title={'Arqueiro'}
-                  setDivider={true}
-               />
-               <BookDetailTable
-                  detailTitle={'Formato'}
-                  title={'Papel'}
-                  setDivider={true}
-               />
-               <BookDetailTable
-                  detailTitle={'Modelo'}
-                  title={'9999830'}
+                  title={bookData.publisher}
                   setDivider={true}
                />
                <BookDetailTable
                   detailTitle={'Condição'}
-                  title={'Novo'}
+                  title={bookData.condition}
                   detailStyles={styles.bottomDetail}
                />
             </View>
