@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import IconBtn from '../UI/IconBtn';
+import IconBtn from './IconBtn';
 import { Colors } from '../../constants/styles';
 
 const TextIcon = ({

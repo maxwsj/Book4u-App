@@ -15,7 +15,6 @@ import CellphoneForm from '../../../componnets/ProfileData/CellphoneForm';
 import TelephoneForm from '../../../componnets/ProfileData/TelephoneForm';
 import UserModal from '../../../componnets/ProfileData/UserModal';
 
-import userService from '../../../util/http-user';
 import {
    fetchUserData,
    sendUserPersonalData,
@@ -35,7 +34,6 @@ const ProfileData = ({ navigation }) => {
    const dispatch = useDispatch();
    const userData = useSelector((state) => state.user.userData);
    const userLibrarie = useSelector((state) => state.user.userLibrarie);
-
    const userImg =
       userData.picture === '' ? DEFAULT_USER_IMG : { uri: userData.picture };
 
@@ -54,7 +52,11 @@ const ProfileData = ({ navigation }) => {
 
    useEffect(() => {
       dispatch(fetchUserLibrarie(authCtx.token));
-   }, [dispatch]);
+      dispatch(fetchUserData(authCtx.token));
+      // if (userLibrarie.length === 0) {
+      //    console.log('Menor');
+      // }
+   }, [dispatch, userData, userLibrarie]);
 
    function addressHandler() {
       setAddressIsVisible(true);
@@ -132,7 +134,6 @@ const ProfileData = ({ navigation }) => {
          const userPicture = { picture: image.uri };
          dispatch(sendUserProfilePicture(authCtx.token, userPicture));
       }
-      dispatch(fetchUserData(authCtx.token));
    }
 
    return (

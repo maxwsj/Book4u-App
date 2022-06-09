@@ -15,7 +15,9 @@ const UserBookOffer = ({ offerBookData }) => {
          <View style={styles.bookInfoContainer}>
             <Text style={styles.bookTitle}>{offerBookData.name}</Text>
             <Text style={styles.bookAuthor}>{offerBookData.author}</Text>
-            <Text style={styles.bookPrice}>{`R$${offerBookData.price}`}</Text>
+            <Text
+               style={styles.bookPrice}
+            >{`Pontos: ${offerBookData.price}`}</Text>
          </View>
       </View>
    );

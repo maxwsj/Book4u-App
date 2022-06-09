@@ -15,7 +15,6 @@ const userSlice = createSlice({
             (book) => book.id === newLibrarie.id
          );
 
-         // SE O LIVRO NÃO EXISTE NO MOMENTO É REALIZADO UM PUSH NA userLibrarie
          if (!existingLibrarie) {
             state.userLibrarie.push({
                id: newLibrarie.id,

@@ -7,8 +7,13 @@ import UserBookOffer from '../../../componnets/ProfileData/Payment/UserBookOffer
 import { useSelector, useDispatch } from 'react-redux';
 import { filteredBookData } from '../../../store/redux-store/book/book-actions';
 import { filteredUserBook } from '../../../store/redux-store/user/user-actions';
+import PaymentNotification from '../../../componnets/UI/PaymentCard/PaymentNotification';
 
 const ExchangeDetail = ({ route, navigation }) => {
+   const [creditsIsGreater, setCreditsIsGreater] = useState(false);
+   const [creditsIsLess, setCreditsIsLess] = useState(false);
+   const [creditIsEqual, setCreditsIsEqual] = useState(false);
+
    const { externalBookId, userBookId, userOption } = route.params;
    const dispatch = useDispatch();
    const book = useSelector((state) => state.book.bookData);
@@ -33,6 +38,23 @@ const ExchangeDetail = ({ route, navigation }) => {
       navigation.navigate('CanceledExchange');
    }
 
+   useEffect(() => {
+      if (+filteredUserBookData.price > +selectedBookData.price) {
+         console.log(
+            'O valor do livro do usuário é maior que o livro selecionado'
+         );
+         setCreditsIsGreater(true);
+      } else if (+filteredUserBookData.price < +selectedBookData.price) {
+         console.log(
+            'O valor do livro do usuário é menor que o livro selecionado'
+         );
+         setCreditsIsLess(true);
+      } else {
+         setCreditsIsEqual(true);
+         console.log('Não existe diferença entre os livros desejados');
+      }
+   }, [filteredUserBookData, selectedBookData]);
+
    return (
       <ScrollView>
          <View style={styles.container}>
@@ -45,10 +67,10 @@ const ExchangeDetail = ({ route, navigation }) => {
             <Text style={styles.title}>Endereço</Text>
             <View style={styles.card}>
                <Text style={styles.text}>
-                  {`${selectedBookData.ownerCity}, ${selectedBookData.ownerState}, ${selectedBookData.ownerStreetName}, ${selectedBookData.ownerStreetName}`}
+                  {`${selectedBookData.ownerState}, ${selectedBookData.ownerCity}`}
                </Text>
                <Text style={[styles.text, styles.subText]}>
-                  {`${selectedBookData.ownerStreetName}`}
+                  {`${selectedBookData.ownerStreetName}, ${selectedBookData.ownerDistrict}, ${selectedBookData.ownerHouseNumber}`}
                </Text>
             </View>
             <Text style={styles.title}>Pedido</Text>
@@ -68,7 +90,7 @@ const ExchangeDetail = ({ route, navigation }) => {
                   </Text>
                   <Text
                      style={styles.bookPrice}
-                  >{`R$${selectedBookData.price}`}</Text>
+                  >{`Pontos: ${selectedBookData.price}`}</Text>
                </View>
             </View>
             <Text style={styles.title}>Método de pagamento</Text>
@@ -80,6 +102,21 @@ const ExchangeDetail = ({ route, navigation }) => {
             {userOption === 'Book' ? (
                <UserBookOffer offerBookData={filteredUserBookData} />
             ) : null}
+            {creditsIsGreater && (
+               <PaymentNotification
+                  text={'O valor do seu livro é maior que o livro desejado!'}
+               />
+            )}
+            {creditsIsLess && (
+               <PaymentNotification
+                  text={'O valor do seu livro é menor que o livro desejado!'}
+               />
+            )}
+            {creditIsEqual && (
+               <PaymentNotification
+                  text={'O valor do seu livro é igual ao livro desejado!'}
+               />
+            )}
             <View style={styles.buttonContainer}>
                <Button
                   onPress={cancelExchangeHandler}

@@ -1,6 +1,7 @@
 import { StyleSheet, Pressable, View } from 'react-native';
 import React from 'react';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { Badge } from 'react-native-paper';
 
 const IconBtn = ({
    iconBtnConfig,

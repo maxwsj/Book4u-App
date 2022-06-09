@@ -75,6 +75,7 @@ const SignUpContent = ({ onSubmitUser, isInvalid }) => {
                complement: '',
                token: '',
             },
+            credits: '',
             firstName: firstName,
             lastName: lastName,
             picture: '',

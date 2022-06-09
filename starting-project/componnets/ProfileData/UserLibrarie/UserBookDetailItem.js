@@ -5,31 +5,64 @@ import { Colors } from '../../../constants/styles';
 import BookDetailTable from '../../BookDetails/BookDetailTable';
 import BookInfoContainer from '../../BookDetails/BookInfoContainer';
 import BookSynopsisContainer from '../../BookDetails/BookSynopsisContainer';
+import BookTradeContainer from '../../BookDetails/BookTradeContainer';
+import Button from '../../UI/Button';
+import { useNavigation } from '@react-navigation/native';
+
+const DEFAULT_USER_IMG = require('../../../assets/userImg/userProfileDefault.png');
 
 const { width } = Dimensions.get('window');
 
-const UserBookDetailItem = ({ bookData }) => {
+const UserBookDetailItem = ({ bookData, isExternalUser }) => {
+   const navigation = useNavigation();
+
+   function tradeButtonHandler() {
+      navigation.navigate('PaymentMethodScreen', {
+         externalBookId: bookData.id,
+      });
+   }
+
+   const userImg =
+      bookData.ownerPicture === ''
+         ? DEFAULT_USER_IMG
+         : { uri: bookData.ownerPicture };
+
    return (
       <View style={styles.container}>
          <View style={styles.sectionInfo}>
             <View>
-               <Text style={styles.price}>R${bookData.price}</Text>
+               <Text style={styles.price}>Pontos: {bookData.price}</Text>
                <Title style={styles.title}>{bookData.name}</Title>
                <Text style={styles.author}>{bookData.author}</Text>
             </View>
             <View style={styles.userProfile}>
-               <Pressable onPress={() => console.log('profile')}>
-                  <Avatar.Image
-                     size={50}
-                     style={styles.profileBackgroundColor}
-                  />
-               </Pressable>
-               <Text style={styles.userProfileText}>Fernando de Morais</Text>
+               <Avatar.Image
+                  size={50}
+                  style={styles.profileBackgroundColor}
+                  source={userImg}
+               />
+               <Text style={styles.userProfileText}>
+                  {`${bookData.ownerFirstName} ${bookData.ownerLastName}`}
+               </Text>
             </View>
          </View>
          <BookInfoContainer dividerStyle={styles.divider} bookData={bookData} />
          <BookSynopsisContainer synopsisText={bookData.synopsis} />
-
+         {isExternalUser && (
+            <View style={styles.tradeWrapper}>
+               <View style={styles.tradeItems}>
+                  <BookTradeContainer />
+               </View>
+               <View style={styles.tradeItems}>
+                  <Button
+                     stylesBtn={styles.btnStyle}
+                     onPress={tradeButtonHandler}
+                  >
+                     Trocar
+                  </Button>
+               </View>
+            </View>
+         )}
          <View style={styles.detailsContainer}>
             <Text style={styles.detailsTitle}>Detalhes do livro</Text>
             <View style={styles.detailWrapper}>

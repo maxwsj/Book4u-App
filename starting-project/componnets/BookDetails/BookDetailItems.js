@@ -1,7 +1,10 @@
 import { StyleSheet, Text, View, Pressable, Dimensions } from 'react-native';
 import { useEffect, useState } from 'react';
+
 import { Title, Avatar } from 'react-native-paper';
 import { Colors } from '../../constants/styles';
+const { width } = Dimensions.get('window');
+
 import Button from '../UI/Button';
 import BookDetailTable from './BookDetailTable';
 import BookInfoContainer from './BookInfoContainer';
@@ -9,28 +12,59 @@ import BookTradeContainer from './BookTradeContainer';
 import BookSynopsisContainer from './BookSynopsisContainer';
 import { useNavigation } from '@react-navigation/native';
 
-const { width } = Dimensions.get('window');
+import { useDispatch, useSelector } from 'react-redux';
+import {
+   setExternalUserData,
+   setExternalUserLibrarie,
+} from '../../store/redux-store/externalUser/externalUser-actions';
+
+const DEFAULT_USER_IMG = require('../../assets/userImg/userProfileDefault.png');
 
 const BookDetailItems = ({ bookData }) => {
+   const dispatch = useDispatch();
+   const userImg =
+      bookData.ownerPicture === ''
+         ? DEFAULT_USER_IMG
+         : { uri: bookData.ownerPicture };
    const navigation = useNavigation();
    function tradeButtonHandler() {
       navigation.navigate('PaymentMethodScreen', {
          externalBookId: bookData.id,
       });
    }
+
+   const book = useSelector((state) => state.book.bookData);
+
+   function getBookDataHandler() {
+      const externalUserLibrarie = book.filter((bookItem) => {
+         return bookItem.owner.id === bookData.ownerId;
+      });
+      dispatch(setExternalUserLibrarie(externalUserLibrarie));
+   }
+
+   function externalBookScreenHandler() {
+      navigation.navigate('ExternalProfileData');
+   }
+
+   useEffect(() => {
+      dispatch(setExternalUserData(bookData));
+      getBookDataHandler();
+   }, [dispatch, bookData]);
+
    return (
       <View style={styles.container}>
          <View style={styles.sectionInfo}>
             <View>
-               <Text style={styles.price}>R${bookData.price}</Text>
+               <Text style={styles.price}>Pontos: {bookData.price}</Text>
                <Title style={styles.title}>{bookData.name}</Title>
                <Text style={styles.author}>{bookData.author}</Text>
             </View>
             <View style={styles.userProfile}>
-               <Pressable onPress={() => console.log('profile')}>
+               <Pressable onPress={externalBookScreenHandler}>
                   <Avatar.Image
                      size={50}
                      style={styles.profileBackgroundColor}
+                     source={userImg}
                   />
                </Pressable>
                <Text style={styles.userProfileText}>

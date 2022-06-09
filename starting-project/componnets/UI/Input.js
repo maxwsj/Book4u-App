@@ -3,7 +3,7 @@ import React from 'react';
 
 import { Colors } from '../../constants/styles';
 import InvalidInputTxt from './InvalidInputTxt';
-import IconBtn from '../UI/IconBtn';
+import IconBtn from './IconBtn';
 
 const Input = ({
    inputConfig,

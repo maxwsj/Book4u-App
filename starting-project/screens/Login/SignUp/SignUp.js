@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 import Logo from '../../../componnets/UI/Logo';
 
@@ -20,7 +20,6 @@ const SignUp = ({ navigation }) => {
    }
 
    async function signupHandler(userData) {
-      // setIsAuthenticating(true);
       try {
          const registerNumber = await usuarioService.createUser(userData);
 
@@ -28,11 +27,9 @@ const SignUp = ({ navigation }) => {
             email: userData.personalData.email,
             registerNumber: registerNumber,
          });
-
-         // authCtx.authenticate(token);
       } catch (error) {
          setIsInvalid(true);
-         // setIsAuthenticating(false);
+         console.log(error);
       }
    }
 

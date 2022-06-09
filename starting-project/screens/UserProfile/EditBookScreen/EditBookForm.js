@@ -178,7 +178,7 @@ const EditBookForm = ({ route, navigation }) => {
 
          <View style={styles.detailsContainer}>
             <View style={styles.bookPriceContainer}>
-               <Text style={styles.bookPriceText}>R$</Text>
+               <Text style={styles.bookPriceText}>Pontos: </Text>
                <TextInput
                   style={styles.bookPriceInput}
                   keyboardType='numeric'

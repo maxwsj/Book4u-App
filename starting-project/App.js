@@ -3,9 +3,12 @@ import 'react-native-gesture-handler';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, LogBox } from 'react-native';
 import { useContext, useState, useEffect } from 'react';
-import { Provider } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import AuthContextProvider, { AuthContext } from './store/auth-context';
+import { Provider } from 'react-redux';
 import store from './store/redux-store';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchBookData } from './store/redux-store/book/book-actions';
 
 import AppLoading from 'expo-app-loading';
 
@@ -18,7 +21,9 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
 import { Colors } from './constants/styles';
+import { useFonts } from 'expo-font';
 
+// Authenticating Stack
 import SignIn from './screens/Login/SignIn/SignIn';
 import SignUp from './screens/Login/SignUp/SignUp';
 import SignUpAuth from './screens/Login/SignUp/SignUpAuth';
@@ -43,15 +48,14 @@ import ExchangeDetail from './screens/Payment/ExchangeDetail/ExchangeDetail';
 import CanceledExchange from './screens/Payment/PaymentSituation/CanceledExchange';
 import SuccessfullyExchanged from './screens/Payment/PaymentSituation/SuccessfullyExchanged';
 
-import { useFonts } from 'expo-font';
+// External user screens
+import ExternalProfileData from './screens/ExternalUserProfile/ExternalUserProfileData/ExternalProfileData';
+import ExternalUserBookDetail from './screens/ExternalUserProfile/ExternalUserLibrarie/ExternalUserBookDetail';
 
 import IconBtn from './componnets/UI/IconBtn';
 import LogoButton from './componnets/UI/LogoButton';
 import DrawerContent from './componnets/UI/DrawerContent';
-
-import AuthContextProvider, { AuthContext } from './store/auth-context';
-import { useSelector, useDispatch } from 'react-redux';
-import { fetchBookData } from './store/redux-store/book/book-actions';
+import IconNotification from './componnets/UI/Notification/IconNotification';
 
 LogBox.ignoreAllLogs(); //Ignore all log notifications
 LogBox.ignoreLogs(['']);
@@ -87,6 +91,7 @@ function AuthenticatedStack() {
 
    useEffect(() => {
       dispatch(fetchBookData(authCtx.token));
+      // Fetch recent books
    }, [dispatch]);
 
    function logoBtn() {
@@ -127,6 +132,22 @@ function AuthenticatedStack() {
          })
       );
    }
+   function externalProfileScreenHandler() {
+      navigation.dispatch(
+         CommonActions.reset({
+            index: 1,
+            routes: [
+               { name: 'ExternalUserBookDetail' },
+               {
+                  name: 'ExternalProfileData',
+               },
+            ],
+         })
+      );
+   }
+
+   // Se o número de notificações for maior que 0 aplicará esses estilos ao botao de notificações
+   const teste = { left: 10, top: 5 };
 
    return (
       <Drawer.Navigator
@@ -167,14 +188,16 @@ function AuthenticatedStack() {
             component={Home}
             options={{
                headerLeft: ({ tintColor }) => (
-                  <IconBtn
-                     icon='ellipsis-horizontal'
+                  <IconNotification
+                     icon='notifications-outline'
                      color={tintColor}
                      size={24}
                      iconBtnStyle={styles.iconLeftBtn}
                      onPress={() => {
                         console.log(`Left BTN`);
                      }}
+                     notificationNum={false}
+                     // iconContainer={teste}
                   />
                ),
             }}
@@ -381,7 +404,7 @@ function AuthenticatedStack() {
                      onPress={profileScreenHandler}
                   />
                ),
-               headerTitle: 'Método de Pagamento',
+               headerTitle: 'Detalhes do Livro',
                headerStyle: { backgroundColor: Colors.white50 },
                headerTintColor: Colors.secondary,
                headerTitleStyle: {
@@ -392,6 +415,7 @@ function AuthenticatedStack() {
                },
             }}
          />
+
          <Drawer.Screen
             name='UserBookOption'
             component={UserBookOption}
@@ -478,6 +502,46 @@ function AuthenticatedStack() {
                   />
                ),
                headerTitle: 'Situação do Pagamento',
+               headerStyle: { backgroundColor: Colors.white50 },
+               headerTintColor: Colors.secondary,
+               headerTitleStyle: {
+                  color: Colors.silver400,
+                  fontFamily: 'poppins-regular',
+                  fontSize: 18,
+                  marginTop: 4,
+               },
+            }}
+         />
+         {/* External User Screens */}
+         <Drawer.Screen
+            name='ExternalProfileData'
+            component={ExternalProfileData}
+            options={{
+               headerLeft: ({ tintColor }) => (
+                  <IconBtn
+                     icon='arrow-back-outline'
+                     color={tintColor}
+                     size={24}
+                     iconBtnStyle={styles.iconLeftBtn}
+                     onPress={prevScreenHandler}
+                  />
+               ),
+            }}
+         />
+         <Drawer.Screen
+            name='ExternalUserBookDetail'
+            component={ExternalUserBookDetail}
+            options={{
+               headerLeft: ({ tintColor }) => (
+                  <IconBtn
+                     icon='arrow-back-outline'
+                     color={tintColor}
+                     size={24}
+                     iconBtnStyle={styles.iconLeftBtn}
+                     onPress={externalProfileScreenHandler}
+                  />
+               ),
+               headerTitle: 'Detalhes do Livro',
                headerStyle: { backgroundColor: Colors.white50 },
                headerTintColor: Colors.secondary,
                headerTitleStyle: {

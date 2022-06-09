@@ -11,7 +11,6 @@ class UsuarioService {
          headers: Config.HEADER_REQUEST,
       });
       const registerNumber = response.data.createdUser.registerNumber;
-
       return registerNumber;
    }
 
@@ -67,7 +66,6 @@ class UsuarioService {
          timeout: Config.TIMEOUT_REQUEST,
          headers: Config.HEADER_REQUEST,
       });
-
       return response;
    }
 }

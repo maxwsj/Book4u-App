@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View, TextInput } from 'react-native';
 import { Divider } from 'react-native-paper';
 import { Colors } from '../../constants/styles';
+import DropdownCat from '../UI/Filter/DropdownCat';
 
 const UserBookTable = ({
    detailTitle,
@@ -9,6 +10,8 @@ const UserBookTable = ({
    detailStyles,
    onUpdateValue,
    inputConfig,
+   setDropdown,
+   onSelect,
 }) => {
    return (
       <>
@@ -25,6 +28,15 @@ const UserBookTable = ({
                      onChangeText={onUpdateValue}
                      {...inputConfig}
                   />
+                  {setDropdown && (
+                     <DropdownCat
+                        dropDownContainerStyle={styles.dropDownContainerStyle}
+                        dropdownWrapperStyle={styles.dropdownWrapperStyle}
+                        textStyle={styles.textStyle}
+                        dropdownLabelStyle={styles.dropdownLabelStyle}
+                        onSelect={onSelect}
+                     />
+                  )}
                </View>
             </View>
          </View>
@@ -87,5 +99,20 @@ const styles = StyleSheet.create({
    },
    inputContainer: {
       borderBottomWidth: 0,
+   },
+   dropDownContainerStyle: {
+      backgroundColor: Colors.silver50,
+   },
+   dropdownWrapperStyle: {
+      backgroundColor: Colors.silver50,
+      borderWidth: 0,
+      bottom: 13,
+   },
+   textStyle: {
+      color: Colors.silver300,
+      textAlign: 'center',
+   },
+   dropdownLabelStyle: {
+      color: Colors.silver300,
    },
 });

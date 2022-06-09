@@ -13,19 +13,6 @@ class BookService {
             Authorization: `Bearer ${userToken}`,
             'Content-Type': 'application/json',
          },
-      });
-   }
-
-   async getBookData(userToken) {
-      const response = await axios({
-         url: Config.API_URL + `api/book/list/${userToken}`,
-         method: 'GET',
-         timeout: Config.TIMEOUT_REQUEST,
-         headers: {
-            token: userToken,
-            Authorization: `Bearer ${userToken}`,
-            'Content-Type': 'application/json',
-         },
       })
          .then((response) => {
             console.log('NO ERROR');
@@ -51,8 +38,19 @@ class BookService {
             }
             return Promise.reject(error);
          });
+   }
 
-      console.log(response);
+   async getBookData(userToken) {
+      const response = await axios({
+         url: Config.API_URL + `api/book/list/${userToken}`,
+         method: 'GET',
+         timeout: Config.TIMEOUT_REQUEST,
+         headers: {
+            token: userToken,
+            Authorization: `Bearer ${userToken}`,
+            'Content-Type': 'application/json',
+         },
+      });
       return response.data;
    }
 }

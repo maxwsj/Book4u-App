@@ -6,13 +6,20 @@ import { Colors } from '../../../constants/styles';
 
 const { width } = Dimensions.get('window');
 
-const UserBookSection = ({ items }) => {
+const UserBookSection = ({ items, isExternal }) => {
    const navigation = useNavigation();
    function renderBookItem(itemData) {
       function pressHandler() {
-         navigation.navigate('UserDetailBook', {
-            bookId: itemData.item.id,
-         });
+         if (isExternal) {
+            navigation.navigate('ExternalUserBookDetail', {
+               bookId: itemData.item.id,
+               isExternalUser: isExternal,
+            });
+         } else {
+            navigation.navigate('UserDetailBook', {
+               bookId: itemData.item.id,
+            });
+         }
       }
 
       const book = itemData.item;

@@ -1,16 +1,24 @@
 import { StyleSheet, View, Pressable } from 'react-native';
 import { useContext } from 'react';
+
 import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import { Avatar, Title, Caption, Paragraph, Drawer } from 'react-native-paper';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Colors } from '../../constants/styles';
 
 import { AuthContext } from '../../store/auth-context';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { userActions } from '../../store/redux-store/user/user-slice';
+
+const DEFAULT_USER_IMG = require('../../assets/userImg/userProfileDefault.png');
+
 const DrawerContent = ({ props, navigation }) => {
    const authCtx = useContext(AuthContext);
    const dispatch = useDispatch();
+
+   const userData = useSelector((state) => state.user.userData);
+   const userImg =
+      userData.picture === '' ? DEFAULT_USER_IMG : { uri: userData.picture };
 
    function profileHandler() {
       navigation.navigate('ProfileData');
@@ -44,29 +52,33 @@ const DrawerContent = ({ props, navigation }) => {
                            onPress={profileHandler}
                         >
                            <Avatar.Image
-                              source={require('../../assets/userImg/userProfileDefault.png')}
+                              source={userImg}
                               size={50}
                               style={styles.profileBackgroundColor}
                            />
                         </Pressable>
                      </View>
                      <View style={{ flexDirection: 'column', marginLeft: 15 }}>
-                        <Title style={styles.title}>User name</Title>
-                        <Caption style={styles.caption}>user@email.com</Caption>
+                        <Title style={styles.title}>{userData.fullName}</Title>
+                        <Caption style={styles.captionEmail}>
+                           {userData.email}
+                        </Caption>
                      </View>
                   </View>
                   <View style={styles.row}>
                      <View style={styles.section}>
-                        <Paragraph style={[styles.paragraph, styles.caption]}>
-                           80
-                        </Paragraph>
-                        <Caption style={styles.caption}>Following</Caption>
+                        <Paragraph
+                           style={[styles.paragraph, styles.caption]}
+                        ></Paragraph>
+                        <Caption style={styles.caption}>Créditos</Caption>
                      </View>
                      <View style={styles.section}>
                         <Paragraph style={[styles.paragraph, styles.caption]}>
-                           100
+                           3
                         </Paragraph>
-                        <Caption style={styles.caption}>Followers</Caption>
+                        <Caption style={styles.caption}>
+                           Livros Cadastrados
+                        </Caption>
                      </View>
                   </View>
                </View>
@@ -97,7 +109,7 @@ const DrawerContent = ({ props, navigation }) => {
                      onPress={historyHandler}
                   />
                   <DrawerItem
-                     label='Biblioteca'
+                     label='Adicionar livro'
                      icon={(color, size) => (
                         <Ionicons name='book-outline' color={color} size={24} />
                      )}
@@ -175,6 +187,11 @@ const styles = StyleSheet.create({
       fontSize: 14,
       lineHeight: 14,
    },
+   captionEmail: {
+      fontSize: 14,
+      lineHeight: 14,
+      width: 130,
+   },
    row: {
       marginTop: 20,
       flexDirection: 'row',
@@ -206,6 +223,7 @@ const styles = StyleSheet.create({
    profileBackgroundColor: {
       backgroundColor: Colors.snow,
       borderColor: Colors.silver300,
+      elevation: 4,
    },
    //    drawerSpacing: {
    //       marginTop: 20,

@@ -16,6 +16,7 @@ const RegisterBook = ({ route, navigation }) => {
    const authCtx = useContext(AuthContext);
 
    const [isNewBook, setIsNewBook] = useState(false);
+   const [dropdownItem, setDropdownItem] = useState('');
    const [isSemiNewBook, setIsSemiNewBook] = useState(false);
    const [isUsedBook, setIsUsedBook] = useState(false);
    const [bookCondition, setBookCondition] = useState('');
@@ -32,7 +33,6 @@ const RegisterBook = ({ route, navigation }) => {
       publisher: '',
       pageQuantity: '',
       condition: '',
-      category: '',
    });
 
    function updateInputValueHandler(inputIdentifier, enteredValue) {
@@ -117,7 +117,7 @@ const RegisterBook = ({ route, navigation }) => {
          },
          category: [
             {
-               name: formData.category,
+               name: dropdownItem,
             },
          ],
          bookImages: {
@@ -127,7 +127,6 @@ const RegisterBook = ({ route, navigation }) => {
             backSideImage: backSide,
          },
       };
-
       bookService.registerBook(bookData, authCtx.token);
       navigation.dispatch(
          CommonActions.reset({
@@ -164,6 +163,10 @@ const RegisterBook = ({ route, navigation }) => {
       }
    }
 
+   function selectedItem(selectedItem) {
+      setDropdownItem(selectedItem);
+   }
+
    return (
       <ScrollView>
          <ScrollView
@@ -197,7 +200,7 @@ const RegisterBook = ({ route, navigation }) => {
 
          <View style={styles.detailsContainer}>
             <View style={styles.bookPriceContainer}>
-               <Text style={styles.bookPriceText}>R$</Text>
+               <Text style={styles.bookPriceText}>Pontos: </Text>
                <TextInput
                   style={styles.bookPriceInput}
                   keyboardType='numeric'
@@ -235,10 +238,10 @@ const RegisterBook = ({ route, navigation }) => {
                />
                <UserBookTable
                   detailTitle={'Categoria'}
-                  title={'Insira uma categoria'}
                   setDivider={true}
-                  onUpdateValue={updateInputValueHandler.bind(this, 'category')}
                   value={formData.category}
+                  setDropdown={true}
+                  onSelect={selectedItem}
                />
                <UserBookTable
                   detailTitle={'Idioma'}

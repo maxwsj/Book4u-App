@@ -1,25 +1,28 @@
 import { StyleSheet, View, TextInput } from 'react-native';
-import React from 'react';
+import { forwardRef } from 'react';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import InvalidInputTxt from './InvalidInputTxt';
 import IconBtn from './IconBtn';
 
 import { Colors } from '../../constants/styles';
 
-const Input = ({
-   inputConfig,
-   iconConfig,
-   isInvalid,
-   onUpdateValue,
-   children,
-   InvalidInputTxtStyle,
-   setIcon,
-   iconBtnConfig,
-   onIconBtnPress,
-   iconBtnStyle,
-   bgStyle,
-   inputContainer,
-}) => {
+const Input = forwardRef((props, ref) => {
+   const {
+      inputConfig,
+      iconConfig,
+      isInvalid,
+      onUpdateValue,
+      children,
+      InvalidInputTxtStyle,
+      setIcon,
+      iconBtnConfig,
+      onIconBtnPress,
+      iconBtnStyle,
+      bgStyle,
+      inputContainer,
+      onSubmit,
+      refValue,
+   } = props;
    return (
       <>
          <View
@@ -35,6 +38,8 @@ const Input = ({
                style={[styles.input, bgStyle, isInvalid && styles.inputInvalid]}
                {...inputConfig}
                onChangeText={onUpdateValue}
+               onSubmitEditing={onSubmit}
+               ref={refValue}
             />
             {setIcon && (
                <IconBtn
@@ -49,7 +54,7 @@ const Input = ({
          </View>
       </>
    );
-};
+});
 
 export default Input;
 
