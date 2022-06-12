@@ -1,15 +1,18 @@
 import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { Colors } from '../../../constants/styles';
 import Button from '../../../componnets/UI/Button';
 import UserBookOffer from '../../../componnets/ProfileData/Payment/UserBookOffer';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { filteredBookData } from '../../../store/redux-store/book/book-actions';
-import { filteredUserBook } from '../../../store/redux-store/user/user-actions';
 import PaymentNotification from '../../../componnets/UI/PaymentCard/PaymentNotification';
+import userService from '../../../util/http-user';
+
+import { AuthContext } from '../../../store/auth-context';
 
 const ExchangeDetail = ({ route, navigation }) => {
+   const authCtx = useContext(AuthContext);
    const [creditsIsGreater, setCreditsIsGreater] = useState(false);
    const [creditsIsLess, setCreditsIsLess] = useState(false);
    const [creditIsEqual, setCreditsIsEqual] = useState(false);
@@ -17,6 +20,7 @@ const ExchangeDetail = ({ route, navigation }) => {
    const { externalBookId, userBookId, userOption } = route.params;
    const dispatch = useDispatch();
    const book = useSelector((state) => state.book.bookData);
+   const externalUserData = useSelector((state) => state.externalUser.userData);
 
    function selectedBookDataHandler() {
       const selectedBookData = book.filter((bookItem) => {
@@ -32,6 +36,7 @@ const ExchangeDetail = ({ route, navigation }) => {
    const selectedBookData = useSelector((state) => state.book.filteredBook);
    const filteredUserBookData = useSelector((state) => state.user.filteredBook);
    function confirmExchangeHandler() {
+      sendUserExchangeOptionHandler();
       navigation.navigate('SuccessfullyExchanged');
    }
    function cancelExchangeHandler() {
@@ -39,21 +44,32 @@ const ExchangeDetail = ({ route, navigation }) => {
    }
 
    useEffect(() => {
-      if (+filteredUserBookData.price > +selectedBookData.price) {
-         console.log(
-            'O valor do livro do usuário é maior que o livro selecionado'
-         );
+      if (
+         +filteredUserBookData.price > +selectedBookData.price &&
+         userOption === 'Book'
+      ) {
          setCreditsIsGreater(true);
-      } else if (+filteredUserBookData.price < +selectedBookData.price) {
-         console.log(
-            'O valor do livro do usuário é menor que o livro selecionado'
-         );
+      } else if (
+         +filteredUserBookData.price < +selectedBookData.price &&
+         userOption === 'Book'
+      ) {
          setCreditsIsLess(true);
-      } else {
+      } else if (
+         +filteredUserBookData.price === +selectedBookData.price &&
+         userOption === 'Book'
+      ) {
          setCreditsIsEqual(true);
-         console.log('Não existe diferença entre os livros desejados');
       }
-   }, [filteredUserBookData, selectedBookData]);
+   }, []);
+
+   async function sendUserExchangeOptionHandler() {
+      console.log('Troca realizada com sucesso !');
+      userService.exchangeBookWithBook(
+         authCtx.token,
+         filteredUserBookData.id,
+         externalBookId
+      );
+   }
 
    return (
       <ScrollView>
@@ -62,15 +78,15 @@ const ExchangeDetail = ({ route, navigation }) => {
             <View style={styles.card}>
                <Text
                   style={styles.text}
-               >{`${selectedBookData.ownerFirstName} ${selectedBookData.ownerLastName}`}</Text>
+               >{`${externalUserData.firstName} ${externalUserData.lastName}`}</Text>
             </View>
             <Text style={styles.title}>Endereço</Text>
             <View style={styles.card}>
                <Text style={styles.text}>
-                  {`${selectedBookData.ownerState}, ${selectedBookData.ownerCity}`}
+                  {`${externalUserData.state}, ${externalUserData.city}`}
                </Text>
                <Text style={[styles.text, styles.subText]}>
-                  {`${selectedBookData.ownerStreetName}, ${selectedBookData.ownerDistrict}, ${selectedBookData.ownerHouseNumber}`}
+                  {`${externalUserData.streetName}, ${externalUserData.district}, ${externalUserData.houseNumber}`}
                </Text>
             </View>
             <Text style={styles.title}>Pedido</Text>

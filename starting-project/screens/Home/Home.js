@@ -1,11 +1,4 @@
-import {
-   StyleSheet,
-   Text,
-   View,
-   ScrollView,
-   Dimensions,
-   TextInput,
-} from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Dimensions } from 'react-native';
 import { useState, useEffect, useContext, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { AuthContext } from '../../store/auth-context';
@@ -13,6 +6,7 @@ import {
    fetchUserData,
    fetchUserLibrarie,
 } from '../../store/redux-store/user/user-actions';
+import { bookActions } from '../../store/redux-store/book/book-slice';
 
 import BooksSection from '../../componnets/BooksSection/BooksSection';
 import BookSelectInformation from '../../componnets/BooksSection/BookSelectInformation';
@@ -31,12 +25,12 @@ const Home = () => {
    console.log(authCtx.token);
    const dispatch = useDispatch();
    const book = useSelector((state) => state.book.bookData);
-   // const genBook = useSelector((state) => state.book.filteredGenBooks);
    const enteredValue = useRef();
 
    useEffect(() => {
       dispatch(fetchUserData(authCtx.token));
       dispatch(fetchUserLibrarie(authCtx.token));
+      dispatch(bookActions.clearFilteredBook());
    }, [dispatch]);
 
    const [visible, setVisible] = useState(false);

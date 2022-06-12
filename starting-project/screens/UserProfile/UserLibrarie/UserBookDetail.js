@@ -15,6 +15,7 @@ function UserBookDetail({ route, navigation }) {
       const selectedBook = userLibrarie.filter((bookItem) => {
          return bookItem.id === bookId;
       });
+      console.log(selectedBook);
       dispatch(filteredBookData(selectedBook));
       const bookImgs = { ...selectedBook[0].bookImages };
       const images = Object.values(bookImgs);

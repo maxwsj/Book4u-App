@@ -16,7 +16,7 @@ const UserBookSection = ({ items, isExternal }) => {
                isExternalUser: isExternal,
             });
          } else {
-            navigation.navigate('UserDetailBook', {
+            navigation.navigate('UserBookDetail', {
                bookId: itemData.item.id,
             });
          }

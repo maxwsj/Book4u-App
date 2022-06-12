@@ -42,11 +42,12 @@ import EditBookForm from './screens/UserProfile/EditBookScreen/EditBookForm';
 import UserNotification from './screens/UserProfile/UserNotification/UserNotification';
 import BookDetail from './screens/Home/BookDetail/BookDetail';
 import PaymentMethodScreen from './screens/Payment/PaymentMethodScreen';
-import UserDetailBook from './screens/UserProfile/UserLibrarie/UserBookDetail';
+import UserBookDetail from './screens/UserProfile/UserLibrarie/UserBookDetail';
 import UserBookOption from './screens/Payment/UserBookOption/UserBookOption';
 import ExchangeDetail from './screens/Payment/ExchangeDetail/ExchangeDetail';
 import CanceledExchange from './screens/Payment/PaymentSituation/CanceledExchange';
 import SuccessfullyExchanged from './screens/Payment/PaymentSituation/SuccessfullyExchanged';
+import HistoryDetailItem from './screens/Payment/HistoryDetails/HistoryDetailItem';
 
 // External user screens
 import ExternalProfileData from './screens/ExternalUserProfile/ExternalUserProfileData/ExternalProfileData';
@@ -91,7 +92,6 @@ function AuthenticatedStack() {
 
    useEffect(() => {
       dispatch(fetchBookData(authCtx.token));
-      // Fetch recent books
    }, [dispatch]);
 
    function logoBtn() {
@@ -212,7 +212,21 @@ function AuthenticatedStack() {
                      color={tintColor}
                      size={24}
                      iconBtnStyle={styles.iconLeftBtn}
-                     onPress={prevScreenHandler}
+                     onPress={() => {
+                        navigation.dispatch(
+                           CommonActions.reset({
+                              index: 1,
+                              routes: [
+                                 {
+                                    name: 'BookDetail',
+                                 },
+                                 {
+                                    name: 'Home',
+                                 },
+                              ],
+                           })
+                        );
+                     }}
                   />
                ),
                headerTitle: 'Detalhes do Livro',
@@ -236,9 +250,44 @@ function AuthenticatedStack() {
                      color={tintColor}
                      size={24}
                      iconBtnStyle={styles.iconLeftBtn}
-                     onPress={prevScreenHandler}
+                     onPress={profileScreenHandler}
                   />
                ),
+               headerTitle: 'Histórico de Troca',
+               headerStyle: { backgroundColor: Colors.white50 },
+               headerTintColor: Colors.secondary,
+               headerTitleStyle: {
+                  color: Colors.silver400,
+                  fontFamily: 'poppins-regular',
+                  fontSize: 18,
+                  marginTop: 4,
+               },
+            }}
+         />
+         <Drawer.Screen
+            name='HistoryDetailItem'
+            component={HistoryDetailItem}
+            options={{
+               headerLeft: ({ tintColor }) => (
+                  <IconBtn
+                     icon='arrow-back-outline'
+                     color={tintColor}
+                     size={24}
+                     iconBtnStyle={styles.iconLeftBtn}
+                     onPress={() => {
+                        navigation.navigate('HistoryScreen');
+                     }}
+                  />
+               ),
+               headerTitle: 'Detalhes do Histórico',
+               headerStyle: { backgroundColor: Colors.white50 },
+               headerTintColor: Colors.secondary,
+               headerTitleStyle: {
+                  color: Colors.silver400,
+                  fontFamily: 'poppins-regular',
+                  fontSize: 18,
+                  marginTop: 4,
+               },
             }}
          />
          <Drawer.Screen
@@ -392,8 +441,8 @@ function AuthenticatedStack() {
             }}
          />
          <Drawer.Screen
-            name='UserDetailBook'
-            component={UserDetailBook}
+            name='UserBookDetail'
+            component={UserBookDetail}
             options={{
                headerLeft: ({ tintColor }) => (
                   <IconBtn

@@ -152,34 +152,33 @@ export function fetchUserLibrarie(userToken) {
       }
       try {
          const librarieData = await fetchData();
-         for (const book of librarieData) {
-            dispatch(
-               userActions.getLibrarie({
-                  id: book.id,
-                  name: book.name,
-                  language: book.language.name,
-                  author: book.author.name,
-                  owner: {
-                     credits: book.owner.credits,
-                     firstName: book.owner.firstName,
-                     id: book.owner.id,
-                     lastName: book.owner.lastName,
-                     picture: book.owner.picture,
-                  },
-                  publisher: book.publisher.name,
-                  pagesQuantity: book.pagesQuantity,
-                  price: book.price,
-                  synopsis: book.synopsis,
-                  condition: book.condition,
-                  bookImages: {
-                     frontSideImage: book.bookImages.frontSideImage,
-                     backSideImage: book.bookImages.backSideImage,
-                     leftSideImage: book.bookImages.leftSideImage,
-                     rightSideImage: book.bookImages.rightSideImage,
-                  },
-               })
-            );
-         }
+         const librarie = librarieData.map((book) => {
+            return {
+               id: book.id,
+               name: book.name,
+               language: book.language.name,
+               author: book.author.name,
+               owner: {
+                  credits: book.owner.credits,
+                  firstName: book.owner.firstName,
+                  id: book.owner.id,
+                  lastName: book.owner.lastName,
+                  picture: book.owner.picture,
+               },
+               publisher: book.publisher.name,
+               pagesQuantity: book.pagesQuantity,
+               price: book.price,
+               synopsis: book.synopsis,
+               condition: book.condition,
+               bookImages: {
+                  frontSideImage: book.bookImages.frontSideImage,
+                  backSideImage: book.bookImages.backSideImage,
+                  leftSideImage: book.bookImages.leftSideImage,
+                  rightSideImage: book.bookImages.rightSideImage,
+               },
+            };
+         });
+         dispatch(userActions.getLibrarie(librarie));
       } catch (error) {}
    };
 }

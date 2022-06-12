@@ -17,27 +17,27 @@ import {
    setExternalUserData,
    setExternalUserLibrarie,
 } from '../../store/redux-store/externalUser/externalUser-actions';
+import IconBtn from '../UI/IconBtn';
 
 const DEFAULT_USER_IMG = require('../../assets/userImg/userProfileDefault.png');
 
 const BookDetailItems = ({ bookData }) => {
+   const [wishItem, setWishItem] = useState(false);
+   const [ownerData, setSetOwnerData] = useState({});
    const dispatch = useDispatch();
    const userImg =
-      bookData.ownerPicture === ''
-         ? DEFAULT_USER_IMG
-         : { uri: bookData.ownerPicture };
+      ownerData.picture === '' ? DEFAULT_USER_IMG : { uri: ownerData.picture };
    const navigation = useNavigation();
    function tradeButtonHandler() {
       navigation.navigate('PaymentMethodScreen', {
          externalBookId: bookData.id,
       });
    }
-
    const book = useSelector((state) => state.book.bookData);
 
    function getBookDataHandler() {
       const externalUserLibrarie = book.filter((bookItem) => {
-         return bookItem.owner.id === bookData.ownerId;
+         return bookItem.owner.id === ownerData.id;
       });
       dispatch(setExternalUserLibrarie(externalUserLibrarie));
    }
@@ -46,13 +46,29 @@ const BookDetailItems = ({ bookData }) => {
       navigation.navigate('ExternalProfileData');
    }
 
+   function wishBookButtonHandler() {
+      setWishItem(!wishItem);
+   }
    useEffect(() => {
-      dispatch(setExternalUserData(bookData));
+      setSetOwnerData({ ...bookData.owner });
+   }, [bookData]);
+   useEffect(() => {
       getBookDataHandler();
-   }, [dispatch, bookData]);
+   }, [ownerData]);
+   useEffect(() => {
+      dispatch(setExternalUserData(ownerData));
+   }, [ownerData]);
 
    return (
       <View style={styles.container}>
+         <View style={styles.wishIconBtnContainer}>
+            <IconBtn
+               color={Colors.secondary}
+               icon={wishItem ? 'heart' : 'heart-outline'}
+               size={40}
+               onPress={wishBookButtonHandler}
+            />
+         </View>
          <View style={styles.sectionInfo}>
             <View>
                <Text style={styles.price}>Pontos: {bookData.price}</Text>
@@ -68,7 +84,7 @@ const BookDetailItems = ({ bookData }) => {
                   />
                </Pressable>
                <Text style={styles.userProfileText}>
-                  {`${bookData.ownerFirstName} ${bookData.ownerLastName}`}
+                  {`${ownerData.firstName} ${ownerData.lastName}`}
                </Text>
             </View>
          </View>
@@ -131,7 +147,7 @@ const styles = StyleSheet.create({
       justifyContent: 'space-around',
       alignItems: 'center',
       flexDirection: 'row',
-      marginTop: 30,
+      marginTop: -30,
    },
    userProfile: {
       justifyContent: 'center',
@@ -202,4 +218,5 @@ const styles = StyleSheet.create({
       height: 60,
       backgroundColor: Colors.secondary,
    },
+   wishIconBtnContainer: { alignItems: 'flex-end', bottom: 55, right: 15 },
 });

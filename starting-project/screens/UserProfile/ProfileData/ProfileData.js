@@ -21,7 +21,10 @@ import {
    sendUserProfilePicture,
    fetchUserLibrarie,
 } from '../../../store/redux-store/user/user-actions';
+import { setExternalUserData } from '../../../store/redux-store/externalUser/externalUser-actions';
+
 import { useSelector, useDispatch } from 'react-redux';
+import BookSelectInformation from '../../../componnets/BooksSection/BookSelectInformation';
 
 const { width, height } = Dimensions.get('window');
 const DEFAULT_STATE = 'Estado não cadastrado';
@@ -39,6 +42,7 @@ const ProfileData = ({ navigation }) => {
 
    const [bookData, setBookData] = useState({});
    const [bookOption, setBookOption] = useState(true);
+   const [hasNoBooks, setHasNoBooks] = useState(false);
    const [whishOption, setWhishOption] = useState(false);
    const [contactOption, setContactOption] = useState(false);
 
@@ -51,12 +55,17 @@ const ProfileData = ({ navigation }) => {
    const hideAddressModal = () => setAddressIsVisible(false);
 
    useEffect(() => {
+      dispatch(setExternalUserData(userData));
       dispatch(fetchUserLibrarie(authCtx.token));
-      dispatch(fetchUserData(authCtx.token));
-      // if (userLibrarie.length === 0) {
-      //    console.log('Menor');
-      // }
-   }, [dispatch, userData, userLibrarie]);
+   }, [dispatch]);
+
+   useEffect(() => {
+      if (userLibrarie.length === 0) {
+         setHasNoBooks(true);
+      } else {
+         setHasNoBooks(false);
+      }
+   }, [userLibrarie]);
 
    function addressHandler() {
       setAddressIsVisible(true);
@@ -133,6 +142,7 @@ const ProfileData = ({ navigation }) => {
       if (!image.cancelled) {
          const userPicture = { picture: image.uri };
          dispatch(sendUserProfilePicture(authCtx.token, userPicture));
+         dispatch(fetchUserData(authCtx.token));
       }
    }
 
@@ -208,6 +218,11 @@ const ProfileData = ({ navigation }) => {
                      />
                   </View>
                   <UserBookSection items={userLibrarie} />
+                  {hasNoBooks && (
+                     <BookSelectInformation
+                        text={`Nenhum livro cadastrado no momento, cadastre um livro clicando no botão de '+'.`}
+                     />
+                  )}
                </View>
             )}
             {whishOption && (

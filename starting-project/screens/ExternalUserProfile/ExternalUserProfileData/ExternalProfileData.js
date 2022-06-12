@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, Dimensions } from 'react-native';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Divider, Avatar } from 'react-native-paper';
 
 import { Colors } from '../../../constants/styles';
@@ -21,9 +21,7 @@ const ExternalProfileData = ({ navigation }) => {
    const userData = useSelector((state) => state.externalUser.userData);
    const userLibrarie = useSelector((state) => state.externalUser.userLibrarie);
    const userImg =
-      userData.ownerPicture === ''
-         ? DEFAULT_USER_IMG
-         : { uri: userData.ownerPicture };
+      userData.picture === '' ? DEFAULT_USER_IMG : { uri: userData.picture };
 
    const [bookOption, setBookOption] = useState(true);
    const [whishOption, setWhishOption] = useState(false);
@@ -58,17 +56,15 @@ const ExternalProfileData = ({ navigation }) => {
                      />
 
                      <Text style={[styles.text, styles.userText]}>
-                        {`${userData.ownerFirstName} ${userData.ownerLastName}`}
+                        {`${userData.firstName} ${userData.lastName}`}
                      </Text>
                      <Text style={[styles.text, styles.userState]}>
-                        {userData.ownerState === null
+                        {userData.state === null
                            ? DEFAULT_STATE
-                           : userData.ownerState}
+                           : userData.state}
                      </Text>
                      <Text style={[styles.text, styles.userCity]}>
-                        {userData.ownerCity === null
-                           ? DEFAULT_CITY
-                           : userData.ownerCity}
+                        {userData.city === null ? DEFAULT_CITY : userData.city}
                      </Text>
                   </View>
                </View>
@@ -109,7 +105,7 @@ const ExternalProfileData = ({ navigation }) => {
             {contactOption && (
                <View style={styles.userLibrary}>
                   <TextIcon
-                     text={userData.ownerTelephone}
+                     text={userData.telephone}
                      textConfig={styles.textIconTextConfig}
                      leftIconConfig={{
                         name: 'call-outline',
@@ -118,7 +114,7 @@ const ExternalProfileData = ({ navigation }) => {
                      }}
                   />
                   <TextIcon
-                     text={userData.ownerCellphone}
+                     text={userData.cellphone}
                      textConfig={styles.textIconTextConfig}
                      leftIconConfig={{
                         name: 'phone-portrait-outline',
@@ -128,9 +124,9 @@ const ExternalProfileData = ({ navigation }) => {
                   />
                   <TextIcon
                      text={
-                        userData.ownerState === null
+                        userData.state === null
                            ? DEFAULT_ADDRESS
-                           : userData.ownerState
+                           : userData.state
                      }
                      leftIconConfig={{
                         name: 'location-outline',

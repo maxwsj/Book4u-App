@@ -8,13 +8,14 @@ import BookSynopsisContainer from '../../BookDetails/BookSynopsisContainer';
 import BookTradeContainer from '../../BookDetails/BookTradeContainer';
 import Button from '../../UI/Button';
 import { useNavigation } from '@react-navigation/native';
-
+import { useSelector } from 'react-redux';
 const DEFAULT_USER_IMG = require('../../../assets/userImg/userProfileDefault.png');
 
 const { width } = Dimensions.get('window');
 
 const UserBookDetailItem = ({ bookData, isExternalUser }) => {
    const navigation = useNavigation();
+   const userData = useSelector((state) => state.externalUser.userData);
 
    function tradeButtonHandler() {
       navigation.navigate('PaymentMethodScreen', {
@@ -23,9 +24,7 @@ const UserBookDetailItem = ({ bookData, isExternalUser }) => {
    }
 
    const userImg =
-      bookData.ownerPicture === ''
-         ? DEFAULT_USER_IMG
-         : { uri: bookData.ownerPicture };
+      userData.picture === '' ? DEFAULT_USER_IMG : { uri: userData.picture };
 
    return (
       <View style={styles.container}>
@@ -42,7 +41,7 @@ const UserBookDetailItem = ({ bookData, isExternalUser }) => {
                   source={userImg}
                />
                <Text style={styles.userProfileText}>
-                  {`${bookData.ownerFirstName} ${bookData.ownerLastName}`}
+                  {`${userData.firstName} ${userData.lastName}`}
                </Text>
             </View>
          </View>

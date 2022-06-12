@@ -3,6 +3,7 @@ import { launchImageLibraryAsync } from 'expo-image-picker';
 import { Divider, Checkbox } from 'react-native-paper';
 import { CommonActions } from '@react-navigation/native';
 import { useState, useContext, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
 import ImageButton from '../../../componnets/UserLibrarie/ImageButton';
 import UserBookTable from '../../../componnets/UserLibrarie/UserBookTable';
@@ -98,6 +99,9 @@ const RegisterBook = ({ route, navigation }) => {
    }
 
    async function submitHandler() {
+      const priceConversion = +formData.price.replace(',', '.');
+      const fixedPrice = priceConversion.toFixed();
+
       const bookData = {
          name: formData.title,
          pagesQuantity: +formData.pageQuantity,
@@ -105,7 +109,7 @@ const RegisterBook = ({ route, navigation }) => {
          status: 'Disponível',
          condition: bookCondition,
          createdAt: '',
-         price: formData.price,
+         price: fixedPrice.toString(),
          author: {
             name: formData.author,
          },
@@ -203,7 +207,7 @@ const RegisterBook = ({ route, navigation }) => {
                <Text style={styles.bookPriceText}>Pontos: </Text>
                <TextInput
                   style={styles.bookPriceInput}
-                  keyboardType='numeric'
+                  keyboardType='number-pad'
                   placeholder='Digite um Valor'
                   onChangeText={updateInputValueHandler.bind(this, 'price')}
                   value={formData.price}
