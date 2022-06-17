@@ -5,6 +5,7 @@ import { CommonActions } from '@react-navigation/native';
 import { useState, useContext, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
+import InvalidInputTxt from '../../../componnets/UI/InvalidInputTxt';
 import ImageButton from '../../../componnets/UserLibrarie/ImageButton';
 import UserBookTable from '../../../componnets/UserLibrarie/UserBookTable';
 import { Colors } from '../../../constants/styles';
@@ -12,9 +13,9 @@ import Button from '../../../componnets/UI/Button';
 import ImagePreview from '../../../componnets/UserLibrarie/ImagePreview';
 import bookService from '../../../util/http-book';
 import { AuthContext } from '../../../store/auth-context';
-
 const RegisterBook = ({ route, navigation }) => {
    const authCtx = useContext(AuthContext);
+   const [isInvalid, setIsInvalid] = useState(false);
 
    const [isNewBook, setIsNewBook] = useState(false);
    const [dropdownItem, setDropdownItem] = useState('');
@@ -99,50 +100,99 @@ const RegisterBook = ({ route, navigation }) => {
    }
 
    async function submitHandler() {
-      const priceConversion = +formData.price.replace(',', '.');
-      const fixedPrice = priceConversion.toFixed();
+      let {
+         title,
+         price,
+         synopsis,
+         author,
+         language,
+         publisher,
+         pageQuantity,
+         condition,
+      } = formData;
 
-      const bookData = {
-         name: formData.title,
-         pagesQuantity: +formData.pageQuantity,
-         synopsis: formData.synopsis,
-         status: 'Disponível',
-         condition: bookCondition,
-         createdAt: '',
-         price: fixedPrice.toString(),
-         author: {
-            name: formData.author,
-         },
-         language: {
-            name: formData.language,
-         },
-         publisher: {
-            name: formData.publisher,
-         },
-         category: [
-            {
-               name: dropdownItem,
+      title = title.trim();
+      price = +price.trim().replace(',', '.');
+      synopsis = synopsis.trim();
+      author = author.trim();
+      language = language.trim();
+      publisher = publisher.trim();
+      pageQuantity = +pageQuantity.trim();
+      condition = condition.trim();
+
+      const titleIsInvalid = title.length > 0;
+      const synopsisIsInvalid = synopsis.length > 0;
+      const authorIsInvalid = author.length > 0;
+      const languageIsInvalid = language.length > 0;
+      const publisherIsInvalid = publisher.length > 0;
+      const isUnchecked = isNewBook || isSemiNewBook || isUsedBook;
+
+      const pagesQuantityIsInvalid = pageQuantity > 0;
+      const dropDownValueIsInvalid = !dropdownItem === null;
+      const frontSideImageIsInvalid = !frontSideImage === null;
+      const backSideIsInvalid = !backSide === null;
+      const rightSideIsInvalid = !rightSide === null;
+      const leftSideIsInvalid = !leftSide === null;
+
+      if (
+         !titleIsInvalid ||
+         !synopsisIsInvalid ||
+         !authorIsInvalid ||
+         !languageIsInvalid ||
+         !publisherIsInvalid ||
+         !isUnchecked ||
+         !pagesQuantityIsInvalid ||
+         dropDownValueIsInvalid ||
+         frontSideImageIsInvalid ||
+         backSideIsInvalid ||
+         rightSideIsInvalid ||
+         leftSideIsInvalid
+      ) {
+         setIsInvalid(true);
+      } else {
+         const bookData = {
+            name: title,
+            pagesQuantity: pageQuantity,
+            synopsis: synopsis,
+            status: 'Disponível',
+            condition: bookCondition,
+            createdAt: '',
+            price: price.toString(),
+            author: {
+               name: author,
             },
-         ],
-         bookImages: {
-            frontSideImage: frontSideImage,
-            rightSideImage: rightSide,
-            leftSideImage: leftSide,
-            backSideImage: backSide,
-         },
-      };
-      bookService.registerBook(bookData, authCtx.token);
-      navigation.dispatch(
-         CommonActions.reset({
-            index: 1,
-            routes: [
-               { name: 'RegisterBook' },
+            language: {
+               name: language,
+            },
+            publisher: {
+               name: publisher,
+            },
+            category: [
                {
-                  name: 'ProfileData',
+                  name: dropdownItem,
                },
             ],
-         })
-      );
+            bookImages: {
+               frontSideImage: frontSideImage,
+               rightSideImage: rightSide,
+               leftSideImage: leftSide,
+               backSideImage: backSide,
+            },
+         };
+         setIsInvalid(false);
+         bookService.registerBook(bookData, authCtx.token);
+         navigation.dispatch(
+            CommonActions.reset({
+               index: 1,
+               routes: [
+                  { name: 'RegisterBook' },
+                  {
+                     name: 'ProfileData',
+                  },
+               ],
+            })
+         );
+      }
    }
    async function leftSideImageHandler() {
       const image = await launchImageLibraryAsync({
@@ -190,15 +240,25 @@ const RegisterBook = ({ route, navigation }) => {
             <ImagePreview imageUrl={rightSide} />
          </ScrollView>
          <View style={styles.imageButtonsContainer}>
-            <ImageButton setBtnTitle='Capa' onPress={frontSideImageHandler} />
+            <ImageButton
+               setBtnTitle='Capa'
+               onPress={frontSideImageHandler}
+               isInvalid={isInvalid}
+            />
             <ImageButton
                setBtnTitle='Contracapa'
                onPress={backSideImageHandler}
+               isInvalid={isInvalid}
             />
-            <ImageButton setBtnTitle='Lombada' onPress={leftSideImageHandler} />
+            <ImageButton
+               setBtnTitle='Lombada'
+               onPress={leftSideImageHandler}
+               isInvalid={isInvalid}
+            />
             <ImageButton
                setBtnTitle='Folha de rosto'
                onPress={rightSideImageHandler}
+               isInvalid={isInvalid}
             />
          </View>
 
@@ -206,18 +266,27 @@ const RegisterBook = ({ route, navigation }) => {
             <View style={styles.bookPriceContainer}>
                <Text style={styles.bookPriceText}>Pontos: </Text>
                <TextInput
-                  style={styles.bookPriceInput}
+                  style={[
+                     isInvalid === false
+                        ? styles.bookPriceInput
+                        : styles.bookPriceInputIsInvalid,
+                  ]}
                   keyboardType='number-pad'
                   placeholder='Digite um Valor'
                   onChangeText={updateInputValueHandler.bind(this, 'price')}
                   value={formData.price}
                />
             </View>
+
             <View style={styles.synopsisContainer}>
                <Text style={styles.synopsisTitle}>Sinopse</Text>
                <TextInput
                   multiline={true}
-                  style={styles.synopsisInput}
+                  style={[
+                     isInvalid === false
+                        ? styles.synopsisInput
+                        : styles.synopsisIsInvalid,
+                  ]}
                   placeholder='INSIRA UMA SINOPSE AQUI...............'
                   onChangeText={updateInputValueHandler.bind(this, 'synopsis')}
                   value={formData.synopsis}
@@ -232,13 +301,16 @@ const RegisterBook = ({ route, navigation }) => {
                   detailStyles={styles.topDetail}
                   onUpdateValue={updateInputValueHandler.bind(this, 'title')}
                   value={formData.title}
+                  isInvalid={isInvalid}
                />
+
                <UserBookTable
                   detailTitle={'Autor'}
                   title={'Insira um Autor'}
                   setDivider={true}
                   onUpdateValue={updateInputValueHandler.bind(this, 'author')}
                   value={formData.author}
+                  isInvalid={isInvalid}
                />
                <UserBookTable
                   detailTitle={'Categoria'}
@@ -246,6 +318,7 @@ const RegisterBook = ({ route, navigation }) => {
                   value={formData.category}
                   setDropdown={true}
                   onSelect={selectedItem}
+                  isInvalid={isInvalid}
                />
                <UserBookTable
                   detailTitle={'Idioma'}
@@ -253,6 +326,7 @@ const RegisterBook = ({ route, navigation }) => {
                   setDivider={true}
                   onUpdateValue={updateInputValueHandler.bind(this, 'language')}
                   value={formData.language}
+                  isInvalid={isInvalid}
                />
                <UserBookTable
                   detailTitle={'Editora'}
@@ -263,6 +337,7 @@ const RegisterBook = ({ route, navigation }) => {
                      'publisher'
                   )}
                   value={formData.publisher}
+                  isInvalid={isInvalid}
                />
                <UserBookTable
                   detailTitle={'Número de páginas'}
@@ -276,6 +351,7 @@ const RegisterBook = ({ route, navigation }) => {
                   inputConfig={{
                      keyboardType: 'numeric',
                   }}
+                  isInvalid={isInvalid}
                />
 
                <View style={[styles.detailItems, styles.bottomDetail]}>
@@ -284,7 +360,7 @@ const RegisterBook = ({ route, navigation }) => {
                   </View>
                   <Divider style={styles.dividerCheckbox} />
                   <View style={styles.detailTextWrapper}>
-                     <View>
+                     <View style={isInvalid && styles.checkboxIsInvalid}>
                         <Checkbox.Item
                            labelStyle={styles.checkBoxLabelStyle}
                            position='leading'
@@ -294,7 +370,7 @@ const RegisterBook = ({ route, navigation }) => {
                            color='#FF722D'
                         />
                      </View>
-                     <View>
+                     <View style={isInvalid && styles.checkboxIsInvalid}>
                         <Checkbox.Item
                            labelStyle={styles.checkBoxLabelStyle}
                            position='leading'
@@ -304,7 +380,7 @@ const RegisterBook = ({ route, navigation }) => {
                            color='#FF722D'
                         />
                      </View>
-                     <View>
+                     <View style={isInvalid && styles.checkboxIsInvalid}>
                         <Checkbox.Item
                            labelStyle={styles.checkBoxLabelStyle}
                            position='leading'
@@ -314,6 +390,9 @@ const RegisterBook = ({ route, navigation }) => {
                            color='#FF722D'
                         />
                      </View>
+                     {isInvalid && (
+                        <InvalidInputTxt>*Dados Incorretos</InvalidInputTxt>
+                     )}
                   </View>
                </View>
             </View>
@@ -376,6 +455,19 @@ const styles = StyleSheet.create({
       elevation: 3,
       borderRadius: 4,
    },
+   synopsisIsInvalid: {
+      flex: 1,
+      paddingTop: 10,
+      paddingRight: 10,
+      paddingBottom: 3,
+      paddingLeft: 5,
+      backgroundColor: Colors.papayaWhip,
+      fontSize: 14,
+      color: Colors.silver400,
+      fontFamily: 'lato-regular',
+      elevation: 3,
+      borderRadius: 4,
+   },
    bookPriceContainer: {
       flexDirection: 'row',
       alignItems: 'center',
@@ -385,6 +477,16 @@ const styles = StyleSheet.create({
       paddingRight: 10,
       marginLeft: 10,
       fontSize: 16,
+      color: Colors.secondary,
+      fontFamily: 'lato-regular',
+      borderRadius: 4,
+   },
+   bookPriceInputIsInvalid: {
+      flex: 1,
+      paddingRight: 10,
+      marginLeft: 10,
+      fontSize: 16,
+      backgroundColor: Colors.papayaWhip,
       color: Colors.secondary,
       fontFamily: 'lato-regular',
       borderRadius: 4,
@@ -464,5 +566,16 @@ const styles = StyleSheet.create({
       color: Colors.silver200,
       fontSize: 14,
       textAlign: 'center',
+   },
+
+   checkboxIsInvalid: {
+      backgroundColor: Colors.papayaWhip,
+      borderColor: Colors.white,
+      borderRadius: 5,
+      margin: 2,
+   },
+
+   inputStyle: {
+      marginRight: 55,
    },
 });

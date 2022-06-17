@@ -11,13 +11,19 @@ import { Colors } from '../../constants/styles';
 
 const { width, height } = Dimensions.get('window');
 
-const ImageButton = ({ setBtnTitle, onPress }) => {
+const ImageButton = ({ setBtnTitle, onPress, isInvalid }) => {
    return (
       <Pressable
          style={({ pressed }) => [pressed && styles.pressed]}
          onPress={onPress}
       >
-         <View style={styles.imageButton}>
+         <View
+            style={[
+               isInvalid === false
+                  ? styles.imageButton
+                  : styles.imageButtonIsInvalid,
+            ]}
+         >
             <View style={styles.buttonWrapper}>
                <Ionicons
                   name='push-outline'
@@ -40,6 +46,15 @@ const styles = StyleSheet.create({
       marginTop: 15,
       elevation: 2,
       backgroundColor: Colors.white,
+      borderRadius: 6,
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginHorizontal: 5,
+   },
+   imageButtonIsInvalid: {
+      marginTop: 15,
+      elevation: 2,
+      backgroundColor: Colors.papayaWhip,
       borderRadius: 6,
       justifyContent: 'center',
       alignItems: 'center',

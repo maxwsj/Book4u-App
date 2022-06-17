@@ -9,6 +9,7 @@ import { Provider } from 'react-redux';
 import store from './store/redux-store';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchBookData } from './store/redux-store/book/book-actions';
+import { fetchUserNotification } from './store/redux-store/user/user-actions';
 
 import AppLoading from 'expo-app-loading';
 
@@ -48,6 +49,7 @@ import ExchangeDetail from './screens/Payment/ExchangeDetail/ExchangeDetail';
 import CanceledExchange from './screens/Payment/PaymentSituation/CanceledExchange';
 import SuccessfullyExchanged from './screens/Payment/PaymentSituation/SuccessfullyExchanged';
 import HistoryDetailItem from './screens/Payment/HistoryDetails/HistoryDetailItem';
+import RequestDetail from './screens/UserProfile/UserNotification/RequestNotification/RequestDetail';
 
 // External user screens
 import ExternalProfileData from './screens/ExternalUserProfile/ExternalUserProfileData/ExternalProfileData';
@@ -92,6 +94,7 @@ function AuthenticatedStack() {
 
    useEffect(() => {
       dispatch(fetchBookData(authCtx.token));
+      dispatch(fetchUserNotification(authCtx.token));
    }, [dispatch]);
 
    function logoBtn() {
@@ -399,6 +402,42 @@ function AuthenticatedStack() {
                      onPress={prevScreenHandler}
                   />
                ),
+            }}
+         />
+         <Drawer.Screen
+            name='RequestDetail'
+            component={RequestDetail}
+            options={{
+               headerLeft: ({ tintColor }) => (
+                  <IconBtn
+                     icon='arrow-back-outline'
+                     color={tintColor}
+                     size={24}
+                     iconBtnStyle={styles.iconLeftBtn}
+                     onPress={() =>
+                        navigation.dispatch(
+                           CommonActions.reset({
+                              index: 1,
+                              routes: [
+                                 { name: 'RequestDetail' },
+                                 {
+                                    name: 'UserNotification',
+                                 },
+                              ],
+                           })
+                        )
+                     }
+                  />
+               ),
+               headerTitle: 'Detalhes do Pedido',
+               headerStyle: { backgroundColor: Colors.white50 },
+               headerTintColor: Colors.secondary,
+               headerTitleStyle: {
+                  color: Colors.silver400,
+                  fontFamily: 'poppins-regular',
+                  fontSize: 18,
+                  marginTop: 4,
+               },
             }}
          />
          <Drawer.Screen

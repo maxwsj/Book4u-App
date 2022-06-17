@@ -2,6 +2,7 @@ import { StyleSheet, Text, View, TextInput } from 'react-native';
 import { Divider } from 'react-native-paper';
 import { Colors } from '../../constants/styles';
 import DropdownCat from '../UI/Filter/DropdownCat';
+import InvalidInputTxt from '../UI/InvalidInputTxt';
 
 const UserBookTable = ({
    detailTitle,
@@ -12,6 +13,7 @@ const UserBookTable = ({
    inputConfig,
    setDropdown,
    onSelect,
+   isInvalid,
 }) => {
    return (
       <>
@@ -23,7 +25,11 @@ const UserBookTable = ({
             <View style={styles.detailTextWrapper}>
                <View>
                   <TextInput
-                     style={styles.inputStyles}
+                     style={
+                        isInvalid === false
+                           ? styles.inputStyles
+                           : styles.invalidInput
+                     }
                      placeholder={title}
                      onChangeText={onUpdateValue}
                      {...inputConfig}
@@ -38,6 +44,11 @@ const UserBookTable = ({
                      />
                   )}
                </View>
+               {isInvalid && (
+                  <InvalidInputTxt inputStyle={styles.inputStyle}>
+                     *Dados Incorretos
+                  </InvalidInputTxt>
+               )}
             </View>
          </View>
          {setDivider && <Divider style={styles.dividerPaper} />}
@@ -114,5 +125,15 @@ const styles = StyleSheet.create({
    },
    dropdownLabelStyle: {
       color: Colors.silver300,
+   },
+   inputStyle: {
+      marginLeft: 55,
+   },
+   invalidInput: {
+      backgroundColor: Colors.papayaWhip,
+      fontFamily: 'lato-bold',
+      color: Colors.silver400,
+      fontSize: 14,
+      textAlign: 'center',
    },
 });

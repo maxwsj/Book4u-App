@@ -1,26 +1,48 @@
 import { StyleSheet, Text, View, Pressable } from 'react-native';
-import React from 'react';
+import { useEffect, useContext } from 'react';
 import { Avatar } from 'react-native-paper';
 import Button from '../Button';
 import { Colors } from '../../../constants/styles';
+import { useNavigation } from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
+import { fetchRequestById } from '../../../store/redux-store/user/user-actions';
+import { AuthContext } from '../../../store/auth-context';
 
-const TradeNotificationItem = () => {
+const TradeNotificationItem = ({
+   externalUserName,
+   externalUserAddress,
+   externalUserPicture,
+   tradeId,
+}) => {
+   const dispatch = useDispatch();
+   const authCtx = useContext(AuthContext);
+
+   const navigation = useNavigation();
+
+   function requestDetailHandler() {
+      navigation.navigate('RequestDetail', { tradeId: tradeId });
+      dispatch(fetchRequestById(authCtx.token, tradeId));
+   }
    return (
       <View style={styles.card}>
          <View style={styles.cardItems}>
             <Pressable onPress={() => console.log('profile')}>
-               <Avatar.Image size={50} style={styles.profileBackgroundColor} />
+               <Avatar.Image
+                  size={50}
+                  style={styles.profileBackgroundColor}
+                  source={{ uri: externalUserPicture }}
+               />
             </Pressable>
             <View>
-               <Text style={styles.userName}>Aragon Swifte</Text>
-               <Text style={styles.userAddress}>Salvador Bahia</Text>
+               <Text style={styles.userName}>{externalUserName}</Text>
+               <Text style={styles.userAddress}>{externalUserAddress}</Text>
             </View>
             <View>
                <Text style={styles.textNotification}>1 minuto atrás</Text>
             </View>
          </View>
          <View style={styles.buttonContainer}>
-            <Button stylesBtn={styles.button}>
+            <Button onPress={requestDetailHandler} stylesBtn={styles.button}>
                Deseja realizar uma troca !
             </Button>
          </View>

@@ -2,8 +2,8 @@ import { StyleSheet, Text } from 'react-native';
 import React from 'react';
 import { Colors } from '../../constants/styles';
 
-const InvalidInputTxt = ({ children }) => {
-   return <Text style={[styles.invalidText]}>{children}</Text>;
+const InvalidInputTxt = ({ children, inputStyle }) => {
+   return <Text style={[styles.invalidText, inputStyle]}>{children}</Text>;
 };
 
 export default InvalidInputTxt;

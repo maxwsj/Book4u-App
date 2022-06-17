@@ -2,8 +2,22 @@ import { StyleSheet, Pressable, View, Text, ScrollView } from 'react-native';
 import ExchangeNotificationItem from '../../../componnets/UI/Notification/ExchangeNotificationItem';
 import SuccessfullyNotificationItem from '../../../componnets/UI/Notification/SuccessfullyNotificationItem';
 import UnsuccessfulNotificationItem from '../../../componnets/UI/Notification/UnsuccessfulNotificationItem';
+import { useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
 
 const UserNotification = () => {
+   const [isNotEmpty, setIsNotEmpty] = useState(false);
+
+   useEffect(() => {
+      if (notification.length === 0) {
+         setIsNotEmpty(false);
+      } else {
+         setIsNotEmpty(true);
+      }
+   }, [notification]);
+
+   const notification = useSelector((state) => state.user.userNotifications);
+
    return (
       <ScrollView>
          <View style={styles.container}>
@@ -16,9 +30,16 @@ const UserNotification = () => {
                   <Text>Marcar tudo como lido</Text>
                </Pressable>
             </View>
-            <ExchangeNotificationItem />
-            <SuccessfullyNotificationItem />
-            <UnsuccessfulNotificationItem />
+            {isNotEmpty &&
+               notification.map((item) => (
+                  <ExchangeNotificationItem
+                     key={item.tradeId}
+                     externalUserName={item.userRequested.owner}
+                     externalUserAddress={`${item.userRequested.state} ${item.userRequested.city}`}
+                     externalUserPicture={item.userRequested.picture}
+                     tradeId={item.tradeId}
+                  />
+               ))}
          </View>
       </ScrollView>
    );

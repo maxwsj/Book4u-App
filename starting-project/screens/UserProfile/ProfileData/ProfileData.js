@@ -18,6 +18,9 @@ import UserModal from '../../../componnets/ProfileData/UserModal';
 import {
    fetchUserData,
    sendUserPersonalData,
+   sendUserCellphone,
+   sendUserTelephone,
+   sendUserAddress,
    sendUserProfilePicture,
    fetchUserLibrarie,
 } from '../../../store/redux-store/user/user-actions';
@@ -117,19 +120,16 @@ const ProfileData = ({ navigation }) => {
       navigation.navigate('DeleteBook');
    }
 
-   async function submitAddressHandler(userPersonalData) {
-      dispatch(sendUserPersonalData(authCtx.token, userPersonalData));
-      dispatch(fetchUserData(authCtx.token));
+   async function submitAddressHandler(userAddress) {
+      dispatch(sendUserAddress(authCtx.token, userAddress));
    }
 
    async function submitCellphoneHandler(userCellphone) {
-      dispatch(sendUserPersonalData(authCtx.token, userCellphone));
-      dispatch(fetchUserData(authCtx.token));
+      dispatch(sendUserCellphone(authCtx.token, userCellphone));
    }
 
    async function submitTelephoneHandler(userTelephone) {
-      dispatch(sendUserPersonalData(authCtx.token, userTelephone));
-      dispatch(fetchUserData(authCtx.token));
+      dispatch(sendUserTelephone(authCtx.token, userTelephone));
    }
 
    async function profilePictureHandler() {

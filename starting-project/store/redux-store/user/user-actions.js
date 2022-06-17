@@ -35,6 +35,74 @@ export function sendUserPersonalData(userToken, userPersonalData) {
       } catch (error) {}
    };
 }
+export function sendUserCellphone(userToken, userCellphone) {
+   return async (dispatch) => {
+      async function sendData() {
+         const response = await axios({
+            url: Config.API_URL + `api/personal-data/${userToken}`,
+            method: 'POST',
+            data: userCellphone,
+            timeout: Config.TIMEOUT_REQUEST,
+            headers: {
+               token: userToken,
+               Authorization: `Bearer ${userToken}`,
+               'Content-Type': 'application/json',
+            },
+         });
+         return response.status;
+      }
+      try {
+         const response = await sendData();
+         dispatch(userActions.getUserCellphone(userCellphone));
+      } catch (error) {}
+   };
+}
+
+export function sendUserTelephone(userToken, userTelephone) {
+   return async (dispatch) => {
+      async function sendData() {
+         const response = await axios({
+            url: Config.API_URL + `api/personal-data/${userToken}`,
+            method: 'POST',
+            data: userTelephone,
+            timeout: Config.TIMEOUT_REQUEST,
+            headers: {
+               token: userToken,
+               Authorization: `Bearer ${userToken}`,
+               'Content-Type': 'application/json',
+            },
+         });
+         return response.status;
+      }
+      try {
+         const response = await sendData();
+         dispatch(userActions.getUserTelephone(userTelephone));
+      } catch (error) {}
+   };
+}
+
+export function sendUserAddress(userToken, userAddress) {
+   return async (dispatch) => {
+      async function sendData() {
+         const response = await axios({
+            url: Config.API_URL + `api/personal-data/${userToken}`,
+            method: 'POST',
+            data: userAddress,
+            timeout: Config.TIMEOUT_REQUEST,
+            headers: {
+               token: userToken,
+               Authorization: `Bearer ${userToken}`,
+               'Content-Type': 'application/json',
+            },
+         });
+         return response.status;
+      }
+      try {
+         const response = await sendData();
+         dispatch(userActions.getUserAddress(userAddress));
+      } catch (error) {}
+   };
+}
 
 export function fetchUserData(userToken) {
    return async (dispatch) => {
@@ -95,7 +163,7 @@ export function sendUserProfilePicture(userToken, userProfilePicture) {
          const response = await sendData();
          const { picture } = userProfilePicture;
          dispatch(
-            userActions.getUserData({
+            userActions.getUserProfilePicture({
                picture,
             })
          );
@@ -179,6 +247,52 @@ export function fetchUserLibrarie(userToken) {
             };
          });
          dispatch(userActions.getLibrarie(librarie));
+      } catch (error) {}
+   };
+}
+export function fetchUserNotification(userToken) {
+   return async (dispatch) => {
+      async function fetchData() {
+         const response = await axios({
+            url:
+               Config.API_URL +
+               `api/exchange/exchangeRequestNotification/${userToken}`,
+            method: 'GET',
+            timeout: Config.TIMEOUT_REQUEST,
+            headers: {
+               token: userToken,
+               Authorization: `Bearer ${userToken}`,
+               'Content-Type': 'application/json',
+            },
+         });
+         const data = response.data;
+         return data;
+      }
+      try {
+         const notification = await fetchData();
+
+         dispatch(userActions.getUserNotifications(notification));
+      } catch (error) {}
+   };
+}
+export function fetchRequestById(userToken, requestId) {
+   return async (dispatch) => {
+      async function fetchData() {
+         const response = await axios({
+            url: Config.API_URL + `api/exchange/getRequestById/${requestId}`,
+            method: 'GET',
+            timeout: Config.TIMEOUT_REQUEST,
+            headers: {
+               Authorization: `Bearer ${userToken}`,
+               'Content-Type': 'application/json',
+            },
+         });
+         const data = response.data;
+         return data;
+      }
+      try {
+         const request = await fetchData();
+         dispatch(userActions.getUserRequestDetails(request));
       } catch (error) {}
    };
 }
