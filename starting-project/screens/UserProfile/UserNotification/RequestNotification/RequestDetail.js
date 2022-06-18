@@ -7,8 +7,11 @@ import PaymentNotification from '../../../../componnets/UI/PaymentCard/PaymentNo
 import { useSelector, useDispatch } from 'react-redux';
 
 import { AuthContext } from '../../../../store/auth-context';
+import userService from '../../../../util/http-user';
+import { CommonActions } from '@react-navigation/native';
 
 const RequestDetail = ({ route, navigation }) => {
+   const { tradeId } = route.params;
    const authCtx = useContext(AuthContext);
    const dispatch = useDispatch();
    const requestData = useSelector((state) => state.user.requestDetail);
@@ -56,6 +59,35 @@ const RequestDetail = ({ route, navigation }) => {
          setCreditsIsLess(false);
       }
    }, [bookOfferedData, creditsIsGreater, creditsIsLess, creditIsEqual]);
+
+   function confirmExchangeHandler() {
+      userService.confirmExchange(authCtx.token, tradeId, 'Confirmado');
+      navigation.dispatch(
+         CommonActions.reset({
+            index: 1,
+            routes: [
+               { name: 'RequestDetail' },
+               {
+                  name: 'Home',
+               },
+            ],
+         })
+      );
+   }
+   function refuseExchangeHandler() {
+      userService.confirmExchange(authCtx.token, tradeId, 'Recusado');
+      navigation.dispatch(
+         CommonActions.reset({
+            index: 1,
+            routes: [
+               { name: 'RequestDetail' },
+               {
+                  name: 'Home',
+               },
+            ],
+         })
+      );
+   }
 
    return (
       <ScrollView>
@@ -135,10 +167,16 @@ const RequestDetail = ({ route, navigation }) => {
                />
             )}
             <View style={styles.buttonContainer}>
-               <Button onPress={() => {}} stylesBtn={styles.buttonCancel}>
+               <Button
+                  onPress={refuseExchangeHandler}
+                  stylesBtn={styles.buttonCancel}
+               >
                   Recusar
                </Button>
-               <Button onPress={() => {}} stylesBtn={styles.buttonConfirm}>
+               <Button
+                  onPress={confirmExchangeHandler}
+                  stylesBtn={styles.buttonConfirm}
+               >
                   Aceitar
                </Button>
             </View>

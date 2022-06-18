@@ -1,31 +1,50 @@
 import { StyleSheet, Text, View } from 'react-native';
-import React from 'react';
+import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import BookImage from '../../../componnets/UI/BookImage';
 import { Colors } from '../../../constants/styles';
 const HistoryDetailItem = () => {
+   const filteredHistory = useSelector((state) => state.user.filteredHistory);
+   console.log(filteredHistory);
    return (
       <View style={styles.container}>
          <View style={styles.textInformation}>
             <View style={[styles.textItem, styles.itemMargin]}>
                <Text style={styles.title}>Solicitante</Text>
-               <Text style={styles.text}>Aragon Swifte</Text>
+               <Text style={styles.text}>
+                  {filteredHistory.requester.firstName}
+               </Text>
                <Text style={[styles.title, styles.titleMargin]}>Data</Text>
-               <Text style={styles.text}>20 de Agosto de 2022</Text>
+               <Text style={styles.text}>{filteredHistory.exchangeDate}</Text>
             </View>
             <View style={styles.textItem}>
                <Text style={styles.title}>Trocado por</Text>
-               <Text style={styles.text}>Livro</Text>
-               <Text style={[styles.title, styles.titleMargin]}>Endereço</Text>
-               <Text style={styles.text}>Rua pereira silva</Text>
                <Text style={styles.text}>
-                  Joao sérgio alves, Margarida, 990
+                  {filteredHistory.type == 'BOOK' ? 'Livro' : 'Ponto'}
+               </Text>
+               <Text style={[styles.title, styles.titleMargin]}>Endereço</Text>
+               <Text
+                  style={styles.text}
+               >{`${filteredHistory.requester.zipCode}, ${filteredHistory.requester.state} - ${filteredHistory.requester.city}`}</Text>
+               <Text style={styles.text}>
+                  {`${filteredHistory.requester.district}, ${filteredHistory.requester.streetName} ${filteredHistory.requester.houseNumber}`}
                </Text>
             </View>
          </View>
          <Text style={styles.exchanType}>Ofertado</Text>
-         <BookImage />
+         <BookImage
+            bookName={filteredHistory.offered.name}
+            bookPrice={filteredHistory.offered.price}
+            bookAuthor={filteredHistory.offered.author.name}
+            image={filteredHistory.offered.images.frontSideImage}
+         />
          <Text style={styles.exchanType}>Recebido</Text>
-         <BookImage />
+         <BookImage
+            bookName={filteredHistory.received.name}
+            bookPrice={filteredHistory.received.price}
+            bookAuthor={filteredHistory.received.author.name}
+            image={filteredHistory.received.images.frontSideImage}
+         />
       </View>
    );
 };

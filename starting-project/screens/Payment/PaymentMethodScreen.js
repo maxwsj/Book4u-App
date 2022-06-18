@@ -6,12 +6,14 @@ import PaymentButton from '../../componnets/UI/PaymentButton';
 const bookImg = require('../../assets/img/book.png');
 const moneyImg = require('../../assets/img/money.png');
 let USER_OPTION = '';
+import { useSelector } from 'react-redux';
 
 const PaymentMethodScreen = ({ route, navigation }) => {
    const { userBookId, externalBookId, userBookIsSelected } = route.params;
    const [externalId, setExternalId] = useState('');
    const [moneyIsSelected, setMoneyIsSelected] = useState(false);
    const [bookIsSelected, setBookIsSelected] = useState(false);
+   const userCredits = useSelector((state) => state.user.userCredits);
 
    useEffect(() => {
       setExternalId(externalBookId);
@@ -33,21 +35,30 @@ const PaymentMethodScreen = ({ route, navigation }) => {
    }
 
    function confirmOptionHandler() {
-      if (moneyIsSelected === true) {
-         USER_OPTION = 'Money';
-         navigation.navigate('ExchangeDetail', {
-            externalBookId: externalId,
-            userBookId: userBookId,
-            userOption: USER_OPTION,
-         });
-      } else if (bookIsSelected === true) {
-         USER_OPTION = 'Book';
+      if (moneyIsSelected === true && userCredits > 0) {
+         USER_OPTION = 'Credit';
          navigation.navigate('ExchangeDetail', {
             externalBookId: externalId,
             userBookId: userBookId,
             userOption: USER_OPTION,
          });
       } else {
+         Alert.alert(
+            'Créditos Insuficientes !',
+            'Escolha outro método de pagamento!'
+         );
+         setMoneyIsSelected(!moneyIsSelected);
+      }
+
+      if (bookIsSelected === true) {
+         USER_OPTION = 'Book';
+         navigation.navigate('ExchangeDetail', {
+            externalBookId: externalId,
+            userBookId: userBookId,
+            userOption: USER_OPTION,
+         });
+      }
+      if (bookIsSelected === false && moneyIsSelected === false) {
          Alert.alert(
             'Pagamento não selecionado !',
             'Escolha um método de pagamento!'

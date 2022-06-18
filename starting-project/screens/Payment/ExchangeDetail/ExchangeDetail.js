@@ -63,12 +63,16 @@ const ExchangeDetail = ({ route, navigation }) => {
    }, []);
 
    async function sendUserExchangeOptionHandler() {
-      console.log('Troca realizada com sucesso !');
-      userService.exchangeBookWithBook(
-         authCtx.token,
-         filteredUserBookData.id,
-         externalBookId
-      );
+      if (userOption == 'Book') {
+         userService.exchangeBookWithBook(
+            authCtx.token,
+            filteredUserBookData.id,
+            externalBookId
+         );
+      }
+      if (userOption == 'Credit') {
+         userService.exchangeBookWithCredit(authCtx.token, externalBookId);
+      }
    }
 
    return (
@@ -120,12 +124,14 @@ const ExchangeDetail = ({ route, navigation }) => {
             ) : null}
             {creditsIsGreater && (
                <PaymentNotification
-                  text={'O valor do seu livro é maior que o livro desejado!'}
+                  text={`O valor do seu livro é maior que o valor do livro desejado! Caso aceite a troca, serão adicionados um total de: ${
+                     +filteredUserBookData.price - +selectedBookData.price
+                  } pontos em sua conta.`}
                />
             )}
             {creditsIsLess && (
                <PaymentNotification
-                  text={'O valor do seu livro é menor que o livro desejado!'}
+                  text={`O valor do seu livro é menor que o valor do livro desejado! Caso prossiga com a troca, o usuário será notificado sobre o seu desejo de troca.`}
                />
             )}
             {creditIsEqual && (

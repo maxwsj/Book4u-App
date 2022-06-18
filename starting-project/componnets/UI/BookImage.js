@@ -2,16 +2,16 @@ import { StyleSheet, Text, View, Image } from 'react-native';
 import React from 'react';
 import { Colors } from '../../constants/styles';
 
-const BookImage = () => {
+const BookImage = ({ image, bookName, bookAuthor, bookPrice }) => {
    return (
       <View style={styles.imageItem}>
          <View style={styles.imageContainer}>
-            <Image style={styles.image} />
+            <Image style={styles.image} source={{ uri: image }} />
          </View>
          <View style={styles.textContainer}>
-            <Text style={styles.bookTitle}>How innovation works</Text>
-            <Text style={styles.bookAuthor}>Matt Ridley</Text>
-            <Text style={styles.bookPrice}>Pontos: 30</Text>
+            <Text style={styles.bookTitle}>{bookName}</Text>
+            <Text style={styles.bookAuthor}>{bookAuthor}</Text>
+            <Text style={styles.bookPrice}>Pontos: {bookPrice}</Text>
          </View>
       </View>
    );
@@ -32,7 +32,6 @@ const styles = StyleSheet.create({
    image: {
       width: '100%',
       height: '100%',
-      backgroundColor: Colors.darkCyan,
       borderRadius: 5,
    },
    bookTitle: {

@@ -44,6 +44,22 @@ class BookService {
       const data = response.data;
       return data;
    }
+
+   async setReadNotification(userToken, tradeId) {
+      const response = await axios({
+         url: Config.API_URL + `api/exchange/readAllNotifications/${userToken}`,
+         method: 'PUT',
+         timeout: Config.TIMEOUT_REQUEST,
+         data: { ids: [tradeId] },
+         headers: {
+            token: userToken,
+            Authorization: `Bearer ${userToken}`,
+            'Content-Type': 'application/json',
+         },
+      });
+      const data = response.data;
+      return data;
+   }
 }
 
 let bookService = new BookService();

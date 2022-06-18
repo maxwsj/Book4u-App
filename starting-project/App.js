@@ -9,7 +9,12 @@ import { Provider } from 'react-redux';
 import store from './store/redux-store';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchBookData } from './store/redux-store/book/book-actions';
-import { fetchUserNotification } from './store/redux-store/user/user-actions';
+import {
+   fetchExchangeNotification,
+   fetchNotificationInfo,
+   fetchUserHistory,
+   fetchUserCredits,
+} from './store/redux-store/user/user-actions';
 
 import AppLoading from 'expo-app-loading';
 
@@ -94,7 +99,10 @@ function AuthenticatedStack() {
 
    useEffect(() => {
       dispatch(fetchBookData(authCtx.token));
-      dispatch(fetchUserNotification(authCtx.token));
+      dispatch(fetchExchangeNotification(authCtx.token));
+      dispatch(fetchNotificationInfo(authCtx.token));
+      dispatch(fetchUserHistory(authCtx.token));
+      dispatch(fetchUserCredits(authCtx.token));
    }, [dispatch]);
 
    function logoBtn() {
@@ -293,6 +301,7 @@ function AuthenticatedStack() {
                },
             }}
          />
+
          <Drawer.Screen
             name='RegisterBook'
             component={RegisterBook}

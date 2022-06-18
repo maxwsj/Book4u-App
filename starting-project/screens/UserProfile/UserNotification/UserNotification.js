@@ -6,17 +6,33 @@ import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 
 const UserNotification = () => {
-   const [isNotEmpty, setIsNotEmpty] = useState(false);
+   const [exchangeNotIsNotEmpty, setExchangeNotIsNotEmpty] = useState(false);
+   const [notificationInfoIsNotEmpty, setNotificationInfoIsNotEmpty] =
+      useState(false);
+
+   const exchangeNotification = useSelector(
+      (state) => state.user.enxchangeNotification
+   );
+   const notificationInformation = useSelector(
+      (state) => state.user.notificationInfo
+   );
+
+   console.log(notificationInformation);
+   useEffect(() => {
+      if (exchangeNotification.length === 0) {
+         setExchangeNotIsNotEmpty(false);
+      } else {
+         setExchangeNotIsNotEmpty(true);
+      }
+   }, [exchangeNotification]);
 
    useEffect(() => {
-      if (notification.length === 0) {
-         setIsNotEmpty(false);
+      if (notificationInfoIsNotEmpty.length === 0) {
+         setNotificationInfoIsNotEmpty(false);
       } else {
-         setIsNotEmpty(true);
+         setNotificationInfoIsNotEmpty(true);
       }
-   }, [notification]);
-
-   const notification = useSelector((state) => state.user.userNotifications);
+   }, [notificationInfoIsNotEmpty]);
 
    return (
       <ScrollView>
@@ -30,14 +46,31 @@ const UserNotification = () => {
                   <Text>Marcar tudo como lido</Text>
                </Pressable>
             </View>
-            {isNotEmpty &&
-               notification.map((item) => (
-                  <ExchangeNotificationItem
+            {exchangeNotIsNotEmpty &&
+               exchangeNotification.map((item) => {
+                  return (
+                     <ExchangeNotificationItem
+                        key={item.tradeId}
+                        externalUserName={item.userRequested.owner}
+                        externalUserAddress={`${item.userRequested.state} ${item.userRequested.city}`}
+                        externalUserPicture={item.userRequested.picture}
+                        tradeId={item.tradeId}
+                     />
+                  );
+               })}
+            {notificationInfoIsNotEmpty &&
+               notificationInformation.map((item) => (
+                  <SuccessfullyNotificationItem
                      key={item.tradeId}
-                     externalUserName={item.userRequested.owner}
-                     externalUserAddress={`${item.userRequested.state} ${item.userRequested.city}`}
-                     externalUserPicture={item.userRequested.picture}
+                     bookName={item.bookRequired.name}
+                     bookAuthor={item.bookRequired.authorName}
+                     bookImg={item.bookRequired.bookImage}
+                     ownerCity={item.bookRequired.ownerCity}
+                     ownerName={item.bookRequired.owner}
+                     ownerState={item.bookRequired.ownerState}
+                     situation={item.situation}
                      tradeId={item.tradeId}
+                     read={item.read}
                   />
                ))}
          </View>

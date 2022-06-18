@@ -17,7 +17,6 @@ import UserModal from '../../../componnets/ProfileData/UserModal';
 
 import {
    fetchUserData,
-   sendUserPersonalData,
    sendUserCellphone,
    sendUserTelephone,
    sendUserAddress,

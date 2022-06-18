@@ -17,9 +17,9 @@ const DrawerContent = ({ props, navigation }) => {
    const dispatch = useDispatch();
 
    const userData = useSelector((state) => state.user.userData);
+   const userCredits = useSelector((state) => state.user.userCredits);
    const userImg =
       userData.picture === '' ? DEFAULT_USER_IMG : { uri: userData.picture };
-
    function profileHandler() {
       navigation.navigate('ProfileData');
    }
@@ -36,7 +36,6 @@ const DrawerContent = ({ props, navigation }) => {
       authCtx.logout();
       dispatch(userActions.logout());
    }
-
    return (
       <View style={{ flex: 1 }}>
          <DrawerContentScrollView {...props}>
@@ -60,25 +59,30 @@ const DrawerContent = ({ props, navigation }) => {
                      </View>
                      <View style={{ flexDirection: 'column', marginLeft: 15 }}>
                         <Title style={styles.title}>{userData.fullName}</Title>
-                        <Caption style={styles.captionEmail}>
-                           {userData.email}
-                        </Caption>
+                        <View
+                           style={{
+                              flexDirection: 'row',
+                           }}
+                        >
+                           <Caption style={styles.caption}>Créditos:</Caption>
+                           <Paragraph
+                              style={[
+                                 styles.paragraph,
+                                 styles.caption,
+                                 styles.credits,
+                              ]}
+                           >
+                              {userCredits}
+                           </Paragraph>
+                        </View>
                      </View>
                   </View>
                   <View style={styles.row}>
                      <View style={styles.section}>
-                        <Paragraph
-                           style={[styles.paragraph, styles.caption]}
-                        ></Paragraph>
-                        <Caption style={styles.caption}>Créditos</Caption>
-                     </View>
-                     <View style={styles.section}>
+                        <Caption style={styles.caption}>Email: </Caption>
                         <Paragraph style={[styles.paragraph, styles.caption]}>
-                           3
+                           {userData.email}
                         </Paragraph>
-                        <Caption style={styles.caption}>
-                           Livros Cadastrados
-                        </Caption>
                      </View>
                   </View>
                </View>
@@ -190,7 +194,6 @@ const styles = StyleSheet.create({
    captionEmail: {
       fontSize: 14,
       lineHeight: 14,
-      width: 130,
    },
    row: {
       marginTop: 20,
@@ -230,5 +233,12 @@ const styles = StyleSheet.create({
    //    },
    pressed: {
       opacity: 0.7,
+   },
+
+   credits: {
+      color: Colors.secondary,
+      marginLeft: 12,
+      fontSize: 14,
+      elevation: 5,
    },
 });

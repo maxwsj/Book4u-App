@@ -1,69 +1,52 @@
-import { StyleSheet, Text, View } from 'react-native';
-import React from 'react';
-import { Colors } from '../../constants/styles';
-import Button from '../../componnets/UI/Button';
+import { StyleSheet, ScrollView, View } from 'react-native';
+import { useState, useEffect } from 'react';
+import HistoryItem from '../../componnets/HistoryScreen/HistoryItem';
+import { getFilteredHistoryData } from '../../store/redux-store/user/user-actions';
+import { useSelector, useDispatch } from 'react-redux';
 
 const HistoryScreen = ({ navigation }) => {
-   function detailHistoryHandler() {
+   const dispatch = useDispatch();
+   const [historyIsEmpty, setHistoryIsEmpty] = useState(false);
+   const userHistory = useSelector((state) => state.user.history);
+
+   useEffect(() => {
+      if (userHistory.length === 0) {
+         setHistoryIsEmpty(false);
+      } else {
+         setHistoryIsEmpty(true);
+      }
+   }, [userHistory]);
+
+   function detailHistoryHandler(itemId) {
+      const filteredHistory = userHistory.filter((item) => item.id === itemId);
+      const filteredData = filteredHistory[0];
+      dispatch(getFilteredHistoryData(filteredData));
+
       navigation.navigate('HistoryDetailItem');
    }
+
    return (
-      <>
-         <View style={styles.card}>
-            <View>
-               <Text style={styles.title}>Tipo de Troca</Text>
-               <Text style={styles.text}>Pontos</Text>
-               <Text style={styles.title}>Usuário</Text>
-               <Text style={styles.text}>Aragon Swifte</Text>
-               <Text style={styles.title}>Status</Text>
-               <Text style={styles.text}>Aguardando Confirmação</Text>
-            </View>
-            <View>
-               <Text style={styles.title}>Data</Text>
-               <Text style={styles.text}>20 de Agosto de 2022</Text>
-            </View>
+      <ScrollView>
+         <View style={styles.container}>
+            {historyIsEmpty &&
+               userHistory.map((item) => (
+                  <HistoryItem
+                     key={item.id}
+                     onPress={detailHistoryHandler}
+                     date={item.exchangeDate}
+                     ownerName={`${item.requester.firstName} ${item.requester.lastName}`}
+                     historyId={item.id}
+                  />
+               ))}
          </View>
-         <View style={styles.buttonContainer}>
-            <Button
-               onPress={detailHistoryHandler}
-               stylesBtn={styles.buttonStyle}
-            >
-               Detalhes
-            </Button>
-         </View>
-      </>
+      </ScrollView>
    );
 };
 
 export default HistoryScreen;
 
 const styles = StyleSheet.create({
-   title: {
-      fontSize: 16,
-      fontFamily: 'lato-bold',
-      color: Colors.dimgray,
-      marginVertical: 8,
-   },
-   card: {
-      marginHorizontal: 30,
-      backgroundColor: Colors.silver50,
-      borderRadius: 6,
-      elevation: 6,
-      flexDirection: 'row',
-      justifyContent: 'space-evenly',
-      padding: 20,
-      marginTop: 30,
-   },
-   text: {
-      fontFamily: 'lato-regular',
-      color: Colors.silver400,
-      fontSize: 14,
-   },
-   buttonContainer: {
-      marginTop: 8,
-      marginHorizontal: 30,
-   },
-   buttonStyle: {
-      backgroundColor: Colors.darkCyan,
+   container: {
+      marginBottom: 30,
    },
 });

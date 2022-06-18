@@ -3,8 +3,13 @@ const initialState = {
    userData: {},
    filteredBook: {},
    userLibrarie: [],
-   userNotifications: [],
+   enxchangeNotification: [],
+   creditNotification: [],
+   notificationInfo: [],
    requestDetail: {},
+   history: [],
+   filteredHistory: {},
+   userCredits: 0,
 };
 const userSlice = createSlice({
    name: 'user',
@@ -13,6 +18,10 @@ const userSlice = createSlice({
       getUserData(state, action) {
          const newUserData = action.payload;
          state.userData = { ...newUserData };
+      },
+      getFilteredHistory(state, action) {
+         const newFilteredHistory = action.payload;
+         state.filteredHistory = { ...newFilteredHistory };
       },
 
       getUserProfilePicture(state, action) {
@@ -63,18 +72,42 @@ const userSlice = createSlice({
          state.filteredBook = { ...newFilteredBook };
       },
 
-      getUserNotifications(state, action) {
-         const newNotification = state.userNotifications.find(
+      getEnxchangeNotification(state, action) {
+         const newNotification = state.enxchangeNotification.find(
             (item) => item.tradeId === action.payload.tradeId
          );
          if (!newNotification) {
-            state.userNotifications = [...action.payload];
+            state.enxchangeNotification = [...action.payload];
+         }
+      },
+      getCreditNotification(state, action) {
+         const newNotification = state.creditNotification.find(
+            (item) => item.tradeId === action.payload.tradeId
+         );
+         if (!newNotification) {
+            state.creditNotification = [...action.payload];
+         }
+      },
+      getNotificationInfo(state, action) {
+         const newNotificationInfo = state.notificationInfo.find(
+            (item) => item.tradeId === action.payload.tradeId
+         );
+         if (!newNotificationInfo) {
+            state.notificationInfo = [...action.payload];
          }
       },
 
       getUserRequestDetails(state, action) {
          const newRequestDetail = action.payload;
          state.requestDetail = { ...newRequestDetail };
+      },
+
+      getUserHistory(state, action) {
+         state.history = [...action.payload];
+      },
+
+      getUserCredits(state, action) {
+         state.userCredits = action.payload;
       },
 
       logout(state) {},

@@ -1,28 +1,75 @@
 import { StyleSheet, Text, View, Image } from 'react-native';
-import React from 'react';
 import { Colors } from '../../../constants/styles';
 import Button from '../Button';
+import { useEffect, useState, useContext } from 'react';
+import bookService from '../../../util/http-book';
+import { AuthContext } from '../../../store/auth-context';
 
-const SuccessfullyNotificationItem = () => {
+const SuccessfullyNotificationItem = ({
+   bookImg,
+   bookName,
+   bookAuthor,
+   ownerName,
+   ownerState,
+   ownerCity,
+   situation,
+   read,
+   tradeId,
+}) => {
+   console.log(read);
+   const [btnSituation, setBtnSituation] = useState({});
+   const authCtx = useContext(AuthContext);
+   const [readNot, setReadNot] = useState(read);
+
+   useEffect(() => {
+      if (situation == 'Pendente') {
+         const btnStyle = {
+            backgroundColor: Colors.primary,
+         };
+         setBtnSituation(btnStyle);
+      } else if (situation == 'Confirmado') {
+         const btnStyle = {
+            backgroundColor: Colors.darkCyan,
+         };
+         setBtnSituation(btnStyle);
+      } else if (situation == 'Recusado') {
+         const btnStyle = {
+            backgroundColor: Colors.secondary,
+         };
+         setBtnSituation(btnStyle);
+      }
+   }, [situation]);
+
+   async function setReadHandler() {
+      setReadNot('Read');
+      if (readNot == 'Nonread') {
+         bookService.setReadNotification(authCtx.token, tradeId);
+      }
+   }
+
    return (
-      <View style={styles.card}>
+      <View
+         style={[readNot == 'Nonread' ? styles.nonReadCard : styles.readCard]}
+      >
          <View style={styles.cardItems}>
             <View style={styles.imageContainer}>
                <Image
                   style={styles.bookImage}
                   source={{
-                     uri: 'https://images.unsplash.com/photo-1592496431122-2349e0fbc666?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=912&q=80',
+                     uri: bookImg,
                   }}
                />
             </View>
             <View>
                <View>
-                  <Text style={styles.userName}>Aragon Swifte</Text>
-                  <Text style={styles.userAddress}>Salvador Bahia</Text>
+                  <Text style={styles.userName}>{ownerName}</Text>
+                  <Text
+                     style={styles.userAddress}
+                  >{`${ownerState} ${ownerCity}`}</Text>
                </View>
                <View style={styles.bookNameContainer}>
-                  <Text style={styles.bookName}>How Innovation Works</Text>
-                  <Text style={styles.bookAuthor}>Partick Rotfhus</Text>
+                  <Text style={styles.bookName}>{bookName}</Text>
+                  <Text style={styles.bookAuthor}>{bookAuthor}</Text>
                </View>
             </View>
             <View>
@@ -31,7 +78,9 @@ const SuccessfullyNotificationItem = () => {
          </View>
 
          <View style={styles.buttonContainer}>
-            <Button stylesBtn={styles.button}>Solicitado com sucesso !</Button>
+            <Button stylesBtn={btnSituation} onPress={setReadHandler}>
+               {situation}
+            </Button>
          </View>
       </View>
    );
@@ -40,12 +89,22 @@ const SuccessfullyNotificationItem = () => {
 export default SuccessfullyNotificationItem;
 
 const styles = StyleSheet.create({
-   card: {
+   readCard: {
       backgroundColor: Colors.silver50,
       elevation: 6,
       borderRadius: 6,
       marginBottom: 30,
    },
+
+   nonReadCard: {
+      backgroundColor: Colors.silver50,
+      elevation: 6,
+      borderRadius: 6,
+      marginBottom: 30,
+      borderColor: Colors.secondary,
+      borderWidth: 1,
+   },
+
    profileBackgroundColor: {
       backgroundColor: Colors.silver100,
       borderColor: Colors.silver300,
@@ -60,9 +119,7 @@ const styles = StyleSheet.create({
       marginHorizontal: 30,
       marginBottom: 12,
    },
-   button: {
-      backgroundColor: Colors.darkCyan,
-   },
+
    textNotification: {
       fontSize: 10,
       fontFamily: 'lato-regular',

@@ -25,6 +25,7 @@ const Home = () => {
    console.log(authCtx.token);
    const dispatch = useDispatch();
    const book = useSelector((state) => state.book.bookData);
+   const filteredGenBooks = useSelector((state) => state.book.filteredGenBooks);
    const enteredValue = useRef();
 
    useEffect(() => {
@@ -124,7 +125,7 @@ const Home = () => {
                      onPress={filterHandler}
                   />
                </View>
-               {genIsSelected && <BooksSection items={book} />}
+               {genIsSelected && <BooksSection items={filteredGenBooks} />}
                {!genIsSelected && (
                   <BookSelectInformation
                      text={'Selecione um Genêro de livro para exibi-lo aqui.'}
