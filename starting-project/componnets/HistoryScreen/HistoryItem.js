@@ -3,7 +3,7 @@ import React from 'react';
 import Button from '../UI/Button';
 import { Colors } from '../../constants/styles';
 
-const HistoryItem = ({ onPress, date, ownerName, historyId }) => {
+const HistoryItem = ({ onPress, date, ownerName, historyId, exchangeType }) => {
    function historyItemHandler() {
       onPress(historyId);
    }
@@ -12,7 +12,9 @@ const HistoryItem = ({ onPress, date, ownerName, historyId }) => {
          <View style={styles.card}>
             <View>
                <Text style={styles.title}>Tipo de Troca</Text>
-               <Text style={styles.text}>Pontos</Text>
+               <Text style={styles.text}>
+                  {exchangeType == 'BOOK' ? 'Livro' : 'Ponto'}
+               </Text>
                <Text style={styles.title}>Usuário</Text>
                <Text style={styles.text}>{ownerName}</Text>
                <Text style={styles.title}>Status</Text>

@@ -6,36 +6,60 @@ import { useSelector, useDispatch } from 'react-redux';
 
 const HistoryScreen = ({ navigation }) => {
    const dispatch = useDispatch();
-   const [historyIsEmpty, setHistoryIsEmpty] = useState(false);
-   const userHistory = useSelector((state) => state.user.history);
+   const [bookHistoryIsEmpty, setBookHistoryIsEmpty] = useState(false);
+   const [creditHistoryIsEmpty, setCreditHistoryIsEmpty] = useState(false);
+   const userBookHistory = useSelector((state) => state.user.bookHistory);
+   const userCreditHistory = useSelector((state) => state.user.creditHistory);
 
    useEffect(() => {
-      if (userHistory.length === 0) {
-         setHistoryIsEmpty(false);
+      if (userBookHistory.length === 0) {
+         setBookHistoryIsEmpty(false);
       } else {
-         setHistoryIsEmpty(true);
+         setBookHistoryIsEmpty(true);
       }
-   }, [userHistory]);
+   }, [userBookHistory]);
 
-   function detailHistoryHandler(itemId) {
-      const filteredHistory = userHistory.filter((item) => item.id === itemId);
+   useEffect(() => {
+      if (userCreditHistory.length === 0) {
+         setCreditHistoryIsEmpty(false);
+      } else {
+         setCreditHistoryIsEmpty(true);
+      }
+   }, [userCreditHistory]);
+
+   function detailHistoryHandler(itemId, exchangeType) {
+      const filteredHistory = userBookHistory.filter(
+         (item) => item.id === itemId
+      );
       const filteredData = filteredHistory[0];
       dispatch(getFilteredHistoryData(filteredData));
 
-      navigation.navigate('HistoryDetailItem');
+      navigation.navigate('HistoryDetailItem', { exchangeType: exchangeType });
    }
 
    return (
       <ScrollView>
          <View style={styles.container}>
-            {historyIsEmpty &&
-               userHistory.map((item) => (
+            {bookHistoryIsEmpty &&
+               userCreditHistory.map((item) => (
                   <HistoryItem
                      key={item.id}
                      onPress={detailHistoryHandler}
                      date={item.exchangeDate}
                      ownerName={`${item.requester.firstName} ${item.requester.lastName}`}
                      historyId={item.id}
+                     exchangeType={item.type}
+                  />
+               ))}
+            {creditHistoryIsEmpty &&
+               userBookHistory.map((item) => (
+                  <HistoryItem
+                     key={item.id}
+                     onPress={detailHistoryHandler}
+                     date={item.exchangeDate}
+                     ownerName={`${item.requester.firstName} ${item.requester.lastName}`}
+                     historyId={item.id}
+                     exchangeType={item.type}
                   />
                ))}
          </View>

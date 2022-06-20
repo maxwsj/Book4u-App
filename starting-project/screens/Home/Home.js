@@ -3,9 +3,16 @@ import { useState, useEffect, useContext, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { AuthContext } from '../../store/auth-context';
 import {
+   fetchExchangeNotification,
    fetchUserData,
    fetchUserLibrarie,
+   fetchUserHistory,
+   fetchExchangeCreditNotification,
+   fetchNotificationInfo,
+   fetchUserCredits,
+   fetchCreditNotificationInfo,
 } from '../../store/redux-store/user/user-actions';
+
 import { bookActions } from '../../store/redux-store/book/book-slice';
 
 import BooksSection from '../../componnets/BooksSection/BooksSection';
@@ -32,6 +39,12 @@ const Home = () => {
       dispatch(fetchUserData(authCtx.token));
       dispatch(fetchUserLibrarie(authCtx.token));
       dispatch(bookActions.clearFilteredBook());
+      dispatch(fetchNotificationInfo(authCtx.token));
+      dispatch(fetchExchangeNotification(authCtx.token));
+      dispatch(fetchExchangeCreditNotification(authCtx.token));
+      dispatch(fetchUserHistory(authCtx.token));
+      dispatch(fetchUserCredits(authCtx.token));
+      dispatch(fetchCreditNotificationInfo(authCtx.token));
    }, [dispatch]);
 
    const [visible, setVisible] = useState(false);

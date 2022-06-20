@@ -4,6 +4,7 @@ const initialState = {
    filteredBook: {},
    filteredGenBooks: [],
    searchedBooks: [],
+   recentBooks: [],
 };
 const bookSlice = createSlice({
    name: 'book',
@@ -16,6 +17,16 @@ const bookSlice = createSlice({
          );
          if (!existingBook) {
             state.bookData = [...newBook];
+         }
+      },
+
+      getRecentBookData(state, action) {
+         const newBook = action.payload;
+         const existingBook = state.recentBooks.find(
+            (book) => book.id === newBook.id
+         );
+         if (!existingBook) {
+            state.recentBooks = [...newBook];
          }
       },
 

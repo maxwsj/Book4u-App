@@ -6,8 +6,11 @@ const initialState = {
    enxchangeNotification: [],
    creditNotification: [],
    notificationInfo: [],
+   creditNotificationInfo: [],
    requestDetail: {},
-   history: [],
+   creditRequestDetail: {},
+   bookHistory: [],
+   creditHistory: [],
    filteredHistory: {},
    userCredits: 0,
 };
@@ -39,6 +42,9 @@ const userSlice = createSlice({
          }
          if (!newAddress.state == '') {
             state.userData.state = newAddress.state;
+         }
+         if (!newAddress.streetName == '') {
+            state.userData.streetName = newAddress.streetName;
          }
          if (!newAddress.district == '') {
             state.userData.district = newAddress.district;
@@ -96,14 +102,31 @@ const userSlice = createSlice({
             state.notificationInfo = [...action.payload];
          }
       },
+      getCreditNotificationInfo(state, action) {
+         const newCreditNotificationInfo = state.creditNotificationInfo.find(
+            (item) => item.tradeId === action.payload.tradeId
+         );
+         if (!newCreditNotificationInfo) {
+            state.creditNotificationInfo = [...action.payload];
+         }
+      },
 
       getUserRequestDetails(state, action) {
          const newRequestDetail = action.payload;
          state.requestDetail = { ...newRequestDetail };
       },
 
-      getUserHistory(state, action) {
-         state.history = [...action.payload];
+      getCreditRequestDetails(state, action) {
+         const newCreditRequest = action.payload;
+         state.creditRequestDetail = { ...newCreditRequest };
+      },
+
+      getUserBookHistory(state, action) {
+         state.bookHistory = [...action.payload];
+      },
+
+      getUserCreditHistory(state, action) {
+         state.creditHistory = [...action.payload];
       },
 
       getUserCredits(state, action) {

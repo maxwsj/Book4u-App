@@ -130,7 +130,7 @@ export function fetchUserData(userToken) {
                fullName: `${userData.firstName} ${userData.lastName}`,
                state: userData.personalData.state,
                city: userData.personalData.city,
-               address: userData.personalData.streetName,
+               streetName: userData.personalData.streetName,
                cellphone: userData.personalData.cellphone,
                complement: userData.personalData.complement,
                cpf: userData.personalData.cpf,
@@ -323,6 +323,31 @@ export function fetchNotificationInfo(userToken) {
       } catch (error) {}
    };
 }
+export function fetchCreditNotificationInfo(userToken) {
+   return async (dispatch) => {
+      async function fetchData() {
+         const response = await axios({
+            url:
+               Config.API_URL + `api/exchange/creditExchangeInfo/${userToken}`,
+            method: 'GET',
+            timeout: Config.TIMEOUT_REQUEST,
+            headers: {
+               token: userToken,
+               Authorization: `Bearer ${userToken}`,
+               'Content-Type': 'application/json',
+            },
+         });
+         const data = response.data;
+         return data;
+      }
+      try {
+         const creditInfo = await fetchData();
+
+         dispatch(userActions.getCreditNotificationInfo(creditInfo));
+      } catch (error) {}
+   };
+}
+
 export function fetchRequestById(userToken, requestId) {
    return async (dispatch) => {
       async function fetchData() {
@@ -344,6 +369,29 @@ export function fetchRequestById(userToken, requestId) {
       } catch (error) {}
    };
 }
+export function fetchCreditRequestById(userToken, requestId) {
+   return async (dispatch) => {
+      async function fetchData() {
+         const response = await axios({
+            url:
+               Config.API_URL +
+               `api/exchange/getCreditRequestById/${requestId}`,
+            method: 'GET',
+            timeout: Config.TIMEOUT_REQUEST,
+            headers: {
+               Authorization: `Bearer ${userToken}`,
+               'Content-Type': 'application/json',
+            },
+         });
+         const data = response.data;
+         return data;
+      }
+      try {
+         const request = await fetchData();
+         dispatch(userActions.getCreditRequestDetails(request));
+      } catch (error) {}
+   };
+}
 
 export function fetchUserHistory(userToken) {
    return async (dispatch) => {
@@ -358,12 +406,13 @@ export function fetchUserHistory(userToken) {
                'Content-Type': 'application/json',
             },
          });
-         const data = response.data.book;
+         const data = response.data;
          return data;
       }
       try {
          const history = await fetchData();
-         dispatch(userActions.getUserHistory(history));
+         dispatch(userActions.getUserBookHistory(history.book));
+         dispatch(userActions.getUserCreditHistory(history.credits));
       } catch (error) {}
    };
 }

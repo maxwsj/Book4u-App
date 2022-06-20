@@ -37,6 +37,7 @@ const DEFAULT_USER_IMG = require('../../../assets/userImg/userProfileDefault.png
 const ProfileData = ({ navigation }) => {
    const authCtx = useContext(AuthContext);
    const dispatch = useDispatch();
+
    const userData = useSelector((state) => state.user.userData);
    const userLibrarie = useSelector((state) => state.user.userLibrarie);
    const userImg =
@@ -59,7 +60,7 @@ const ProfileData = ({ navigation }) => {
    useEffect(() => {
       dispatch(setExternalUserData(userData));
       dispatch(fetchUserLibrarie(authCtx.token));
-   }, [dispatch]);
+   }, [dispatch, userData]);
 
    useEffect(() => {
       if (userLibrarie.length === 0) {
@@ -269,9 +270,9 @@ const ProfileData = ({ navigation }) => {
                   />
                   <TextIcon
                      text={
-                        userData.address === null
+                        userData.streetName === null
                            ? DEFAULT_ADDRESS
-                           : userData.address
+                           : userData.streetName
                      }
                      textConfig={styles.textIconTextConfig}
                      leftIconConfig={{

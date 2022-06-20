@@ -9,6 +9,12 @@ const UserNotification = () => {
    const [exchangeNotIsNotEmpty, setExchangeNotIsNotEmpty] = useState(false);
    const [notificationInfoIsNotEmpty, setNotificationInfoIsNotEmpty] =
       useState(false);
+   const [creditNotificationIsNotEmpty, setCreditNotificationIsNotEmpty] =
+      useState(false);
+   const [
+      creditNotificationInfoIsNotEmpty,
+      setCreditNotificationInfoIsNotEmpty,
+   ] = useState(false);
 
    const exchangeNotification = useSelector(
       (state) => state.user.enxchangeNotification
@@ -16,8 +22,14 @@ const UserNotification = () => {
    const notificationInformation = useSelector(
       (state) => state.user.notificationInfo
    );
+   const creditNotification = useSelector(
+      (state) => state.user.creditNotification
+   );
 
-   console.log(notificationInformation);
+   const creditNotificationInformation = useSelector(
+      (state) => state.user.creditNotificationInfo
+   );
+
    useEffect(() => {
       if (exchangeNotification.length === 0) {
          setExchangeNotIsNotEmpty(false);
@@ -27,12 +39,28 @@ const UserNotification = () => {
    }, [exchangeNotification]);
 
    useEffect(() => {
-      if (notificationInfoIsNotEmpty.length === 0) {
+      if (notificationInformation.length === 0) {
          setNotificationInfoIsNotEmpty(false);
       } else {
          setNotificationInfoIsNotEmpty(true);
       }
-   }, [notificationInfoIsNotEmpty]);
+   }, [notificationInformation]);
+
+   useEffect(() => {
+      if (creditNotification.length === 0) {
+         setCreditNotificationIsNotEmpty(false);
+      } else {
+         setCreditNotificationIsNotEmpty(true);
+      }
+   }, [creditNotification]);
+
+   useEffect(() => {
+      if (creditNotificationInformation.length === 0) {
+         setCreditNotificationInfoIsNotEmpty(false);
+      } else {
+         setCreditNotificationInfoIsNotEmpty(true);
+      }
+   }, [creditNotificationInformation]);
 
    return (
       <ScrollView>
@@ -58,6 +86,19 @@ const UserNotification = () => {
                      />
                   );
                })}
+            {creditNotificationIsNotEmpty &&
+               creditNotification.map((item) => {
+                  return (
+                     <ExchangeNotificationItem
+                        key={item.tradeId}
+                        externalUserName={item.userRequested.user}
+                        externalUserAddress={`${item.userRequested.state} ${item.userRequested.city}`}
+                        externalUserPicture={item.userRequested.picture}
+                        credit={item.creditsToReceive}
+                        tradeId={item.tradeId}
+                     />
+                  );
+               })}
             {notificationInfoIsNotEmpty &&
                notificationInformation.map((item) => (
                   <SuccessfullyNotificationItem
@@ -68,6 +109,22 @@ const UserNotification = () => {
                      ownerCity={item.bookRequired.ownerCity}
                      ownerName={item.bookRequired.owner}
                      ownerState={item.bookRequired.ownerState}
+                     situation={item.situation}
+                     tradeId={item.tradeId}
+                     read={item.read}
+                  />
+               ))}
+
+            {creditNotificationInfoIsNotEmpty &&
+               creditNotificationInformation.map((item) => (
+                  <SuccessfullyNotificationItem
+                     key={item.tradeId}
+                     bookName={item.bookRequired.bookName}
+                     bookAuthor={item.bookRequired.author}
+                     bookImg={item.bookRequired.bookImage}
+                     ownerCity={item.bookRequired.city}
+                     ownerName={item.bookRequired.owner}
+                     ownerState={item.bookRequired.state}
                      situation={item.situation}
                      tradeId={item.tradeId}
                      read={item.read}

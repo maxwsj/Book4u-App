@@ -16,7 +16,6 @@ const SuccessfullyNotificationItem = ({
    read,
    tradeId,
 }) => {
-   console.log(read);
    const [btnSituation, setBtnSituation] = useState({});
    const authCtx = useContext(AuthContext);
    const [readNot, setReadNot] = useState(read);

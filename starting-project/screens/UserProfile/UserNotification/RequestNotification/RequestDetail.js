@@ -3,6 +3,11 @@ import { useState, useEffect, useContext } from 'react';
 import { Colors } from '../../../../constants/styles';
 import Button from '../../../../componnets/UI/Button';
 import PaymentNotification from '../../../../componnets/UI/PaymentCard/PaymentNotification';
+import {
+   fetchExchangeNotification,
+   fetchNotificationInfo,
+   fetchExchangeCreditNotification,
+} from '../../../../store/redux-store/user/user-actions';
 
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -11,10 +16,13 @@ import userService from '../../../../util/http-user';
 import { CommonActions } from '@react-navigation/native';
 
 const RequestDetail = ({ route, navigation }) => {
-   const { tradeId } = route.params;
+   const { tradeId, exchangeOption } = route.params;
    const authCtx = useContext(AuthContext);
    const dispatch = useDispatch();
    const requestData = useSelector((state) => state.user.requestDetail);
+   const creditRequestData = useSelector(
+      (state) => state.user.creditRequestDetail
+   );
    const [bookOfferedData, setBookOfferedData] = useState({});
    const [requiredBookData, setRequiredBookData] = useState({});
 
@@ -22,21 +30,38 @@ const RequestDetail = ({ route, navigation }) => {
    const [creditsIsLess, setCreditsIsLess] = useState(false);
    const [creditIsEqual, setCreditsIsEqual] = useState(false);
    const [bookExchange, setBookExchange] = useState(false);
+   const [bookCredit, setBookCredit] = useState(false);
    const [exchangeType, setExchangeType] = useState('');
 
    useEffect(() => {
-      setBookOfferedData({ ...requestData.bookOffered });
-      setRequiredBookData({ ...requestData.requiredBook });
-   }, [requestData]);
+      if (exchangeOption == 'Book') {
+         setBookOfferedData({ ...requestData.bookOffered });
+         setRequiredBookData({ ...requestData.requiredBook });
+      }
+
+      if (exchangeOption == 'Credit') {
+         setRequiredBookData({ ...creditRequestData.requiredBook });
+      }
+   }, [requestData, creditRequestData]);
 
    useEffect(() => {
-      if (bookOfferedData !== {}) {
+      if (exchangeOption == 'Credit') {
+         setExchangeType('Crédito');
+         setBookCredit(true);
+      } else {
          setExchangeType('Livro');
          setBookExchange(true);
-      } else {
-         setExchangeType('Pontos');
       }
    }, []);
+
+   // useEffect(() => {
+   //    if (bookOfferedData !== {}) {
+   //       setExchangeType('Livro');
+   //       setBookExchange(true);
+   //    } else {
+   //       setExchangeType('Pontos');
+   //    }
+   // }, []);
 
    useEffect(() => {
       const oferedPrice = +bookOfferedData.price;
@@ -61,6 +86,8 @@ const RequestDetail = ({ route, navigation }) => {
    }, [bookOfferedData, creditsIsGreater, creditsIsLess, creditIsEqual]);
 
    function confirmExchangeHandler() {
+      dispatch(fetchExchangeNotification(authCtx.token));
+      dispatch(fetchNotificationInfo(authCtx.token));
       userService.confirmExchange(authCtx.token, tradeId, 'Confirmado');
       navigation.dispatch(
          CommonActions.reset({
@@ -75,6 +102,8 @@ const RequestDetail = ({ route, navigation }) => {
       );
    }
    function refuseExchangeHandler() {
+      dispatch(fetchExchangeNotification(authCtx.token));
+      dispatch(fetchNotificationInfo(authCtx.token));
       userService.confirmExchange(authCtx.token, tradeId, 'Recusado');
       navigation.dispatch(
          CommonActions.reset({
@@ -89,9 +118,40 @@ const RequestDetail = ({ route, navigation }) => {
       );
    }
 
-   return (
-      <ScrollView>
-         <View style={styles.container}>
+   function confirmCreditExchangeHandler() {
+      dispatch(fetchExchangeCreditNotification(authCtx.token));
+      userService.confirmCreditExchange(authCtx.token, tradeId, 'Confirmado');
+      navigation.dispatch(
+         CommonActions.reset({
+            index: 1,
+            routes: [
+               { name: 'RequestDetail' },
+               {
+                  name: 'Home',
+               },
+            ],
+         })
+      );
+   }
+
+   function refuseCreditExchangeHandler() {
+      userService.confirmCreditExchange(authCtx.token, tradeId, 'Recusado');
+      navigation.dispatch(
+         CommonActions.reset({
+            index: 1,
+            routes: [
+               { name: 'RequestDetail' },
+               {
+                  name: 'Home',
+               },
+            ],
+         })
+      );
+   }
+
+   function BookOption() {
+      return (
+         <>
             <Text style={styles.title}>Usuário</Text>
             <View style={styles.card}>
                <Text style={styles.text}>{bookOfferedData.owner}</Text>
@@ -105,7 +165,32 @@ const RequestDetail = ({ route, navigation }) => {
                   {`${bookOfferedData.ownerStreet}, ${bookOfferedData.ownerDistric} , ${bookOfferedData.ownerHouseNumber}`}
                </Text>
             </View>
+            <></>
             <Text style={styles.title}>Pedido</Text>
+
+            <View style={styles.bookContainer}>
+               <View style={styles.imageContainer}>
+                  <Image
+                     style={styles.bookImage}
+                     source={{
+                        uri: requiredBookData.bookImage,
+                     }}
+                  />
+               </View>
+               <View style={styles.bookInfoContainer}>
+                  <Text style={styles.bookTitle}>{requiredBookData.name}</Text>
+                  <Text style={styles.bookAuthor}>
+                     {requiredBookData.author}
+                  </Text>
+                  <Text
+                     style={styles.bookPrice}
+                  >{`Pontos: ${requiredBookData.price}`}</Text>
+               </View>
+            </View>
+            <Text style={styles.title}>Método de pagamento</Text>
+            <View style={styles.card}>
+               <Text style={styles.text}>{exchangeType}</Text>
+            </View>
             <View style={styles.bookContainer}>
                <View style={styles.imageContainer}>
                   <Image
@@ -126,29 +211,6 @@ const RequestDetail = ({ route, navigation }) => {
                </View>
             </View>
 
-            <Text style={styles.title}>Método de pagamento</Text>
-            <View style={styles.card}>
-               <Text style={styles.text}>{exchangeType}</Text>
-            </View>
-            <View style={styles.bookContainer}>
-               <View style={styles.imageContainer}>
-                  <Image
-                     style={styles.bookImage}
-                     source={{
-                        uri: requiredBookData.bookImage,
-                     }}
-                  />
-               </View>
-               <View style={styles.bookInfoContainer}>
-                  <Text style={styles.bookTitle}>{requiredBookData.name}</Text>
-                  <Text style={styles.bookAuthor}>
-                     {requiredBookData.author}
-                  </Text>
-                  <Text
-                     style={styles.bookPrice}
-                  >{`Pontos: ${requiredBookData.price}`}</Text>
-               </View>
-            </View>
             {creditsIsGreater && (
                <PaymentNotification
                   text={'O valor do livro ofertado é maior que o do seu livro!'}
@@ -180,6 +242,77 @@ const RequestDetail = ({ route, navigation }) => {
                   Aceitar
                </Button>
             </View>
+         </>
+      );
+   }
+
+   function CreditOption() {
+      return (
+         <>
+            <Text style={styles.title}>Usuário</Text>
+            <View style={styles.card}>
+               <Text style={styles.text}>{creditRequestData.buyerUser}</Text>
+            </View>
+            <Text style={styles.title}>Endereço</Text>
+            <View style={styles.card}>
+               <Text style={styles.text}>
+                  {`${creditRequestData.buyerState}, ${creditRequestData.buyerCity}`}
+               </Text>
+               <Text style={[styles.text, styles.subText]}>
+                  {`${creditRequestData.buyerStreet}, ${creditRequestData.buyerDistrict} , ${creditRequestData.buyerHouseNumber}`}
+               </Text>
+            </View>
+            <Text style={styles.title}>Pedido</Text>
+            <View style={styles.bookContainer}>
+               <View style={styles.imageContainer}>
+                  <Image
+                     style={styles.bookImage}
+                     source={{
+                        uri: requiredBookData.bookImage,
+                     }}
+                  />
+               </View>
+               <View style={styles.bookInfoContainer}>
+                  <Text style={styles.bookTitle}>{requiredBookData.name}</Text>
+                  <Text style={styles.bookAuthor}>
+                     {requiredBookData.author}
+                  </Text>
+                  <Text
+                     style={styles.bookPrice}
+                  >{`Pontos: ${requiredBookData.price}`}</Text>
+               </View>
+            </View>
+
+            <Text style={styles.title}>Método de pagamento</Text>
+            <View style={styles.card}>
+               <Text style={styles.text}>{exchangeType}</Text>
+               <Text style={styles.creditToReceive}>
+                  Pontos: {creditRequestData.creditToReceive}
+               </Text>
+            </View>
+            <View style={styles.buttonContainer}>
+               <Button
+                  onPress={refuseCreditExchangeHandler}
+                  stylesBtn={styles.buttonCancel}
+               >
+                  Recusar
+               </Button>
+               <Button
+                  onPress={confirmCreditExchangeHandler}
+                  stylesBtn={styles.buttonConfirm}
+               >
+                  Aceitar
+               </Button>
+            </View>
+         </>
+      );
+   }
+
+   return (
+      <ScrollView>
+         <View style={styles.container}>
+            {bookExchange && <BookOption />}
+            {bookCredit && <CreditOption />}
          </View>
       </ScrollView>
    );
@@ -261,5 +394,11 @@ const styles = StyleSheet.create({
       backgroundColor: Colors.secondary,
       paddingHorizontal: 24,
       paddingVertical: 14,
+   },
+   creditToReceive: {
+      color: Colors.secondary,
+      fontFamily: 'lato-regular',
+      fontSize: 16,
+      marginTop: 8,
    },
 });

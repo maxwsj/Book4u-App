@@ -42,21 +42,19 @@ const PaymentMethodScreen = ({ route, navigation }) => {
             userBookId: userBookId,
             userOption: USER_OPTION,
          });
-      } else {
-         Alert.alert(
-            'Créditos Insuficientes !',
-            'Escolha outro método de pagamento!'
-         );
-         setMoneyIsSelected(!moneyIsSelected);
-      }
-
-      if (bookIsSelected === true) {
+      } else if (bookIsSelected === true) {
          USER_OPTION = 'Book';
          navigation.navigate('ExchangeDetail', {
             externalBookId: externalId,
             userBookId: userBookId,
             userOption: USER_OPTION,
          });
+      } else {
+         Alert.alert(
+            'Créditos Insuficientes !',
+            'Escolha outro método de pagamento!'
+         );
+         setMoneyIsSelected(false);
       }
       if (bookIsSelected === false && moneyIsSelected === false) {
          Alert.alert(

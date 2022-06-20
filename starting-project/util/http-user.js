@@ -28,6 +28,35 @@ class UserService {
             Authorization: `Bearer ${userToken}`,
             'Content-Type': 'application/json',
          },
+      });
+   }
+   async confirmExchange(userToken, bookId, exchangeResponse) {
+      const response = await axios({
+         url:
+            Config.API_URL +
+            `api/exchange/confirmExchangeBook/${bookId}/${exchangeResponse}`,
+         method: 'PUT',
+         timeout: Config.TIMEOUT_REQUEST,
+         headers: {
+            token: userToken,
+            Authorization: `Bearer ${userToken}`,
+            'Content-Type': 'application/json',
+         },
+      });
+   }
+
+   async confirmCreditExchange(userToken, tradeId, exchangeResponse) {
+      const response = await axios({
+         url:
+            Config.API_URL +
+            `api/exchange/confirmCreditExchange/${tradeId}/${exchangeResponse}`,
+         method: 'PUT',
+         timeout: Config.TIMEOUT_REQUEST,
+         headers: {
+            token: userToken,
+            Authorization: `Bearer ${userToken}`,
+            'Content-Type': 'application/json',
+         },
       })
          .then((response) => {
             console.log('NO ERROR');
@@ -53,20 +82,6 @@ class UserService {
             }
             return Promise.reject(error);
          });
-   }
-   async confirmExchange(userToken, bookId, exchangeResponse) {
-      const response = await axios({
-         url:
-            Config.API_URL +
-            `api/exchange/confirmExchangeBook/${bookId}/${exchangeResponse}`,
-         method: 'PUT',
-         timeout: Config.TIMEOUT_REQUEST,
-         headers: {
-            token: userToken,
-            Authorization: `Bearer ${userToken}`,
-            'Content-Type': 'application/json',
-         },
-      });
    }
 }
 

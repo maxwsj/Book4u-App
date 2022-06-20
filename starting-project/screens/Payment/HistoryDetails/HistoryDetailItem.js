@@ -5,7 +5,6 @@ import BookImage from '../../../componnets/UI/BookImage';
 import { Colors } from '../../../constants/styles';
 const HistoryDetailItem = () => {
    const filteredHistory = useSelector((state) => state.user.filteredHistory);
-   console.log(filteredHistory);
    return (
       <View style={styles.container}>
          <View style={styles.textInformation}>

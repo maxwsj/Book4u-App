@@ -5,7 +5,10 @@ import Button from '../Button';
 import { Colors } from '../../../constants/styles';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
-import { fetchRequestById } from '../../../store/redux-store/user/user-actions';
+import {
+   fetchRequestById,
+   fetchCreditRequestById,
+} from '../../../store/redux-store/user/user-actions';
 import { AuthContext } from '../../../store/auth-context';
 
 const TradeNotificationItem = ({
@@ -13,6 +16,7 @@ const TradeNotificationItem = ({
    externalUserAddress,
    externalUserPicture,
    tradeId,
+   credit,
 }) => {
    const dispatch = useDispatch();
    const authCtx = useContext(AuthContext);
@@ -20,8 +24,19 @@ const TradeNotificationItem = ({
    const navigation = useNavigation();
 
    function requestDetailHandler() {
-      navigation.navigate('RequestDetail', { tradeId: tradeId });
-      dispatch(fetchRequestById(authCtx.token, tradeId));
+      if (credit) {
+         navigation.navigate('RequestDetail', {
+            tradeId: tradeId,
+            exchangeOption: 'Credit',
+         });
+         dispatch(fetchCreditRequestById(authCtx.token, tradeId));
+      } else {
+         navigation.navigate('RequestDetail', {
+            tradeId: tradeId,
+            exchangeOption: 'Book',
+         });
+         dispatch(fetchRequestById(authCtx.token, tradeId));
+      }
    }
    return (
       <View style={styles.card}>

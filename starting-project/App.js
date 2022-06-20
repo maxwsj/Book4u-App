@@ -8,10 +8,11 @@ import AuthContextProvider, { AuthContext } from './store/auth-context';
 import { Provider } from 'react-redux';
 import store from './store/redux-store';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchBookData } from './store/redux-store/book/book-actions';
 import {
-   fetchExchangeNotification,
-   fetchNotificationInfo,
+   fetchBookData,
+   fetchRecentBookData,
+} from './store/redux-store/book/book-actions';
+import {
    fetchUserHistory,
    fetchUserCredits,
 } from './store/redux-store/user/user-actions';
@@ -99,8 +100,7 @@ function AuthenticatedStack() {
 
    useEffect(() => {
       dispatch(fetchBookData(authCtx.token));
-      dispatch(fetchExchangeNotification(authCtx.token));
-      dispatch(fetchNotificationInfo(authCtx.token));
+      dispatch(fetchRecentBookData(authCtx.token, 7));
       dispatch(fetchUserHistory(authCtx.token));
       dispatch(fetchUserCredits(authCtx.token));
    }, [dispatch]);
