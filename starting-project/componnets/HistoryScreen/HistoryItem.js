@@ -5,7 +5,7 @@ import { Colors } from '../../constants/styles';
 
 const HistoryItem = ({ onPress, date, ownerName, historyId, exchangeType }) => {
    function historyItemHandler() {
-      onPress(historyId);
+      onPress(historyId, exchangeType);
    }
    return (
       <>

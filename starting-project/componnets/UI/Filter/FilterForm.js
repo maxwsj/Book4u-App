@@ -3,7 +3,7 @@ import { useState, useContext } from 'react';
 import { Colors } from '../../../constants/styles';
 import Button from '../../UI/Button';
 import IconBtn from '../IconBtn';
-import DropdownCat from './DropdownCat';
+import DropDownRegisteredGen from './DropDownRegisteredGen';
 
 import { AuthContext } from '../../../store/auth-context';
 import { fetchGenBookData } from '../../../store/redux-store/book/book-actions';
@@ -36,7 +36,7 @@ const FilterForm = ({ onSelect, onClose }) => {
                }}
             />
          </View>
-         <DropdownCat onSelect={getSelectedGenres} />
+         <DropDownRegisteredGen onSelect={getSelectedGenres} />
          <View style={styles.buttonWrapper}>
             <Button onPress={submitHandler}>Confirmar</Button>
          </View>

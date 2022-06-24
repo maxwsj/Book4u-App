@@ -14,9 +14,9 @@ import UserAddressForm from '../../../componnets/ProfileData/UserAddressForm';
 import CellphoneForm from '../../../componnets/ProfileData/CellphoneForm';
 import TelephoneForm from '../../../componnets/ProfileData/TelephoneForm';
 import UserModal from '../../../componnets/ProfileData/UserModal';
+import UserWishBookSection from '../../../componnets/ProfileData/UserLibrarie/UserWishBookSection';
 
 import {
-   fetchUserData,
    sendUserCellphone,
    sendUserTelephone,
    sendUserAddress,
@@ -38,6 +38,7 @@ const ProfileData = ({ navigation }) => {
    const authCtx = useContext(AuthContext);
    const dispatch = useDispatch();
 
+   const wishList = useSelector((state) => state.user.wishlist);
    const userData = useSelector((state) => state.user.userData);
    const userLibrarie = useSelector((state) => state.user.userLibrarie);
    const userImg =
@@ -46,6 +47,7 @@ const ProfileData = ({ navigation }) => {
    const [bookData, setBookData] = useState({});
    const [bookOption, setBookOption] = useState(true);
    const [hasNoBooks, setHasNoBooks] = useState(false);
+   const [hasNoWishBooks, setHasNoWishBooks] = useState(false);
    const [whishOption, setWhishOption] = useState(false);
    const [contactOption, setContactOption] = useState(false);
 
@@ -69,6 +71,14 @@ const ProfileData = ({ navigation }) => {
          setHasNoBooks(false);
       }
    }, [userLibrarie]);
+
+   useEffect(() => {
+      if (wishList.length === 0) {
+         setHasNoWishBooks(true);
+      } else {
+         setHasNoWishBooks(false);
+      }
+   }, [wishList]);
 
    function addressHandler() {
       setAddressIsVisible(true);
@@ -142,7 +152,6 @@ const ProfileData = ({ navigation }) => {
       if (!image.cancelled) {
          const userPicture = { picture: image.uri };
          dispatch(sendUserProfilePicture(authCtx.token, userPicture));
-         dispatch(fetchUserData(authCtx.token));
       }
    }
 
@@ -231,7 +240,12 @@ const ProfileData = ({ navigation }) => {
                      Minha lista de desejo
                   </Text>
 
-                  <UserBookSection items={bookData} />
+                  <UserWishBookSection items={wishList} />
+                  {hasNoWishBooks && (
+                     <BookSelectInformation
+                        text={`Nenhum favorito adicionado no momento, pesquise livros agora e adicione no ícone de coração !`}
+                     />
+                  )}
                </View>
             )}
             {contactOption && (

@@ -1,12 +1,20 @@
-import { StyleSheet, View, FlatList, Dimensions } from 'react-native';
+import { StyleSheet, View, FlatList } from 'react-native';
 import BookVerticalItem from '../../../componnets/UserLibrarie/BookVerticalItem';
-
-const { width } = Dimensions.get('window');
-import { BOOK_DATA } from '../../../data/dummy-data';
+import { useSelector } from 'react-redux';
+import { useContext } from 'react';
+import userService from '../../../util/http-user';
+import { AuthContext } from '../../../store/auth-context';
 
 const DeleteBook = ({ navigation }) => {
+   const authCtx = useContext(AuthContext);
+   const userLibrarie = useSelector((state) => state.user.userLibrarie);
+
    function renderBookItem(itemData) {
-      function pressHandler() {}
+      async function pressHandler() {
+         userService
+            .removeBookFromLibrarie(authCtx.token, itemData.item.id)
+            .then(() => navigation.navigate('Home'));
+      }
 
       const book = itemData.item;
 
@@ -23,7 +31,7 @@ const DeleteBook = ({ navigation }) => {
    return (
       <View>
          <FlatList
-            data={BOOK_DATA}
+            data={userLibrarie}
             showsHorizontalScrollIndicator={false}
             keyExtractor={(item) => item.id}
             decelerationRate={'fast'}

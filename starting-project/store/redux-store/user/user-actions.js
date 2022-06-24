@@ -422,6 +422,11 @@ export function getFilteredHistoryData(filteredHistory) {
       dispatch(userActions.getFilteredHistory(filteredHistory));
    };
 }
+export function getFilteredCreditHistoryData(filteredHistory) {
+   return async (dispatch) => {
+      dispatch(userActions.getFilteredCreditHistory(filteredHistory));
+   };
+}
 
 export function fetchUserCredits(userToken) {
    return async (dispatch) => {
@@ -442,6 +447,29 @@ export function fetchUserCredits(userToken) {
       try {
          const credits = await fetchData();
          dispatch(userActions.getUserCredits(+credits));
+      } catch (error) {}
+   };
+}
+
+export function fetchUserWishlist(userToken) {
+   return async (dispatch) => {
+      async function fetchData() {
+         const response = await axios({
+            url: Config.API_URL + `api/wish-list/user/${userToken}`,
+            method: 'GET',
+            timeout: Config.TIMEOUT_REQUEST,
+            headers: {
+               token: userToken,
+               Authorization: `Bearer ${userToken}`,
+               'Content-Type': 'application/json',
+            },
+         });
+         const data = response.data;
+         return data;
+      }
+      try {
+         const wishlistData = await fetchData();
+         dispatch(userActions.getUserWishlist(wishlistData));
       } catch (error) {}
    };
 }

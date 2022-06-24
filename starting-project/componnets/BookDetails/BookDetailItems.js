@@ -1,10 +1,11 @@
 import { StyleSheet, Text, View, Pressable, Dimensions } from 'react-native';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 
 import { Title, Avatar } from 'react-native-paper';
 import { Colors } from '../../constants/styles';
 const { width } = Dimensions.get('window');
 
+import IconBtn from '../UI/IconBtn';
 import Button from '../UI/Button';
 import BookDetailTable from './BookDetailTable';
 import BookInfoContainer from './BookInfoContainer';
@@ -17,11 +18,15 @@ import {
    setExternalUserData,
    setExternalUserLibrarie,
 } from '../../store/redux-store/externalUser/externalUser-actions';
-import IconBtn from '../UI/IconBtn';
+
+import userService from '../../util/http-user';
+import { AuthContext } from '../../store/auth-context';
 
 const DEFAULT_USER_IMG = require('../../assets/userImg/userProfileDefault.png');
 
 const BookDetailItems = ({ bookData }) => {
+   const authCtx = useContext(AuthContext);
+
    const [wishItem, setWishItem] = useState(false);
    const [ownerData, setSetOwnerData] = useState({});
    const dispatch = useDispatch();
@@ -35,6 +40,20 @@ const BookDetailItems = ({ bookData }) => {
    }
    const book = useSelector((state) => state.book.bookData);
 
+   const wishList = useSelector((state) => state.user.wishlist);
+
+   useEffect(() => {
+      const wishBook = wishList.filter(
+         (wishItem) => wishItem.id == bookData.id
+      );
+
+      if (wishBook.length > 0) {
+         setWishItem(true);
+      } else {
+         setWishItem(false);
+      }
+   }, [wishList, bookData]);
+
    function getBookDataHandler() {
       const externalUserLibrarie = book.filter((bookItem) => {
          return bookItem.owner.id === ownerData.id;
@@ -46,8 +65,9 @@ const BookDetailItems = ({ bookData }) => {
       navigation.navigate('ExternalProfileData');
    }
 
-   function wishBookButtonHandler() {
+   async function wishBookButtonHandler() {
       setWishItem(!wishItem);
+      userService.addUserWishBook(authCtx.token, bookData.id);
    }
    useEffect(() => {
       setSetOwnerData({ ...bookData.owner });

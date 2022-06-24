@@ -151,3 +151,79 @@ export function fetchGenBookData(userToken, selectedItem) {
       } catch (error) {}
    };
 }
+
+export function getSearchedBook(userToken, searchedBook) {
+   return async (dispatch) => {
+      async function fetchData() {
+         const response = await axios({
+            url: Config.API_URL + `api/book/get-books-named/${searchedBook}`,
+            method: 'GET',
+            timeout: Config.TIMEOUT_REQUEST,
+            headers: {
+               token: userToken,
+               Authorization: `Bearer ${userToken}`,
+               'Content-Type': 'application/json',
+            },
+         });
+         const data = response.data;
+         return data;
+      }
+      try {
+         const bookData = await fetchData();
+         dispatch(bookActions.getSearchedBookData(bookData));
+      } catch (error) {}
+   };
+}
+
+export function getSearchedAuthor(userToken, searchedAuthor) {
+   return async (dispatch) => {
+      async function fetchData() {
+         const response = await axios({
+            url:
+               Config.API_URL + `api/book/get-book-by-author/${searchedAuthor}`,
+            method: 'GET',
+            timeout: Config.TIMEOUT_REQUEST,
+            headers: {
+               token: userToken,
+               Authorization: `Bearer ${userToken}`,
+               'Content-Type': 'application/json',
+            },
+         });
+         const data = response.data;
+         return data;
+      }
+      try {
+         const bookData = await fetchData();
+         dispatch(bookActions.getSearchedAuthorBookData(bookData));
+      } catch (error) {}
+   };
+}
+
+export function fetchBookGenRegistered(userToken) {
+   return async (dispatch) => {
+      async function fetchData() {
+         const response = await axios({
+            url: Config.API_URL + `api/category/list-all/existent`,
+            method: 'GET',
+            timeout: Config.TIMEOUT_REQUEST,
+            headers: {
+               token: userToken,
+               Authorization: `Bearer ${userToken}`,
+               'Content-Type': 'application/json',
+            },
+         });
+         const data = response.data;
+         return data;
+      }
+      try {
+         const genData = await fetchData();
+         const genLabels = genData.map((gen) => {
+            return {
+               label: gen.name,
+               value: gen.name,
+            };
+         });
+         dispatch(bookActions.getRegisteredBookGen(genLabels));
+      } catch (error) {}
+   };
+}

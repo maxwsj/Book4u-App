@@ -11,7 +11,13 @@ import {
    fetchNotificationInfo,
    fetchUserCredits,
    fetchCreditNotificationInfo,
+   fetchUserWishlist,
 } from '../../store/redux-store/user/user-actions';
+import {
+   getSearchedAuthor,
+   getSearchedBook,
+   fetchBookGenRegistered,
+} from '../../store/redux-store/book/book-actions';
 
 import { bookActions } from '../../store/redux-store/book/book-slice';
 
@@ -33,6 +39,8 @@ const Home = () => {
    const dispatch = useDispatch();
    const book = useSelector((state) => state.book.bookData);
    const filteredGenBooks = useSelector((state) => state.book.filteredGenBooks);
+   const searchedBookData = useSelector((state) => state.book.searchedBook);
+   const searchedAuthorData = useSelector((state) => state.book.searchedAuthor);
    const enteredValue = useRef();
 
    useEffect(() => {
@@ -45,11 +53,14 @@ const Home = () => {
       dispatch(fetchUserHistory(authCtx.token));
       dispatch(fetchUserCredits(authCtx.token));
       dispatch(fetchCreditNotificationInfo(authCtx.token));
+      dispatch(fetchUserWishlist(authCtx.token));
+      dispatch(fetchBookGenRegistered(authCtx.token));
    }, [dispatch]);
 
    const [visible, setVisible] = useState(false);
    const [genIsSelected, setGenIsSelected] = useState(false);
-   const [beenSearch, setBeenSearch] = useState(true);
+   const [searchedBook, setSearchedBook] = useState(false);
+   const [searchedAuthor, setSearchedAuthor] = useState(false);
 
    const filterHandler = () => setVisible(true);
    const hideModal = () => setVisible(false);
@@ -62,16 +73,19 @@ const Home = () => {
       setGenIsSelected(true);
    }
 
-   async function submitUserValue(text) {
-      setTimeout(() => {
-         console.log('FilteredBooks' + text);
-      }, 3000);
-   }
-
-   function getSubmitValueHandler({
+   async function getSearchedBookHandler({
       nativeEvent: { text, eventCount, target },
    }) {
-      submitUserValue(text);
+      dispatch(getSearchedBook(authCtx.token, text));
+      setSearchedBook(true);
+      enteredValue.current.clear();
+   }
+
+   async function getSearchedAuthorHandler({
+      nativeEvent: { text, eventCount, target },
+   }) {
+      dispatch(getSearchedAuthor(authCtx.token, text));
+      setSearchedAuthor(true);
       enteredValue.current.clear();
    }
 
@@ -79,13 +93,15 @@ const Home = () => {
       <ScrollView>
          <View style={styles.homeContainer}>
             <View style={styles.homeWrapper}>
+               <Text style={styles.sectionTitle}>Todos os livros</Text>
+               <BooksSection items={book} />
+               <Divider style={styles.dividerStyles} />
+               <Text style={styles.sectionTitle}>Anuncios recentes</Text>
+               <BooksSection items={book} />
                <InputIcon
-                  // onUpdateValue={updateInputValueHandler.bind(this, 'password')}
-                  // value={enteredPassword}
-                  // isInvalid={passwordIsInvalid}
                   bgStyle={styles.inputBgStyle}
                   inputConfig={{
-                     placeholder: 'Livros, autores, gêneros',
+                     placeholder: 'Digite o nome de um autor',
                      returnKeyType: 'search',
                   }}
                   iconConfig={{
@@ -93,31 +109,49 @@ const Home = () => {
                      size: 20,
                      color: Colors.silver200,
                   }}
-                  // children='* Dados incorretos'
-                  setIcon={true}
-                  iconBtnConfig={{
-                     name: 'filter-outline',
+                  onSubmit={getSearchedAuthorHandler}
+                  refValue={enteredValue}
+               />
+               {searchedAuthor && (
+                  <>
+                     <Text style={styles.sectionTitle}>
+                        Livros do Autor Pesquisado
+                     </Text>
+                     <BooksSection items={searchedAuthorData} />
+                  </>
+               )}
+               {!searchedAuthor && (
+                  <BookSelectInformation
+                     text={'Insira um nome de autor para exibi-lo aqui.'}
+                  />
+               )}
+               <InputIcon
+                  bgStyle={styles.inputBgStyle}
+                  inputConfig={{
+                     placeholder: 'Digite o nome de um livro',
+                     returnKeyType: 'search',
+                  }}
+                  iconConfig={{
+                     name: 'search-outline',
                      size: 20,
                      color: Colors.silver200,
                   }}
-                  iconBtnStyle={styles.iconBtnStyle}
-                  onIconBtnPress={filterHandler}
-                  onSubmit={getSubmitValueHandler}
+                  onSubmit={getSearchedBookHandler}
                   refValue={enteredValue}
                />
-               <Text style={styles.sectionTitle}>Todos os livros</Text>
-               <BooksSection items={book} />
-               {beenSearch && (
+               {searchedBook && (
                   <>
-                     <Divider style={styles.dividerStyles} />
                      <Text style={styles.sectionTitle}>Livro Pesquisado</Text>
-                     <BooksSection items={book} />
+                     <BooksSection items={searchedBookData} />
                   </>
                )}
+               {!searchedBook && (
+                  <BookSelectInformation
+                     text={'Insira um nome de livro para exibi-lo aqui.'}
+                  />
+               )}
                <Divider style={styles.dividerStyles} />
-               <Text style={styles.sectionTitle}>Anuncios recentes</Text>
-               <BooksSection items={book} />
-               <Divider style={styles.dividerStyles} />
+
                <View
                   style={{
                      flexDirection: 'row',
@@ -169,7 +203,7 @@ const styles = StyleSheet.create({
       marginHorizontal: 30,
    },
    homeWrapper: {
-      marginTop: 30,
+      marginTop: 5,
    },
    dividerStyles: {
       marginTop: 12,

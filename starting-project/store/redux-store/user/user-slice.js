@@ -12,7 +12,9 @@ const initialState = {
    bookHistory: [],
    creditHistory: [],
    filteredHistory: {},
+   filtereCreditdHistory: {},
    userCredits: 0,
+   wishlist: [],
 };
 const userSlice = createSlice({
    name: 'user',
@@ -22,9 +24,19 @@ const userSlice = createSlice({
          const newUserData = action.payload;
          state.userData = { ...newUserData };
       },
+
+      getUserWishlist(state, action) {
+         state.wishlist = [...action.payload];
+      },
+
       getFilteredHistory(state, action) {
          const newFilteredHistory = action.payload;
          state.filteredHistory = { ...newFilteredHistory };
+      },
+
+      getFilteredCreditHistory(state, action) {
+         const newFilteredHistory = action.payload;
+         state.filtereCreditdHistory = { ...newFilteredHistory };
       },
 
       getUserProfilePicture(state, action) {
@@ -94,6 +106,7 @@ const userSlice = createSlice({
             state.creditNotification = [...action.payload];
          }
       },
+
       getNotificationInfo(state, action) {
          const newNotificationInfo = state.notificationInfo.find(
             (item) => item.tradeId === action.payload.tradeId

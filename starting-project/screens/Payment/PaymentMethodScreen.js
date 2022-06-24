@@ -13,7 +13,17 @@ const PaymentMethodScreen = ({ route, navigation }) => {
    const [externalId, setExternalId] = useState('');
    const [moneyIsSelected, setMoneyIsSelected] = useState(false);
    const [bookIsSelected, setBookIsSelected] = useState(false);
+   const [selectedBookPrice, setSelectedBookPrice] = useState();
    const userCredits = useSelector((state) => state.user.userCredits);
+   const book = useSelector((state) => state.book.bookData);
+
+   useEffect(() => {
+      const selectedBookFiltered = book.filter(
+         (book) => book.id === externalBookId
+      );
+      const bookPrice = +selectedBookFiltered[0].price;
+      setSelectedBookPrice(bookPrice);
+   }, []);
 
    useEffect(() => {
       setExternalId(externalBookId);
@@ -35,7 +45,7 @@ const PaymentMethodScreen = ({ route, navigation }) => {
    }
 
    function confirmOptionHandler() {
-      if (moneyIsSelected === true && userCredits > 0) {
+      if (moneyIsSelected === true && userCredits > selectedBookPrice) {
          USER_OPTION = 'Credit';
          navigation.navigate('ExchangeDetail', {
             externalBookId: externalId,

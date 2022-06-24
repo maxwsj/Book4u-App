@@ -3,8 +3,10 @@ const initialState = {
    bookData: [],
    filteredBook: {},
    filteredGenBooks: [],
-   searchedBooks: [],
    recentBooks: [],
+   searchedBook: [],
+   searchedAuthor: [],
+   genList: [],
 };
 const bookSlice = createSlice({
    name: 'book',
@@ -17,6 +19,25 @@ const bookSlice = createSlice({
          );
          if (!existingBook) {
             state.bookData = [...newBook];
+         }
+      },
+
+      getSearchedBookData(state, action) {
+         const newSearch = action.payload;
+         const existingBook = state.searchedBook.find(
+            (book) => book.id === newSearch.id
+         );
+         if (!existingBook) {
+            state.searchedBook = [...newSearch];
+         }
+      },
+      getSearchedAuthorBookData(state, action) {
+         const newAuthor = action.payload;
+         const existingBook = state.searchedAuthor.find(
+            (book) => book.id === newAuthor.id
+         );
+         if (!existingBook) {
+            state.searchedAuthor = [...newAuthor];
          }
       },
 
@@ -84,47 +105,9 @@ const bookSlice = createSlice({
          }
       },
 
-      searchedBookData(state, action) {
-         const newBook = action.payload;
-         const existingBook = state.searchedBooks.find(
-            (book) => book.id === newBook.id
-         );
-
-         if (!existingBook) {
-            state.searchedBooks.push({
-               id: newBook.id,
-               name: newBook.name,
-               language: newBook.language,
-               author: newBook.author,
-               owner: {
-                  credits: newBook.owner.credits,
-                  firstName: newBook.owner.firstName,
-                  id: newBook.owner.id,
-                  lastName: newBook.owner.lastName,
-                  picture: newBook.owner.picture,
-                  cellphone: newBook.owner.cellphone,
-                  city: newBook.owner.city,
-                  complement: newBook.owner.complement,
-                  district: newBook.owner.district,
-                  houseNumber: newBook.owner.houseNumber,
-                  state: newBook.owner.state,
-                  streetName: newBook.owner.streetName,
-                  telephone: newBook.owner.telephone,
-                  zipCode: newBook.owner.zipCode,
-               },
-               publisher: newBook.publisher,
-               pagesQuantity: newBook.pagesQuantity,
-               price: newBook.price,
-               synopsis: newBook.synopsis,
-               condition: newBook.condition,
-               bookImages: {
-                  frontSideImage: newBook.bookImages.frontSideImage,
-                  backSideImage: newBook.bookImages.backSideImage,
-                  leftSideImage: newBook.bookImages.leftSideImage,
-                  rightSideImage: newBook.bookImages.rightSideImage,
-               },
-            });
-         }
+      getRegisteredBookGen(state, action) {
+         const newGen = action.payload;
+         state.genList = [...newGen];
       },
    },
 });

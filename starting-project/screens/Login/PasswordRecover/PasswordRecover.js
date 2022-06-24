@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
       marginHorizontal: 30,
    },
    hrColor: {
-      borderBottomColor: Colors.lightCyan,
+      borderBottomColor: Colors.secondary,
    },
    hrContainer: {
       marginTop: 50,

@@ -55,6 +55,7 @@ import ExchangeDetail from './screens/Payment/ExchangeDetail/ExchangeDetail';
 import CanceledExchange from './screens/Payment/PaymentSituation/CanceledExchange';
 import SuccessfullyExchanged from './screens/Payment/PaymentSituation/SuccessfullyExchanged';
 import HistoryDetailItem from './screens/Payment/HistoryDetails/HistoryDetailItem';
+import CreditHistoryDetail from './screens/Payment/HistoryDetails/CreditHistoryDetail';
 import RequestDetail from './screens/UserProfile/UserNotification/RequestNotification/RequestDetail';
 
 // External user screens
@@ -278,6 +279,32 @@ function AuthenticatedStack() {
          <Drawer.Screen
             name='HistoryDetailItem'
             component={HistoryDetailItem}
+            options={{
+               headerLeft: ({ tintColor }) => (
+                  <IconBtn
+                     icon='arrow-back-outline'
+                     color={tintColor}
+                     size={24}
+                     iconBtnStyle={styles.iconLeftBtn}
+                     onPress={() => {
+                        navigation.navigate('HistoryScreen');
+                     }}
+                  />
+               ),
+               headerTitle: 'Detalhes do Histórico',
+               headerStyle: { backgroundColor: Colors.white50 },
+               headerTintColor: Colors.secondary,
+               headerTitleStyle: {
+                  color: Colors.silver400,
+                  fontFamily: 'poppins-regular',
+                  fontSize: 18,
+                  marginTop: 4,
+               },
+            }}
+         />
+         <Drawer.Screen
+            name='CreditHistoryDetail'
+            component={CreditHistoryDetail}
             options={{
                headerLeft: ({ tintColor }) => (
                   <IconBtn
